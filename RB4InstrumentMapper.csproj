@@ -105,12 +105,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="LogUtils.cs" />
-    <Compile Include="PacketParsing\DrumPacket.cs" />
-    <Compile Include="PacketParsing\DrumViGEmMapper.cs" />
-    <Compile Include="PacketParsing\DrumPacketVjoyMapper.cs" />
-    <Compile Include="PacketParsing\GuitarPacket.cs" />
-    <Compile Include="PacketParsing\GuitarViGEmMapper.cs" />
-    <Compile Include="PacketParsing\GuitarPacketVjoyMapper.cs" />
+    <Compile Include="PacketParsing\IDeviceMapper.cs" />
+    <Compile Include="PacketParsing\PacketDefinitions.cs" />
+    <Compile Include="PacketParsing\PacketParser.cs" />
+    <Compile Include="PacketParsing\ParsingUtils.cs" />
+    <Compile Include="PacketParsing\VigemMapper.cs" />
+    <Compile Include="PacketParsing\VigemStatic.cs" />
+    <Compile Include="PacketParsing\VjoyMapper.cs" />
+    <Compile Include="PacketParsing\VjoyStatic.cs" />
+    <Compile Include="PacketParsing\XboxDevice.cs" />
     <Compile Include="MainWindow\ParsingHelpers.cs" />
     <Compile Include="MainWindow\TextBoxConsole.cs" />
     <Page Include="MainWindow\MainWindow.xaml">
