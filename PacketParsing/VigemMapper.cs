@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using Nefarius.ViGEm.Client.Exceptions;
 using Nefarius.ViGEm.Client.Targets;
 using Nefarius.ViGEm.Client.Targets.Xbox360;
 
@@ -13,13 +13,28 @@ namespace RB4InstrumentMapper.Parsing
         private IXbox360Controller device;
 
         /// <summary>
+        /// Whether or not feedback has been received to indicate that the device has connected.
+        /// </summary>
+        private bool deviceConnected = false;
+
+        /// <summary>
         /// Creates a new VigemMapper.
         /// </summary>
         public VigemMapper()
         {
             device = VigemStatic.CreateDevice();
             device.FeedbackReceived += ReceiveUserIndex;
-            device.Connect();
+
+            try
+            {
+                device.Connect();
+            }
+            catch (VigemNoFreeSlotException ex)
+            {
+                device = null;
+                throw new ParseException("ViGEmBus device slots are full.", ex);
+            }
+
             device.AutoSubmitReport = false;
         }
 
@@ -34,8 +49,11 @@ namespace RB4InstrumentMapper.Parsing
         /// <summary>
         /// Temporary event handler for logging the user index of a ViGEm device.
         /// </summary>
-        static void ReceiveUserIndex(object sender, Xbox360FeedbackReceivedEventArgs args)
+        void ReceiveUserIndex(object sender, Xbox360FeedbackReceivedEventArgs args)
         {
+            // Device has connected
+            deviceConnected = true;
+
             // Log the user index
             Console.WriteLine($"Created new ViGEmBus device with user index {args.LedNumber}");
 
@@ -48,6 +66,12 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void ParseInput(ReadOnlySpan<byte> data, byte length)
         {
+            if (!deviceConnected)
+            {
+                // Device has not connected yet
+                return;
+            }
+
             // Reset report
             device.ResetReport();
 
@@ -70,7 +94,7 @@ namespace RB4InstrumentMapper.Parsing
                 
                 default:
                     // Don't parse unknown button data
-                    break;
+                    return;
             }
 
             // Send data
@@ -253,7 +277,7 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void Close()
         {
-            try { device.Disconnect(); } catch {}
+            try { device?.Disconnect(); } catch {}
             device = null;
         }
     }

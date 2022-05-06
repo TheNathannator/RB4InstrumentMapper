@@ -15,7 +15,7 @@ namespace RB4InstrumentMapper.Parsing
         {
             deviceId = VjoyStatic.ClaimNextAvailableDevice();
             state.bDevice = (byte)deviceId;
-            Console.WriteLine($"Created new vJoy device with device ID {deviceId}");
+            Console.WriteLine($"Acquired vJoy device with ID of {deviceId}");
         }
 
         /// <summary>

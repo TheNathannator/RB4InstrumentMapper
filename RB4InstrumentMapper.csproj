@@ -108,6 +108,7 @@
     <Compile Include="PacketParsing\IDeviceMapper.cs" />
     <Compile Include="PacketParsing\PacketDefinitions.cs" />
     <Compile Include="PacketParsing\PacketParser.cs" />
+    <Compile Include="PacketParsing\ParseException.cs" />
     <Compile Include="PacketParsing\ParsingUtils.cs" />
     <Compile Include="PacketParsing\VigemMapper.cs" />
     <Compile Include="PacketParsing\VigemStatic.cs" />

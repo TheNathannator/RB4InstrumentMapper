@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using SharpPcap;
-using SharpPcap.LibPcap;
 using Nefarius.ViGEm.Client;
 using Nefarius.ViGEm.Client.Targets;
-using Nefarius.ViGEm.Client.Exceptions;
 
 namespace RB4InstrumentMapper.Parsing
 {
@@ -26,30 +21,9 @@ namespace RB4InstrumentMapper.Parsing
             get => client != null;
         }
 
-        /// <summary>
-        /// Initializes the ViGEmBus client.
-        /// </summary>
-        public static bool Initialize()
+        static VigemStatic()
         {
-            try
-            {
-                client = new ViGEmClient();
-                return true;
-            }
-            catch
-            {
-                client = null;
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Performs cleanup for the ViGEmBus client.
-        /// </summary>
-        public static void Close()
-        {
-            client?.Dispose();
-            client = null;
+            client = new ViGEmClient();
         }
 
         /// <summary>

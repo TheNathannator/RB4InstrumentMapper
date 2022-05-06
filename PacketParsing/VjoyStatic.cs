@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using SharpPcap;
-using SharpPcap.LibPcap;
 using vJoyInterfaceWrap;
 
 namespace RB4InstrumentMapper.Parsing
@@ -25,23 +21,6 @@ namespace RB4InstrumentMapper.Parsing
         }
 
         /// <summary>
-        /// Gets whether or not vJoy is available.
-        /// </summary>
-        public static bool Available
-        {
-            get
-            {
-                // Check that vJoy is available, and at least one valid device is available
-                if (!client.vJoyEnabled() || GetNextAvailableID() == 0)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-        }
-
-        /// <summary>
         /// Gets the next available device ID.
         /// </summary>
         public static uint GetNextAvailableID()
@@ -52,7 +31,7 @@ namespace RB4InstrumentMapper.Parsing
                 // Ensure device is available
                 if (client.GetVJDStatus(deviceId) == VjdStat.VJD_STAT_FREE)
                 {
-                    // Check that vJoy device is configured correctly
+                    // Check that the vJoy device is configured correctly
                     int numButtons = client.GetVJDButtonNumber(deviceId);
                     int numContPov = client.GetVJDContPovNumber(deviceId);
                     bool xExists = client.GetVJDAxisExist(deviceId, HID_USAGES.HID_USAGE_X); // X axis
@@ -84,12 +63,14 @@ namespace RB4InstrumentMapper.Parsing
 
             if (deviceId == 0)
             {
-                // This shouldn't ever be hit since data is validated before any mapper construction is done,
-                // this is to ensure that things don't explode if stuff goes horribly wrong
-                throw new Exception("No new vJoy devices are available.");
+                throw new ParseException("No new vJoy devices are available.");
             }
 
-            client.AcquireVJD(deviceId);
+            if (!client.AcquireVJD(deviceId))
+            {
+                throw new ParseException($"Could not claim vJoy device {deviceId}.");
+            }
+
             return deviceId;
         }
 
@@ -105,6 +86,14 @@ namespace RB4InstrumentMapper.Parsing
             }
         }
 
+        public static void FreeAllDevices()
+        {
+            for (uint i = 1; i <= 16; i++)
+            {
+                ReleaseDevice(i);
+            }
+        }
+
         /// <summary>
         /// Resets the values of this state.
         /// </summary>
@@ -116,19 +105,6 @@ namespace RB4InstrumentMapper.Parsing
             state.AxisX = 0;
             state.AxisY = 0;
             state.AxisZ = 0;
-        }
-
-        /// <summary>
-        /// Performs cleanup for the vJoy client.
-        /// </summary>
-        public static void Close()
-        {
-            for (uint deviceId = 1; deviceId <= 16; deviceId++)
-            {
-                ReleaseDevice(deviceId);
-            }
-
-            client.ResetAll();
         }
 
         /// <summary>

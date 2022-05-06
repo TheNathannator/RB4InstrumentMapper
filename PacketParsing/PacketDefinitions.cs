@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace RB4InstrumentMapper.Parsing
 {
     /// <summary>

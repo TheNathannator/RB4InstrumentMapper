@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using SharpPcap;
 using RB4InstrumentMapper.Parsing;
 
 // This is in the regular namespace to keep the other packet parsing stuff from bogging up
@@ -32,136 +31,86 @@ namespace RB4InstrumentMapper
         public static ParsingMode ParseMode { get; set; } = (ParsingMode)0;
 
         /// <summary>
-        /// Whether or not capture has been started through StartCapture().
+        /// Whether or not new devices can be added.
         /// </summary>
-        private static bool captureStarted = false;
-
-        /// <summary>
-        /// Starts capture from a given device.
-        /// </summary>
-        public static bool StartCapture(ILiveDevice device)
-        {
-            // Disallow starting capture multiple times without first stopping capture
-            if (device.Started == true)
-            {
-                return false;
-            }
-
-            // Disallow starting while ParseMode is not set yet
-            if (ParseMode == (ParsingMode)0)
-            {
-                return false;
-            }
-
-            // Initialize selected device's static client
-            switch (ParseMode)
-            {
-                case ParsingMode.ViGEmBus:
-                    if (!VigemStatic.Initialize())
-                    {
-                        return false;
-                    }
-                    break;
-
-                case ParsingMode.vJoy:
-                    if (!VjoyStatic.Available)
-                    {
-                        return false;
-                    }
-                    break;
-
-                default:
-                    // Parse mode has not been set yet
-                    return false;
-            }
-
-            // Open the device
-            device.Open(new DeviceConfiguration()
-            {
-                Snaplen = 45, // Capture small packets
-                Mode = DeviceModes.Promiscuous | DeviceModes.MaxResponsiveness, // Promiscuous mode with maximum speed
-                ReadTimeout = 50 // Read timeout
-            });
-
-            // Configure event handlers
-            device.OnPacketArrival += HandlePcapPacket;
-            device.OnCaptureStopped += OnCaptureStop;
-            
-            // Start capture
-            device.StartCapture();
-            captureStarted = true;
-            return true;
-        }
+        private static bool canHandleNewDevices = true;
 
         /// <summary>
         /// Handles a received Pcap packet.
         /// </summary>
-        private static void HandlePcapPacket(object sender, PacketCapture packet)
+        public static void HandlePcapPacket(ReadOnlySpan<byte> data)
         {
-            // Disallow parsing of packets if StartCapture() hasn't been called yet
-            if (!captureStarted)
-            {
-                return;
-            }
-
             // Packet must be at least 30 bytes long
-            if (packet.Data.Length < (Length.ReceiverHeader + Length.CommandHeader))
+            if (data.Length < (Length.ReceiverHeader + Length.CommandHeader))
             {
                 return;
             }
 
             // Get device ID
             ulong deviceId = (ulong)(
-                 packet.Data[HeaderOffset.DeviceId + 5]        |
-                (packet.Data[HeaderOffset.DeviceId + 4] << 8)  |
-                (packet.Data[HeaderOffset.DeviceId + 3] << 16) |
-                (packet.Data[HeaderOffset.DeviceId + 2] << 24) |
-                (packet.Data[HeaderOffset.DeviceId + 1] << 32) |
-                (packet.Data[HeaderOffset.DeviceId]     << 40)
+                 data[HeaderOffset.DeviceId + 5]        |
+                (data[HeaderOffset.DeviceId + 4] << 8)  |
+                (data[HeaderOffset.DeviceId + 3] << 16) |
+                (data[HeaderOffset.DeviceId + 2] << 24) |
+                (data[HeaderOffset.DeviceId + 1] << 32) |
+                (data[HeaderOffset.DeviceId]     << 40) |
+                0x0000000000000000 // Ensures that no garbage data gets through to the final number
             );
 
-            try
+            // Check if ID has been encountered yet
+            if (!pcapIds.ContainsKey(deviceId))
             {
-                // Check if ID has been encountered yet
-                if (!pcapIds.ContainsKey(deviceId))
+                if (!canHandleNewDevices)
                 {
-                    pcapIds.Add(deviceId, new XboxDevice(ParseMode));
-                    Console.WriteLine($"Encountered new device with ID {deviceId.ToString("X12")}");
+                    return;
                 }
 
-                // Strip off receiver header and send the data to be parsed
-                pcapIds[deviceId].ParseCommand(packet.Data.Slice(Length.ReceiverHeader));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error while handling packet: {e.GetFirstLine()}");
-                Logging.LogException(e);
+                XboxDevice device;
+                try
+                {
+                    device = new XboxDevice(ParseMode);
+                }
+                catch (ParseException ex)
+                {
+                    canHandleNewDevices = false;
+                    Console.WriteLine("Device limit reached, or an error occured when creating virtual device. No more devices will be registered.");
+                    Console.WriteLine($"Exception: {ex.GetFirstLine()}");
+                    return;
+                }
 
-                // Stop capture
-                (sender as ILiveDevice).Close();
-                return;
+                pcapIds.Add(deviceId, device);
+                Console.WriteLine($"Encountered new device with ID {deviceId.ToString("X12")}");
             }
+
+            // Strip off receiver header and send the data to be parsed
+            pcapIds[deviceId].ParseCommand(data.Slice(Length.ReceiverHeader));
         }
 
         // TODO: Add libusb support
 
         /// <summary>
-        /// Cleans up when capture stops.
+        /// Performs cleanup for the parser.
         /// </summary>
-        private static void OnCaptureStop(object sender, CaptureStoppedEventStatus status)
+        public static void Close()
         {
+            // Clean up devices
             foreach (XboxDevice device in pcapIds.Values)
             {
                 device.Close();
             }
 
+            // Just in case...
+            // At least in debug builds, stopping capture can take a while and cause the devices to not get disconnected
+            // if (VjoyStatic.Client.vJoyEnabled())
+            // {
+            //     VjoyStatic.FreeAllDevices();
+            // }
+
             // Clear IDs list
             pcapIds.Clear();
 
-            VigemStatic.Close();
-            VjoyStatic.Close();
-
-            captureStarted = false;
+            // Reset flags
+            canHandleNewDevices = true;
         }
     }
 }

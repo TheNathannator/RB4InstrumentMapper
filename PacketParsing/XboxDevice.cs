@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using SharpPcap;
-using SharpPcap.LibPcap;
 
 namespace RB4InstrumentMapper.Parsing
 {
@@ -71,7 +68,7 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void Close()
         {
-            deviceMapper.Close();
+            deviceMapper?.Close();
             deviceMapper = null;
         }
     }
