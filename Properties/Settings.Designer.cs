@@ -12,7 +12,7 @@ namespace RB4InstrumentMapper.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,108 +26,48 @@ namespace RB4InstrumentMapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentPcapSelection {
+        public string pcapDevice {
             get {
-                return ((string)(this["currentPcapSelection"]));
+                return ((string)(this["pcapDevice"]));
             }
             set {
-                this["currentPcapSelection"] = value;
+                this["pcapDevice"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentGuitar1Selection {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool packetDebug {
             get {
-                return ((string)(this["currentGuitar1Selection"]));
+                return ((bool)(this["packetDebug"]));
             }
             set {
-                this["currentGuitar1Selection"] = value;
+                this["packetDebug"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentDrumSelection {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool packetDebugLog {
             get {
-                return ((string)(this["currentDrumSelection"]));
+                return ((bool)(this["packetDebugLog"]));
             }
             set {
-                this["currentDrumSelection"] = value;
+                this["packetDebugLog"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentPacketDebugState {
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int controllerDeviceType {
             get {
-                return ((string)(this["currentPacketDebugState"]));
+                return ((int)(this["controllerDeviceType"]));
             }
             set {
-                this["currentPacketDebugState"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentGuitar2Selection {
-            get {
-                return ((string)(this["currentGuitar2Selection"]));
-            }
-            set {
-                this["currentGuitar2Selection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentGuitar1Id {
-            get {
-                return ((string)(this["currentGuitar1Id"]));
-            }
-            set {
-                this["currentGuitar1Id"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentGuitar2Id {
-            get {
-                return ((string)(this["currentGuitar2Id"]));
-            }
-            set {
-                this["currentGuitar2Id"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentDrumId {
-            get {
-                return ((string)(this["currentDrumId"]));
-            }
-            set {
-                this["currentDrumId"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentPacketDebugLogState {
-            get {
-                return ((string)(this["currentPacketDebugLogState"]));
-            }
-            set {
-                this["currentPacketDebugLogState"] = value;
+                this["controllerDeviceType"] = value;
             }
         }
     }

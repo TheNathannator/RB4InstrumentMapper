@@ -5,48 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RB4InstrumentMapper"
         mc:Ignorable="d"
-        Title="RB4InstrumentMapper" Height="631" Width="800" Loaded="Window_Loaded" Closed="Window_Closed" ResizeMode="CanMinimize">
+        Title="RB4InstrumentMapper" Height="499" Width="800" Loaded="Window_Loaded" Closed="Window_Closed" ResizeMode="CanMinimize" MinWidth="800" MinHeight="2">
     <Grid Margin="10,10,10,10">
-        <Label Name="mainTitleLabel" Content="Rock Band 4 Instrument Mapper" HorizontalAlignment="Left" Height="44" VerticalAlignment="Top" Width="618" FontSize="24" FontWeight="Bold" Margin="9,0,0,0"/>
+        <Label Name="mainTitleLabel" Content="Rock Band 4 Instrument Mapper" HorizontalAlignment="Left" Height="44" VerticalAlignment="Top" Width="381" FontSize="24" FontWeight="Bold" Margin="9,0,0,0" VerticalContentAlignment="Center"/>
+        <Label x:Name="versionLabel" Content="vX.X.X.X" HorizontalAlignment="Right" Height="44" Margin="0,0,10,0" VerticalAlignment="Top" Width="375" IsEnabled="False" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="18"/>
         <GroupBox Header="Pcap" Margin="10,44,10,0" Height="107" VerticalAlignment="Top">
             <Grid Margin="10,10,10,10">
-                <Label Name="pcapDeviceLabel" Content="Devices:" HorizontalAlignment="Left" Height="29" Margin="0,0,0,0" VerticalAlignment="Top" Width="74"/>
-                <ComboBox Name="pcapDeviceCombo" Height="28" Margin="79,0,119.667,0" VerticalAlignment="Top" SelectionChanged="pcapDeviceCombo_SelectionChanged"/>
-                <CheckBox x:Name="packetDebugCheckBox" Content="Show packets (for debugging)" HorizontalAlignment="Left" Height="22" Margin="79,43,0,0" VerticalAlignment="Top" Width="183" Checked="packetDebugCheckBox_Checked" Unchecked="packetDebugCheckBox_Unchecked"/>
-                <CheckBox x:Name="packetLogCheckBox" Content="Log packets to file" HorizontalAlignment="Left" Height="22" Margin="267,43,0,0" VerticalAlignment="Top" Width="120" Checked="packetLogCheckBox_Checked" Unchecked="packetLogCheckBox_Unchecked"/>
-                <Button x:Name="pcapAutoDetectButton" Content="Auto-Detect Pcap" HorizontalAlignment="Right" Margin="0,-1,-0.333,36.333" VerticalAlignment="Bottom" Width="112" Height="28" Click="pcapAutoDetectButton_Click"/>
-                <Button x:Name="pcapRefreshButton" Content="Refresh Pcap" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="132" Height="20" Click="pcapRefreshButton_Click" Margin="0,0,119.667,7.333" FontSize="10"/>
+                <Label Content="Devices:" HorizontalAlignment="Left" Height="29" Margin="0,0,0,0" VerticalAlignment="Top" Width="56"/>
+                <ComboBox Name="pcapDeviceCombo" Height="29" Margin="56,0,138,0" VerticalAlignment="Top" SelectionChanged="pcapDeviceCombo_SelectionChanged"/>
+                <CheckBox x:Name="packetDebugCheckBox" Content="Show packets (for debugging)" HorizontalAlignment="Left" Height="22" Margin="68,42,0,0" VerticalAlignment="Top" Width="184" Checked="packetDebugCheckBox_Checked" Unchecked="packetDebugCheckBox_Unchecked"/>
+                <CheckBox x:Name="packetLogCheckBox" Content="Log packets to file" HorizontalAlignment="Left" Height="22" Margin="267,42,0,0" VerticalAlignment="Top" Width="120" Checked="packetLogCheckBox_Checked" Unchecked="packetLogCheckBox_Unchecked"/>
+                <Button x:Name="pcapAutoDetectButton" Content="Auto-Detect Device" HorizontalAlignment="Right" VerticalAlignment="Top" Width="133" Height="29" Click="pcapAutoDetectButton_Click"/>
+                <Button x:Name="pcapRefreshButton" Content="Refresh List" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="133" Height="29" Click="pcapRefreshButton_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Controller" Margin="10,156,9.667,0" Height="203" VerticalAlignment="Top">
-            <Grid Margin="10,10,9.667,10.333">
-                <Label Name="guitar1Label" Content="Guitar 1:" HorizontalAlignment="Left" Height="29" Margin="0,0,0,0" VerticalAlignment="Top" Width="54"/>
-                <ComboBox Name="guitar1Combo" VerticalAlignment="Top" Height="28" Margin="63,0,281,0" SelectionChanged="guitar1Combo_SelectionChanged"/>
-                <Label x:Name="guitar1IdLabel" Content="Hex ID" HorizontalAlignment="Right" Height="28" Margin="0,0,227,0" VerticalAlignment="Top" Width="45"/>
-                <TextBox x:Name="guitar1IdTextBox" HorizontalAlignment="Right" Height="28" Margin="0,0,123,0" TextWrapping="Wrap" Text="" FontSize="16" VerticalAlignment="Top" Width="96" TextChanged="guitar1IdTextBox_TextChanged" TextAlignment="Right"/>
-                <Button x:Name="guitar1IdAutoDetectButton" Content="Auto-Detect ID" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Top" Width="112" Height="28" Click="guitar1IdAutoDetectButton_Click" IsEnabled="False"/>
-                <Label x:Name="guitar2Label" Content="Guitar 2:" HorizontalAlignment="Left" Height="29" Margin="0,40,0,0" VerticalAlignment="Top" Width="54"/>
-                <ComboBox x:Name="guitar2Combo" VerticalAlignment="Top" Height="28" Margin="63,40,281,0" SelectionChanged="guitar2Combo_SelectionChanged"/>
-                <Label x:Name="guitar2IdLabel" Content="Hex ID" HorizontalAlignment="Right" Height="28" Margin="0,40,227,0" VerticalAlignment="Top" Width="45"/>
-                <TextBox x:Name="guitar2IdTextBox" HorizontalAlignment="Right" Height="28" Margin="0,40,123,0" TextWrapping="Wrap" Text="" FontSize="16" VerticalAlignment="Top" Width="96" TextChanged="guitar2IdTextBox_TextChanged" TextAlignment="Right"/>
-                <Button x:Name="guitar2IdAutoDetectButton" Content="Auto-Detect ID" HorizontalAlignment="Right" Margin="0,40,0,0" VerticalAlignment="Top" Width="112" Height="28" Click="guitar2IdAutoDetectButton_Click" IsEnabled="False"/>
-                <Label Name="drumLabel" Content="Drums:" HorizontalAlignment="Left" Height="29" Margin="0,80,0,0" VerticalAlignment="Top" Width="54"/>
-                <ComboBox Name="drumCombo" VerticalAlignment="Top" Height="28" Margin="63,80,281,0" SelectionChanged="drumCombo_SelectionChanged"/>
-                <Label x:Name="drumIdLabel" Content="Hex ID" HorizontalAlignment="Right" Height="28" Margin="0,80,227,0" VerticalAlignment="Top" Width="45"/>
-                <TextBox x:Name="drumIdTextBox" HorizontalAlignment="Right" Height="28" Margin="0,80,123,0" TextWrapping="Wrap" Text="" FontSize="16" VerticalAlignment="Top" Width="96" TextChanged="drumIdTextBox_TextChanged" TextAlignment="Right"/>
-                <Button x:Name="drumIdAutoDetectButton" Content="Auto-Detect ID" HorizontalAlignment="Right" Margin="0,80,0,0" VerticalAlignment="Top" Width="112" Height="28" Click="drumIdAutoDetectButton_Click" IsEnabled="False"/>
-                <Button x:Name="controllerRefreshButton" Content="Refresh Controller" HorizontalAlignment="Right" Margin="0,118,281,0" VerticalAlignment="Top" Width="132" Height="20" Click="controllerRefreshButton_Click" FontSize="10"/>
-                <Label x:Name="controllerAutoAssignLabel" Content="Ensure controllers are connected. &#xD;&#xA;Maybe press a button on the controller." HorizontalAlignment="Left" Margin="504,118,0,-5" VerticalAlignment="Top" Width="219" Height="46" FontSize="11" Visibility="Hidden"/>
-            </Grid>
-        </GroupBox>
-        <Label x:Name="packetsProcessedLabel" Content="Packets processed:" HorizontalAlignment="Left" Height="26" Margin="25,375,0,0" VerticalAlignment="Top" Width="115" FontSize="10" Visibility="Hidden"/>
-        <Label x:Name="packetsProcessedCountLabel" Content="0" HorizontalAlignment="Left" Height="26" Margin="145,376,0,0" VerticalAlignment="Top" Width="189" FontSize="10" Visibility="Hidden"/>
-        <Button Name="startButton" Content="Start" Margin="0,366,24.667,0" Click="startButton_Click" HorizontalAlignment="Right" Width="145" Height="42" VerticalAlignment="Top" FontSize="18"/>
-        <GroupBox Header="Console" Margin="10,406,10,10">
+        <Label Content="Controller Type:" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="96" Margin="27,162,0,0"/>
+        <ComboBox x:Name="controllerDeviceTypeCombo" Margin="129,162,0,0" SelectionChanged="controllerDeviceTypeCombo_SelectionChanged" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="201">
+            <ComboBoxItem Content="vJoy" IsEnabled="False"/>
+            <ComboBoxItem Content="ViGEmBus" IsEnabled="False"/>
+        </ComboBox>
+        <Label x:Name="packetsProcessedLabel" Content="Packets processed:" Height="40" Margin="0,158,234,0" VerticalAlignment="Top" FontSize="12" Visibility="Hidden" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="110"/>
+        <Label x:Name="packetsProcessedCountLabel" Content="999999999" Height="40" Margin="0,158,164,0" VerticalAlignment="Top" FontSize="12" Visibility="Hidden" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="70"/>
+        <Button Name="startButton" Content="Start" Margin="0,158,26,0" Click="startButton_Click" HorizontalAlignment="Right" Width="133" Height="40" VerticalAlignment="Top" FontSize="18" IsEnabled="False"/>
+        <GroupBox Header="Console" Margin="10,198,10,10">
             <Grid Margin="10,10,10,10">
-                <TextBox Name="messageConsole" Margin="0,0,0,0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" IsReadOnly="True" FontSize="10"/>
+                <TextBox Name="messageConsole" Margin="0,0,0,0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" IsReadOnly="True" FontSize="10" IsUndoEnabled="False"/>
             </Grid>
         </GroupBox>
-        <Label x:Name="guitar1IdLabel_Copy" Content="v1.22.0.0" HorizontalAlignment="Right" Height="28" Margin="0,13,9.667,0" VerticalAlignment="Top" Width="102" IsEnabled="False"/>
     </Grid>
 </Window>

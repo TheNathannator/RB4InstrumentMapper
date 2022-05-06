@@ -2,32 +2,17 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RB4InstrumentMapper.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="currentPcapSelection" Type="System.String" Scope="User">
+    <Setting Name="pcapDevice" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="currentGuitar1Selection" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="packetDebug" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="currentDrumSelection" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="packetDebugLog" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="currentPacketDebugState" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="currentGuitar2Selection" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="currentGuitar1Id" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="currentGuitar2Id" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="currentDrumId" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="currentPacketDebugLogState" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="controllerDeviceType" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-1</Value>
     </Setting>
   </Settings>
 </SettingsFile>
