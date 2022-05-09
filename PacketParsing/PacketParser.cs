@@ -47,14 +47,21 @@ namespace RB4InstrumentMapper
             }
 
             // Get device ID
-            ulong deviceId = (ulong)(
+            // Have to do it in chunks to avoid bit shift wraparounds and sign extension weirdness from casting
+            ulong deviceIdLow = (ulong)(
                  data[HeaderOffset.DeviceId + 5]        |
                 (data[HeaderOffset.DeviceId + 4] << 8)  |
                 (data[HeaderOffset.DeviceId + 3] << 16) |
-                (data[HeaderOffset.DeviceId + 2] << 24) |
-                (data[HeaderOffset.DeviceId + 1] << 32) |
-                (data[HeaderOffset.DeviceId]     << 40) |
-                0x0000000000000000 // Ensures that no garbage data gets through to the final number
+                (data[HeaderOffset.DeviceId + 2] << 24)
+            );
+            ulong deviceIdHigh = (ulong)(
+                data[HeaderOffset.DeviceId + 1] |
+                (data[HeaderOffset.DeviceId] << 8)
+            );
+
+            ulong deviceId = (
+                deviceIdLow |
+                (deviceIdHigh << 32)
             );
 
             // Check if ID has been encountered yet
