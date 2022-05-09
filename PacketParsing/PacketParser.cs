@@ -38,7 +38,7 @@ namespace RB4InstrumentMapper
         /// <summary>
         /// Handles a received Pcap packet.
         /// </summary>
-        public static void HandlePcapPacket(ReadOnlySpan<byte> data)
+        public static void HandlePcapPacket(ReadOnlySpan<byte> data, ref ulong processedCount)
         {
             // Packet must be at least 30 bytes long
             if (data.Length < (Length.ReceiverHeader + Length.CommandHeader))
@@ -91,6 +91,7 @@ namespace RB4InstrumentMapper
 
             // Strip off receiver header and send the data to be parsed
             pcapIds[deviceId].ParseCommand(data.Slice(Length.ReceiverHeader));
+            processedCount++;
         }
 
         // TODO: Add libusb support

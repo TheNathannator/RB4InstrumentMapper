@@ -477,7 +477,7 @@ namespace RB4InstrumentMapper
         {
             try
             {
-                PacketParser.HandlePcapPacket(packet.Data);
+                PacketParser.HandlePcapPacket(packet.Data, ref processedPacketCount);
             }
             catch (Exception ex)
             {
