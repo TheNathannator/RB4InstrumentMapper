@@ -45,6 +45,13 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void ParseCommand(ReadOnlySpan<byte> commandData)
         {
+            if (PacketParser.PacketDebug)
+            {
+                string debugData = $"Command: {commandData.ToHexString()}";
+                Console.Write(debugData);
+                Logging.Packet_Write(debugData);
+            }
+
             switch (commandData[CommandOffset.CommandId])
             {
                 case CommandId.Input:

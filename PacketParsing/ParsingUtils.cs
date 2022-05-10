@@ -78,5 +78,14 @@ namespace RB4InstrumentMapper.Parsing
         {
             return (short)(span[index] << 8 | span[index + 1]);
         }
+
+        /// <summary>
+        /// Converts a ReadOnlySpan<byte> to a string.
+        /// </summary>
+        public static string ToHexString(this ReadOnlySpan<byte> span)
+        {
+            string hexString = ParsingHelpers.ByteArrayToHexString(span.ToArray());
+            return hexString;
+        }
     }
 }

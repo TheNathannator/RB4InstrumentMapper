@@ -58,6 +58,13 @@ namespace RB4InstrumentMapper.Parsing
 
             // Send data
             VjoyStatic.Client.UpdateVJD(deviceId, ref state);
+
+            if (PacketParser.PacketDebug)
+            {
+                string debugData = $", Input: {data.ToHexString()}";
+                Console.WriteLine(debugData);
+                Logging.Packet_WriteLine(debugData);
+            }
         }
 
         /// <summary>
@@ -65,6 +72,13 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         private void ParseCoreButtons(ushort buttons)
         {
+            if (PacketParser.PacketDebug)
+            {
+                string debugData = $"Buttons: {buttons.ToString("X4")}";
+                Console.Write(debugData);
+                Logging.Packet_Write(debugData);
+            }
+
             // Menu
             if ((buttons | GamepadButton.Menu) != 0)
             {
@@ -155,24 +169,38 @@ namespace RB4InstrumentMapper.Parsing
             ParseCoreButtons(data.GetUInt16BE(GuitarOffset.Buttons));
 
             // Frets
-            // The fret data aligns with how we want it to be set in the vJoy device, so it can be mapped directly
-            state.Buttons |= data[GuitarOffset.UpperFrets];
+            byte frets = data[GuitarOffset.UpperFrets];
             // Lower frets are mapped on top of the upper frets to allow both sets to be used in-game
-            state.Buttons |= data[GuitarOffset.LowerFrets];
+            frets |= data[GuitarOffset.LowerFrets];
+
+            // The fret data aligns with how we want it to be set in the vJoy device, so it can be mapped directly
+            state.Buttons |= frets;
+
+            // Axes
+            int whammy = data[GuitarOffset.WhammyBar].ScaleToInt32();
+            int tilt = data[GuitarOffset.Tilt].ScaleToInt32();
+            int pickup = data[GuitarOffset.PickupSwitch].ScaleToInt32();
 
             // Whammy
             // Value ranges from 0 (not pressed) to 255 (fully pressed)
-            state.AxisY = data[GuitarOffset.WhammyBar].ScaleToInt32();
+            state.AxisY = whammy;
 
             // Tilt
             // Value ranges from 0 to 255
             // It seems to have a threshold of around 0x70 though,
             // after a certain point values will get floored to 0
-            state.AxisZ = data[GuitarOffset.Tilt].ScaleToInt32();
+            state.AxisZ = tilt;
 
             // Pickup switch
             // Reported values are 0x00, 0x10, 0x20, 0x30, and 0x40 (ranges from 0 to 64)
-            state.AxisX = data[GuitarOffset.PickupSwitch].ScaleToInt32();
+            state.AxisX = pickup;
+
+            if (PacketParser.PacketDebug)
+            {
+                string debugData = $", Frets: {frets.ToString("X2")}, Whammy: {whammy.ToString("X8")}, Tilt: {tilt.ToString("X8")}, Pickup Switch: {pickup.ToString("X8")}";
+                Console.WriteLine(debugData);
+                Logging.Packet_WriteLine(debugData);
+            }
         }
 
         /// <summary>
@@ -183,47 +211,55 @@ namespace RB4InstrumentMapper.Parsing
             // Buttons
             ParseCoreButtons(data.GetUInt16BE(DrumOffset.Buttons));
 
-            // Pads
+            // Pads and cymbals
+            byte redPad    = (byte)(data[DrumOffset.PadVels] >> 4);
+            byte yellowPad = (byte)(data[DrumOffset.PadVels] | DrumPadVel.Yellow);
+            byte bluePad   = (byte)(data[DrumOffset.PadVels + 1] >> 4);
+            byte greenPad  = (byte)(data[DrumOffset.PadVels + 1] | DrumPadVel.Green);
+
+            byte yellowCym = (byte)(data[DrumOffset.CymbalVels] >> 4);
+            byte blueCym   = (byte)(data[DrumOffset.CymbalVels] | DrumPadVel.Blue);
+            byte greenCym  = (byte)(data[DrumOffset.CymbalVels + 1] >> 4);
+
             // Red pad
-            if ((data[DrumOffset.PadVels] | DrumPadVel.Red) != 0)
+            if (redPad != 0)
             {
                 state.Buttons |= VjoyStatic.Button.One;
             }
 
             // Yellow pad
-            if ((data[DrumOffset.PadVels] | DrumPadVel.Yellow) != 0)
+            if (yellowPad != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Two;
             }
 
             // Blue pad
-            if ((data[DrumOffset.PadVels] | DrumPadVel.Blue) != 0)
+            if (bluePad != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Three;
             }
 
             // Green pad
-            if ((data[DrumOffset.PadVels] | DrumPadVel.Green) != 0)
+            if (greenPad != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Four;
             }
 
 
-            // Cymbals
             // Yellow cymbal
-            if ((data[DrumOffset.CymbalVels] | DrumCymVel.Yellow) != 0)
+            if (yellowCym != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Six;
             }
 
             // Blue cymbal
-            if ((data[DrumOffset.CymbalVels] | DrumCymVel.Blue) != 0)
+            if (blueCym != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Seven;
             }
 
             // Green cymbal
-            if ((data[DrumOffset.CymbalVels] | DrumCymVel.Green) != 0)
+            if (greenCym != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Eight;
             }
@@ -241,6 +277,13 @@ namespace RB4InstrumentMapper.Parsing
             {
                 state.Buttons |= VjoyStatic.Button.Nine;
             }
+
+            if (PacketParser.PacketDebug)
+            {
+                string debugData = $", Pads: Red: {redPad.ToString("X2")}, Yellow: {yellowPad.ToString("X2")}, Blue: {bluePad.ToString("X2")}, Green: {greenPad.ToString("X2")}; Cymbals: Yellow: {yellowCym.ToString("X2")}, Blue: {blueCym.ToString("X2")}, Green: {greenCym.ToString("X2")}";
+                Console.WriteLine(debugData);
+                Logging.Packet_WriteLine(debugData);
+            }
         }
 
         /// <summary>
@@ -256,6 +299,13 @@ namespace RB4InstrumentMapper.Parsing
 
                 state.Buttons |= (data[KeycodeOffset.PressedState] != 0) ? VjoyStatic.Button.Fourteen : 0;
                 VjoyStatic.Client.UpdateVJD(deviceId, ref state);
+            }
+
+            if (PacketParser.PacketDebug)
+            {
+                string debugData = $", Virtual key: {data.ToHexString()}";
+                Console.WriteLine(debugData);
+                Logging.Packet_WriteLine(debugData);
             }
         }
 

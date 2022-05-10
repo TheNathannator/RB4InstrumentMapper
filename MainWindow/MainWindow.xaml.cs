@@ -583,6 +583,7 @@ namespace RB4InstrumentMapper
         private void packetDebugCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             packetDebug = true;
+            PacketParser.PacketDebug = true;
             packetLogCheckBox.IsEnabled = true;
             packetDebugLog = packetLogCheckBox.IsChecked.GetValueOrDefault();
 
@@ -599,6 +600,7 @@ namespace RB4InstrumentMapper
         private void packetDebugCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             packetDebug = false;
+            PacketParser.PacketDebug = false;
             packetLogCheckBox.IsEnabled = false;
             packetDebugLog = false;
 
