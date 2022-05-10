@@ -112,13 +112,6 @@ namespace RB4InstrumentMapper
                 device.Close();
             }
 
-            // Just in case...
-            // At least in debug builds, stopping capture can take a while and cause the devices to not get disconnected
-            // if (VjoyStatic.Client.vJoyEnabled())
-            // {
-            //     VjoyStatic.FreeAllDevices();
-            // }
-
             // Clear IDs list
             pcapIds.Clear();
 
