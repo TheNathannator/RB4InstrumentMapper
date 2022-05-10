@@ -72,6 +72,13 @@ namespace RB4InstrumentMapper.Parsing
                 return;
             }
 
+            if (PacketParser.PacketDebug)
+            {
+                string debugData = $", Input: {data.ToHexString()}";
+                Console.WriteLine(debugData);
+                Logging.Packet_WriteLine(debugData);
+            }
+
             // Reset report
             device.ResetReport();
 
@@ -99,13 +106,6 @@ namespace RB4InstrumentMapper.Parsing
 
             // Send data
             device.SubmitReport();
-
-            if (PacketParser.PacketDebug)
-            {
-                string debugData = $", Input: {data.ToHexString()}";
-                Console.WriteLine(debugData);
-                Logging.Packet_WriteLine(debugData);
-            }
         }
 
         /// <summary>

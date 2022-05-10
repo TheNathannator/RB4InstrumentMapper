@@ -31,6 +31,13 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void ParseInput(ReadOnlySpan<byte> data, byte length)
         {
+            if (PacketParser.PacketDebug)
+            {
+                string debugData = $", Input: {data.ToHexString()}";
+                Console.WriteLine(debugData);
+                Logging.Packet_WriteLine(debugData);
+            }
+
             // Reset report
             state.ResetState();
 
@@ -58,13 +65,6 @@ namespace RB4InstrumentMapper.Parsing
 
             // Send data
             VjoyStatic.Client.UpdateVJD(deviceId, ref state);
-
-            if (PacketParser.PacketDebug)
-            {
-                string debugData = $", Input: {data.ToHexString()}";
-                Console.WriteLine(debugData);
-                Logging.Packet_WriteLine(debugData);
-            }
         }
 
         /// <summary>
