@@ -144,7 +144,7 @@ namespace RB4InstrumentMapper
         /// <summary>
         /// Writes a line to the log file.
         /// </summary>
-        public static void LogLine(string text)
+        public static void Main_WriteLine(string text)
         {
             // Create log file if it hasn't been made yet
             CreateMainLog();
@@ -155,7 +155,7 @@ namespace RB4InstrumentMapper
         /// <summary>
         /// Writes an exception, and any additonal info, to the log.
         /// </summary>
-        public static void LogException(Exception ex, string addtlInfo = null)
+        public static void Main_WriteException(Exception ex, string addtlInfo = null)
         {
             // Create log file if it hasn't been made yet
             CreateMainLog();
@@ -163,12 +163,18 @@ namespace RB4InstrumentMapper
             mainLog?.WriteException(ex, addtlInfo);
         }
 
-        public static void LogPacket(string packetLine)
+        public static void Packet_WriteLine(string text)
         {
-            // Create log file if it hasn't been made yet
-            CreatePacketLog();
+            // Don't create log file if it hasn't been made yet
+            // Packet log should be created manually
+            packetLog?.WriteLine(text);
+        }
 
-            packetLog?.WriteLine(packetLine);
+        public static void Packet_Write(string text)
+        {
+            // Don't create log file if it hasn't been made yet
+            // Packet log should be created manually
+            packetLog?.Write(text);
         }
 
         /// <summary>

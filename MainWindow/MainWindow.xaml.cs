@@ -479,10 +479,15 @@ namespace RB4InstrumentMapper
             {
                 PacketParser.HandlePcapPacket(packet.Data, ref processedPacketCount);
             }
+            catch (ThreadAbortException)
+            {
+                // Don't log ThreadAbortExceptions, just return
+                return;
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error while handling packet: {ex.GetFirstLine()}");
-                Logging.LogException(ex);
+                Logging.Main_WriteException(ex, "Context: Unhandled error during packet handling");
 
                 // Stop capture
                 uiDispatcher.Invoke(StopCapture);
@@ -495,11 +500,7 @@ namespace RB4InstrumentMapper
                 RawCapture raw = packet.GetPacket();
                 string packetLogString = raw.Timeval.Date.ToString("yyyy-MM-dd hh:mm:ss.fff") + $" [{raw.PacketLength}] " + ParsingHelpers.ByteArrayToHexString(raw.Data);;
                 Console.WriteLine(packetLogString);
-
-                if (packetDebugLog)
-                {
-                    Logging.LogPacket(packetLogString);
-                }
+                Logging.Packet_WriteLine(packetLogString);
             }
 
             // Status reporting (slow)
@@ -813,10 +814,10 @@ namespace RB4InstrumentMapper
             if (Logging.MainLogExists)
             {
                 // Log exception
-                Logging.LogLine("-------------------");
-                Logging.LogLine("UNHANDLED EXCEPTION");
-                Logging.LogLine("-------------------");
-                Logging.LogException(unhandledException);
+                Logging.Main_WriteLine("-------------------");
+                Logging.Main_WriteLine("UNHANDLED EXCEPTION");
+                Logging.Main_WriteLine("-------------------");
+                Logging.Main_WriteException(unhandledException);
 
                 // Complete the message buffer
                 message.AppendLine("A log of the error has been created, do you want to open it?");
