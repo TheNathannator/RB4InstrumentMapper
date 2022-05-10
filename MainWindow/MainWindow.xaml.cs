@@ -485,7 +485,7 @@ namespace RB4InstrumentMapper
                 Logging.LogException(ex);
 
                 // Stop capture
-                StopCapture();
+                uiDispatcher.Invoke(StopCapture);
                 return;
             }
 
