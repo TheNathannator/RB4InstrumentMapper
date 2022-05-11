@@ -239,6 +239,11 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void Close()
         {
+            // Reset report
+            state.ResetState();
+            VjoyStatic.Client.UpdateVJD(deviceId, ref state);
+
+            // Free device
             VjoyStatic.ReleaseDevice(deviceId);
         }
     }

@@ -237,6 +237,11 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void Close()
         {
+            // Reset report
+            device.ResetReport();
+            device.SubmitReport();
+
+            // Disconnect device
             try { device?.Disconnect(); } catch {}
             device = null;
         }
