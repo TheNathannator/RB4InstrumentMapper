@@ -37,13 +37,6 @@ namespace RB4InstrumentMapper.Parsing
             // Parse the respective device
             switch (length)
             {
-#if DEBUG
-                // Gamepad report parsing for debugging purposes
-                case Length.Input_Gamepad:
-                    ParseGamepad(data);
-                    break;
-#endif
-
                 case Length.Input_Guitar:
                     ParseGuitar(data);
                     break;
@@ -126,25 +119,6 @@ namespace RB4InstrumentMapper.Parsing
 
             // Other buttons are not mapped here since they may have specific uses
         }
-
-#if DEBUG
-        // Gamepad report parsing for debugging purposes
-        /// <summary>
-        /// Parses gamepad input data from an input report.
-        /// </summary>
-        private void ParseGamepad(ReadOnlySpan<byte> data)
-        {
-            // Buttons
-            ushort buttons = data.GetUInt16BE(GamepadOffset.Buttons);
-            ParseCoreButtons(buttons);
-
-            // Left stick
-            state.AxisX = data.GetInt16LE(GamepadOffset.LeftStickX);
-            state.AxisY = data.GetInt16LE(GamepadOffset.LeftStickY);
-
-            // Don't map anything else, as there are not enough axes and this is meant for debug purposes only
-        }
-#endif
 
         /// <summary>
         /// Parses guitar input data from an input report.

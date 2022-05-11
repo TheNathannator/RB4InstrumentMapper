@@ -77,13 +77,6 @@ namespace RB4InstrumentMapper.Parsing
 
             switch (length)
             {
-#if DEBUG
-                // Gamepad report parsing for debugging purposes
-                case Length.Input_Gamepad:
-                    ParseGamepad(data);
-                    break;
-#endif
-
                 case Length.Input_Guitar:
                     ParseGuitar(data);
                     break;
@@ -119,39 +112,6 @@ namespace RB4InstrumentMapper.Parsing
 
             // Other buttons are not mapped here since they may have specific uses
         }
-
-#if DEBUG
-        // Gamepad report parsing for debugging purposes
-        /// <summary>
-        /// Parses gamepad input data from an input report.
-        /// </summary>
-        private void ParseGamepad(ReadOnlySpan<byte> data)
-        {
-            // Buttons
-            ushort buttons = data.GetUInt16BE(GamepadOffset.Buttons);
-            ParseCoreButtons(buttons);
-
-            device.SetButtonState(Xbox360Button.A, (buttons & GamepadButton.A) != 0);
-            device.SetButtonState(Xbox360Button.B, (buttons & GamepadButton.B) != 0);
-            device.SetButtonState(Xbox360Button.X, (buttons & GamepadButton.X) != 0);
-            device.SetButtonState(Xbox360Button.Y, (buttons & GamepadButton.Y) != 0);
-
-            device.SetButtonState(Xbox360Button.LeftShoulder, (buttons & GamepadButton.LeftBumper) != 0);
-            device.SetButtonState(Xbox360Button.RightShoulder, (buttons & GamepadButton.RightBumper) != 0);
-            device.SetButtonState(Xbox360Button.LeftThumb, (buttons & GamepadButton.LeftStickPress) != 0);
-            device.SetButtonState(Xbox360Button.RightThumb, (buttons & GamepadButton.RightStickPress) != 0);
-
-            // Sticks
-            device.SetAxisValue(Xbox360Axis.LeftThumbX, data.GetInt16LE(GamepadOffset.LeftStickX));
-            device.SetAxisValue(Xbox360Axis.LeftThumbY, data.GetInt16LE(GamepadOffset.LeftStickY));
-            device.SetAxisValue(Xbox360Axis.RightThumbX, data.GetInt16LE(GamepadOffset.RightStickX));
-            device.SetAxisValue(Xbox360Axis.RightThumbY, data.GetInt16LE(GamepadOffset.RightStickY));
-
-            // Triggers
-            device.SetSliderValue(Xbox360Slider.LeftTrigger, (byte)(data.GetInt16LE(GamepadOffset.LeftTrigger) >> 8));
-            device.SetSliderValue(Xbox360Slider.RightTrigger, (byte)(data.GetInt16LE(GamepadOffset.RightTrigger) >> 8));
-        }
-#endif
 
         /// <summary>
         /// Parses guitar input data from an input report.
