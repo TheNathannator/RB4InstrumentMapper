@@ -31,9 +31,6 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void ParseInput(ReadOnlySpan<byte> data, byte length)
         {
-            // Reset report
-            state.ResetState();
-
             // Parse the respective device
             switch (length)
             {
@@ -226,9 +223,6 @@ namespace RB4InstrumentMapper.Parsing
             // Only respond to the Left Windows keycode, as this is what the guide button reports.
             if (data[KeycodeOffset.Keycode] == Keycodes.LeftWin)
             {
-                // Don't reset the state to preserve other button information
-                // state.ResetState();
-
                 state.Buttons |= (data[KeycodeOffset.PressedState] != 0) ? VjoyStatic.Button.Fourteen : 0;
                 VjoyStatic.Client.UpdateVJD(deviceId, ref state);
             }

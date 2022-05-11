@@ -72,9 +72,6 @@ namespace RB4InstrumentMapper.Parsing
                 return;
             }
 
-            // Reset report
-            device.ResetReport();
-
             switch (length)
             {
                 case Length.Input_Guitar:
@@ -227,8 +224,6 @@ namespace RB4InstrumentMapper.Parsing
             // Only respond to the Left Windows keycode, as this is what the guide button reports.
             if (data[KeycodeOffset.Keycode] == Keycodes.LeftWin)
             {
-                // Don't reset the report to preserve other button information
-                // device.ResetReport();
                 device.SetButtonState(Xbox360Button.Guide, data[KeycodeOffset.PressedState] != 0);
                 device.SubmitReport();
             }
