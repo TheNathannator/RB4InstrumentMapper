@@ -185,25 +185,25 @@ namespace RB4InstrumentMapper.Parsing
 
             // Pads
             // Red pad
-            if ((data[DrumOffset.PadVels] | DrumPadVel.Red) != 0)
+            if ((data[DrumOffset.PadVels] & DrumPadVel.Red) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.One;
             }
 
             // Yellow pad
-            if ((data[DrumOffset.PadVels] | DrumPadVel.Yellow) != 0)
+            if ((data[DrumOffset.PadVels] & DrumPadVel.Yellow) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Two;
             }
 
             // Blue pad
-            if ((data[DrumOffset.PadVels] | DrumPadVel.Blue) != 0)
+            if ((data[DrumOffset.PadVels] & DrumPadVel.Blue) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Three;
             }
 
             // Green pad
-            if ((data[DrumOffset.PadVels] | DrumPadVel.Green) != 0)
+            if ((data[DrumOffset.PadVels] & DrumPadVel.Green) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Four;
             }
@@ -211,19 +211,19 @@ namespace RB4InstrumentMapper.Parsing
 
             // Cymbals
             // Yellow cymbal
-            if ((data[DrumOffset.CymbalVels] | DrumCymVel.Yellow) != 0)
+            if ((data[DrumOffset.CymbalVels] & DrumCymVel.Yellow) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Six;
             }
 
             // Blue cymbal
-            if ((data[DrumOffset.CymbalVels] | DrumCymVel.Blue) != 0)
+            if ((data[DrumOffset.CymbalVels] & DrumCymVel.Blue) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Seven;
             }
 
             // Green cymbal
-            if ((data[DrumOffset.CymbalVels] | DrumCymVel.Green) != 0)
+            if ((data[DrumOffset.CymbalVels] & DrumCymVel.Green) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Eight;
             }
@@ -231,13 +231,13 @@ namespace RB4InstrumentMapper.Parsing
 
             // Kick pedals
             // Kick 1
-            if ((data[DrumOffset.Buttons] | DrumButton.KickOne) != 0)
+            if ((data[DrumOffset.Buttons] & DrumButton.KickOne) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Five;
             }
 
             // Kick 2
-            if ((data[DrumOffset.Buttons] | DrumButton.KickTwo) != 0)
+            if ((data[DrumOffset.Buttons] & DrumButton.KickTwo) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Nine;
             }
