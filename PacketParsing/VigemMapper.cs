@@ -72,13 +72,6 @@ namespace RB4InstrumentMapper.Parsing
                 return;
             }
 
-            if (PacketParser.PacketDebug)
-            {
-                string debugData = $", Input: {data.ToHexString()}";
-                Console.WriteLine(debugData);
-                Logging.Packet_WriteLine(debugData);
-            }
-
             // Reset report
             device.ResetReport();
 
@@ -113,13 +106,6 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         private void ParseCoreButtons(ushort buttons)
         {
-            if (PacketParser.PacketDebug)
-            {
-                string debugData = $"Buttons: {buttons.ToString("X4")}";
-                Console.Write(debugData);
-                Logging.Packet_Write(debugData);
-            }
-
             // Menu
             device.SetButtonState(Xbox360Button.Start, (buttons & GamepadButton.Menu) != 0);
             // Options
@@ -185,24 +171,12 @@ namespace RB4InstrumentMapper.Parsing
             device.SetButtonState(Xbox360Button.X, (frets & GuitarFret.Blue) != 0);
             device.SetButtonState(Xbox360Button.LeftShoulder, (frets & GuitarFret.Orange) != 0);
 
-            // Axes
-            short whammy = data[GuitarOffset.WhammyBar].ScaleToInt16();
-            short tilt = data[GuitarOffset.Tilt].ScaleToInt16();
-            byte pickup = data[GuitarOffset.PickupSwitch];
-
             // Whammy
-            device.SetAxisValue(Xbox360Axis.RightThumbX, whammy);
+            device.SetAxisValue(Xbox360Axis.RightThumbX, data[GuitarOffset.WhammyBar].ScaleToInt16());
             // Tilt
-            device.SetAxisValue(Xbox360Axis.RightThumbY, tilt);
+            device.SetAxisValue(Xbox360Axis.RightThumbY, data[GuitarOffset.Tilt].ScaleToInt16());
             // Pickup Switch
-            device.SetSliderValue(Xbox360Slider.LeftTrigger, pickup);
-
-            if (PacketParser.PacketDebug)
-            {
-                string debugData = $", Frets: {frets.ToString("X2")}, Whammy: {whammy.ToString("X4")}, Tilt: {tilt.ToString("X4")}, Pickup Switch: {pickup.ToString("X2")}";
-                Console.WriteLine(debugData);
-                Logging.Packet_WriteLine(debugData);
-            }
+            device.SetSliderValue(Xbox360Slider.LeftTrigger, data[GuitarOffset.PickupSwitch]);
         }
 
         /// <summary>
@@ -237,15 +211,22 @@ namespace RB4InstrumentMapper.Parsing
                 (yellowCym | blueCym | greenCym) != 0);
 
             // Velocities
-            // short redVel = ByteToVelocity(redPad);
-            // short yellowVel = ByteToVelocityNegative((byte)(yellowPad | yellowCym));
-            // short blueVel = ByteToVelocity((byte)(bluePad | blueCym));
-            // short greenVel = ByteToVelocityNegative((byte)(greenPad | greenCym));
-
-            // device.SetAxisValue(Xbox360Axis.LeftThumbX, redVel);
-            // device.SetAxisValue(Xbox360Axis.LeftThumbY, yellowVel);
-            // device.SetAxisValue(Xbox360Axis.RightThumbX, blueVel);
-            // device.SetAxisValue(Xbox360Axis.RightThumbY, greenVel);
+            // device.SetAxisValue(
+            //     Xbox360Axis.LeftThumbX,
+            //     ByteToVelocity(redPad)
+            // );
+            // device.SetAxisValue(
+            //     Xbox360Axis.LeftThumbY,
+            //     ByteToVelocityNegative((byte)(yellowPad | yellowCym))
+            // );
+            // device.SetAxisValue(
+            //     Xbox360Axis.RightThumbX,
+            //     ByteToVelocity((byte)(bluePad | blueCym))
+            // );
+            // device.SetAxisValue(
+            //     Xbox360Axis.RightThumbY,
+            //     ByteToVelocityNegative((byte)(greenPad | greenCym))
+            // );
 
             /// <summary>
             /// Scales a byte to a drums velocity value.
@@ -274,13 +255,6 @@ namespace RB4InstrumentMapper.Parsing
             //         ((~value.ScaleToUInt16()) >> 1) | 0x8000
             //     );
             // }
-
-            if (PacketParser.PacketDebug)
-            {
-                string debugData = $", Pads: Red: {redPad.ToString("X2")}, Yellow: {yellowPad.ToString("X2")}, Blue: {bluePad.ToString("X2")}, Green: {greenPad.ToString("X2")},\nCymbals: Yellow: {yellowCym.ToString("X2")}, Blue: {blueCym.ToString("X2")}, Green: {greenCym.ToString("X2")}"; // ,\nVelocities: Red: {redVel.ToString("X4)}, Yellow: {yellowVel.ToString("X4)}, Blue: {blueVel.ToString("X4)}, Green: {greenVel.ToString("X4)}
-                Console.WriteLine(debugData);
-                Logging.Packet_WriteLine(debugData);
-            }
         }
 
         /// <summary>
@@ -295,13 +269,6 @@ namespace RB4InstrumentMapper.Parsing
                 // device.ResetReport();
                 device.SetButtonState(Xbox360Button.Guide, data[KeycodeOffset.PressedState] != 0);
                 device.SubmitReport();
-            }
-
-            if (PacketParser.PacketDebug)
-            {
-                string debugData = $", Virtual key: {data.ToHexString()}";
-                Console.WriteLine(debugData);
-                Logging.Packet_WriteLine(debugData);
             }
         }
 

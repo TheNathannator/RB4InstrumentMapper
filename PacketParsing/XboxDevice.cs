@@ -45,13 +45,6 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         public void ParseCommand(ReadOnlySpan<byte> commandData)
         {
-            if (PacketParser.PacketDebug)
-            {
-                string debugData = $"Command: {commandData.ToHexString()}";
-                Console.Write(debugData);
-                Logging.Packet_Write(debugData);
-            }
-
             switch (commandData[CommandOffset.CommandId])
             {
                 case CommandId.Input:
@@ -66,12 +59,6 @@ namespace RB4InstrumentMapper.Parsing
 
                 default:
                     // Don't do anything with unrecognized command IDs
-                    if (PacketParser.PacketDebug)
-                    {
-                        // Finish off debug line; normally this is done in the input parsing
-                        Console.Write("\n");
-                        Logging.Packet_Write("\n");
-                    }
                     break;
             }
         }

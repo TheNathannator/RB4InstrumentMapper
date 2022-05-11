@@ -31,11 +31,6 @@ namespace RB4InstrumentMapper
         public static ParsingMode ParseMode { get; set; } = (ParsingMode)0;
 
         /// <summary>
-        /// Gets or sets the current parsing mode.
-        /// </summary>
-        public static bool PacketDebug { get; set; } = false;
-
-        /// <summary>
         /// Whether or not new devices can be added.
         /// </summary>
         private static bool canHandleNewDevices = true;

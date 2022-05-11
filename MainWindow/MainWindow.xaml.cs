@@ -475,15 +475,6 @@ namespace RB4InstrumentMapper
         /// <param name="packet">The received packet</param>
         private void OnPacketArrival(object sender, PacketCapture packet)
         {
-            // Debugging (if enabled)
-            if (packetDebug)
-            {
-                RawCapture raw = packet.GetPacket();
-                string packetLogString = raw.Timeval.Date.ToString("yyyy-MM-dd hh:mm:ss.fff") + $" [{raw.PacketLength}] " + ParsingHelpers.ByteArrayToHexString(raw.Data);;
-                Console.WriteLine(packetLogString);
-                Logging.Packet_WriteLine(packetLogString);
-            }
-
             try
             {
                 PacketParser.HandlePcapPacket(packet.Data, ref processedPacketCount);
@@ -501,6 +492,15 @@ namespace RB4InstrumentMapper
                 // Stop capture
                 uiDispatcher.Invoke(StopCapture);
                 return;
+            }
+
+            // Debugging (if enabled)
+            if (packetDebug)
+            {
+                RawCapture raw = packet.GetPacket();
+                string packetLogString = raw.Timeval.Date.ToString("yyyy-MM-dd hh:mm:ss.fff") + $" [{raw.PacketLength}] " + ParsingHelpers.ByteArrayToHexString(raw.Data);;
+                Console.WriteLine(packetLogString);
+                Logging.Packet_WriteLine(packetLogString);
             }
 
             // Status reporting (slow)
@@ -583,7 +583,6 @@ namespace RB4InstrumentMapper
         private void packetDebugCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             packetDebug = true;
-            PacketParser.PacketDebug = true;
             packetLogCheckBox.IsEnabled = true;
             packetDebugLog = packetLogCheckBox.IsChecked.GetValueOrDefault();
 
@@ -600,7 +599,6 @@ namespace RB4InstrumentMapper
         private void packetDebugCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             packetDebug = false;
-            PacketParser.PacketDebug = false;
             packetLogCheckBox.IsEnabled = false;
             packetDebugLog = false;
 
