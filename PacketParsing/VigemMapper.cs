@@ -121,15 +121,15 @@ namespace RB4InstrumentMapper.Parsing
             }
 
             // Menu
-            device.SetButtonState(Xbox360Button.Start, (buttons | GamepadButton.Menu) != 0);
+            device.SetButtonState(Xbox360Button.Start, (buttons & GamepadButton.Menu) != 0);
             // Options
-            device.SetButtonState(Xbox360Button.Back, (buttons | GamepadButton.Options) != 0);
+            device.SetButtonState(Xbox360Button.Back, (buttons & GamepadButton.Options) != 0);
 
             // Dpad
-            device.SetButtonState(Xbox360Button.Up, (buttons | GamepadButton.DpadUp) != 0);
-            device.SetButtonState(Xbox360Button.Down, (buttons | GamepadButton.DpadDown) != 0);
-            device.SetButtonState(Xbox360Button.Left, (buttons | GamepadButton.DpadLeft) != 0);
-            device.SetButtonState(Xbox360Button.Right, (buttons | GamepadButton.DpadRight) != 0);
+            device.SetButtonState(Xbox360Button.Up, (buttons & GamepadButton.DpadUp) != 0);
+            device.SetButtonState(Xbox360Button.Down, (buttons & GamepadButton.DpadDown) != 0);
+            device.SetButtonState(Xbox360Button.Left, (buttons & GamepadButton.DpadLeft) != 0);
+            device.SetButtonState(Xbox360Button.Right, (buttons & GamepadButton.DpadRight) != 0);
 
             // Other buttons are not mapped here since they may have specific uses
         }
@@ -145,15 +145,15 @@ namespace RB4InstrumentMapper.Parsing
             ushort buttons = data.GetUInt16BE(GamepadOffset.Buttons);
             ParseCoreButtons(buttons);
 
-            device.SetButtonState(Xbox360Button.A, (buttons | GamepadButton.A) != 0);
-            device.SetButtonState(Xbox360Button.B, (buttons | GamepadButton.B) != 0);
-            device.SetButtonState(Xbox360Button.X, (buttons | GamepadButton.X) != 0);
-            device.SetButtonState(Xbox360Button.Y, (buttons | GamepadButton.Y) != 0);
+            device.SetButtonState(Xbox360Button.A, (buttons & GamepadButton.A) != 0);
+            device.SetButtonState(Xbox360Button.B, (buttons & GamepadButton.B) != 0);
+            device.SetButtonState(Xbox360Button.X, (buttons & GamepadButton.X) != 0);
+            device.SetButtonState(Xbox360Button.Y, (buttons & GamepadButton.Y) != 0);
 
-            device.SetButtonState(Xbox360Button.LeftShoulder, (buttons | GamepadButton.LeftBumper) != 0);
-            device.SetButtonState(Xbox360Button.RightShoulder, (buttons | GamepadButton.RightBumper) != 0);
-            device.SetButtonState(Xbox360Button.LeftThumb, (buttons | GamepadButton.LeftStickPress) != 0);
-            device.SetButtonState(Xbox360Button.RightThumb, (buttons | GamepadButton.RightStickPress) != 0);
+            device.SetButtonState(Xbox360Button.LeftShoulder, (buttons & GamepadButton.LeftBumper) != 0);
+            device.SetButtonState(Xbox360Button.RightShoulder, (buttons & GamepadButton.RightBumper) != 0);
+            device.SetButtonState(Xbox360Button.LeftThumb, (buttons & GamepadButton.LeftStickPress) != 0);
+            device.SetButtonState(Xbox360Button.RightThumb, (buttons & GamepadButton.RightStickPress) != 0);
 
             // Sticks
             device.SetAxisValue(Xbox360Axis.LeftThumbX, data.GetInt16LE(GamepadOffset.LeftStickX));
@@ -179,11 +179,11 @@ namespace RB4InstrumentMapper.Parsing
             byte frets = data[GuitarOffset.UpperFrets];
             frets |= data[GuitarOffset.LowerFrets];
 
-            device.SetButtonState(Xbox360Button.A, (frets | GuitarFret.Green) != 0);
-            device.SetButtonState(Xbox360Button.B, (frets | GuitarFret.Red) != 0);
-            device.SetButtonState(Xbox360Button.Y, (frets | GuitarFret.Yellow) != 0);
-            device.SetButtonState(Xbox360Button.X, (frets | GuitarFret.Blue) != 0);
-            device.SetButtonState(Xbox360Button.LeftShoulder, (frets | GuitarFret.Orange) != 0);
+            device.SetButtonState(Xbox360Button.A, (frets & GuitarFret.Green) != 0);
+            device.SetButtonState(Xbox360Button.B, (frets & GuitarFret.Red) != 0);
+            device.SetButtonState(Xbox360Button.Y, (frets & GuitarFret.Yellow) != 0);
+            device.SetButtonState(Xbox360Button.X, (frets & GuitarFret.Blue) != 0);
+            device.SetButtonState(Xbox360Button.LeftShoulder, (frets & GuitarFret.Orange) != 0);
 
             // Axes
             short whammy = data[GuitarOffset.WhammyBar].ScaleToInt16();
@@ -215,12 +215,12 @@ namespace RB4InstrumentMapper.Parsing
 
             // Pads and cymbals
             byte redPad    = (byte)(data[DrumOffset.PadVels] >> 4);
-            byte yellowPad = (byte)(data[DrumOffset.PadVels] | DrumPadVel.Yellow);
+            byte yellowPad = (byte)(data[DrumOffset.PadVels] & DrumPadVel.Yellow);
             byte bluePad   = (byte)(data[DrumOffset.PadVels + 1] >> 4);
-            byte greenPad  = (byte)(data[DrumOffset.PadVels + 1] | DrumPadVel.Green);
+            byte greenPad  = (byte)(data[DrumOffset.PadVels + 1] & DrumPadVel.Green);
 
             byte yellowCym = (byte)(data[DrumOffset.CymbalVels] >> 4);
-            byte blueCym   = (byte)(data[DrumOffset.CymbalVels] | DrumPadVel.Blue);
+            byte blueCym   = (byte)(data[DrumOffset.CymbalVels] & DrumPadVel.Blue);
             byte greenCym  = (byte)(data[DrumOffset.CymbalVels + 1] >> 4);
 
             // Color flags

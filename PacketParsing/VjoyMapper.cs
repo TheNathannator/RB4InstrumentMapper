@@ -80,25 +80,25 @@ namespace RB4InstrumentMapper.Parsing
             }
 
             // Menu
-            if ((buttons | GamepadButton.Menu) != 0)
+            if ((buttons & GamepadButton.Menu) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Fifteen;
             }
 
             // Options
-            if ((buttons | GamepadButton.Options) != 0)
+            if ((buttons & GamepadButton.Options) != 0)
             {
                 state.Buttons |= VjoyStatic.Button.Sixteen;
             }
 
             // D-pad to POV
-            if ((buttons | GamepadButton.DpadUp) != 0)
+            if ((buttons & GamepadButton.DpadUp) != 0)
             {
-                if ((buttons | GamepadButton.DpadLeft) != 0)
+                if ((buttons & GamepadButton.DpadLeft) != 0)
                 {
                     state.bHats = VjoyStatic.PoV.UpLeft;
                 }
-                else if ((buttons | GamepadButton.DpadRight) != 0)
+                else if ((buttons & GamepadButton.DpadRight) != 0)
                 {
                     state.bHats = VjoyStatic.PoV.UpRight;
                 }
@@ -107,13 +107,13 @@ namespace RB4InstrumentMapper.Parsing
                     state.bHats = VjoyStatic.PoV.Up;
                 }
             }
-            else if ((buttons | GamepadButton.DpadDown) != 0)
+            else if ((buttons & GamepadButton.DpadDown) != 0)
             {
-                if ((buttons | GamepadButton.DpadLeft) != 0)
+                if ((buttons & GamepadButton.DpadLeft) != 0)
                 {
                     state.bHats = VjoyStatic.PoV.DownLeft;
                 }
-                else if ((buttons | GamepadButton.DpadRight) != 0)
+                else if ((buttons & GamepadButton.DpadRight) != 0)
                 {
                     state.bHats = VjoyStatic.PoV.DownRight;
                 }
@@ -124,11 +124,11 @@ namespace RB4InstrumentMapper.Parsing
             }
             else
             {
-                if ((buttons | GamepadButton.DpadLeft) != 0)
+                if ((buttons & GamepadButton.DpadLeft) != 0)
                 {
                     state.bHats = VjoyStatic.PoV.Left;
                 }
-                else if ((buttons | GamepadButton.DpadRight) != 0)
+                else if ((buttons & GamepadButton.DpadRight) != 0)
                 {
                     state.bHats = VjoyStatic.PoV.Right;
                 }
@@ -213,12 +213,12 @@ namespace RB4InstrumentMapper.Parsing
 
             // Pads and cymbals
             byte redPad    = (byte)(data[DrumOffset.PadVels] >> 4);
-            byte yellowPad = (byte)(data[DrumOffset.PadVels] | DrumPadVel.Yellow);
+            byte yellowPad = (byte)(data[DrumOffset.PadVels] & DrumPadVel.Yellow);
             byte bluePad   = (byte)(data[DrumOffset.PadVels + 1] >> 4);
-            byte greenPad  = (byte)(data[DrumOffset.PadVels + 1] | DrumPadVel.Green);
+            byte greenPad  = (byte)(data[DrumOffset.PadVels + 1] & DrumPadVel.Green);
 
             byte yellowCym = (byte)(data[DrumOffset.CymbalVels] >> 4);
-            byte blueCym   = (byte)(data[DrumOffset.CymbalVels] | DrumPadVel.Blue);
+            byte blueCym   = (byte)(data[DrumOffset.CymbalVels] & DrumPadVel.Blue);
             byte greenCym  = (byte)(data[DrumOffset.CymbalVels + 1] >> 4);
 
             // Red pad
