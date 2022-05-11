@@ -142,7 +142,8 @@ namespace RB4InstrumentMapper.Parsing
         Red = 0x02,
         Yellow = 0x04,
         Blue = 0x08,
-        Orange = 0x10;
+        Orange = 0x10,
+        All = 0x1F;
     }
 
     /// <summary>

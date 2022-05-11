@@ -128,9 +128,9 @@ namespace RB4InstrumentMapper.Parsing
 
             // Frets
             // The fret data aligns with how we want it to be set in the vJoy device, so it can be mapped directly
-            state.Buttons |= data[GuitarOffset.UpperFrets];
+            state.Buttons |= (uint)(data[GuitarOffset.UpperFrets] & GuitarFret.All);
             // Lower frets are mapped on top of the upper frets to allow both sets to be used in-game
-            state.Buttons |= data[GuitarOffset.LowerFrets];
+            state.Buttons |= (uint)(data[GuitarOffset.LowerFrets] & GuitarFret.All);
 
             // Whammy
             // Value ranges from 0 (not pressed) to 255 (fully pressed)
