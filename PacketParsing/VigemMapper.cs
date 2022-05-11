@@ -171,50 +171,52 @@ namespace RB4InstrumentMapper.Parsing
                 (yellowCym | blueCym | greenCym) != 0);
 
             // Velocities
-            // device.SetAxisValue(
-            //     Xbox360Axis.LeftThumbX,
-            //     ByteToVelocity(redPad)
-            // );
-            // device.SetAxisValue(
-            //     Xbox360Axis.LeftThumbY,
-            //     ByteToVelocityNegative((byte)(yellowPad | yellowCym))
-            // );
-            // device.SetAxisValue(
-            //     Xbox360Axis.RightThumbX,
-            //     ByteToVelocity((byte)(bluePad | blueCym))
-            // );
-            // device.SetAxisValue(
-            //     Xbox360Axis.RightThumbY,
-            //     ByteToVelocityNegative((byte)(greenPad | greenCym))
-            // );
+            device.SetAxisValue(
+                Xbox360Axis.LeftThumbX,
+                ByteToVelocity(redPad)
+            );
+            device.SetAxisValue(
+                Xbox360Axis.LeftThumbY,
+                ByteToVelocityNegative((byte)(yellowPad | yellowCym))
+            );
+            device.SetAxisValue(
+                Xbox360Axis.RightThumbX,
+                ByteToVelocity((byte)(bluePad | blueCym))
+            );
+            device.SetAxisValue(
+                Xbox360Axis.RightThumbY,
+                ByteToVelocityNegative((byte)(greenPad | greenCym))
+            );
 
             /// <summary>
             /// Scales a byte to a drums velocity value.
             /// </summary>
-            // short ByteToVelocity(byte value)
-            // {
-            //     // TODO: Figure out if this is necessary
-            //     // Currently, this assumes the max from the kit is 0x04
-            //     value = (byte)(value * 0x40 - 1);
+            short ByteToVelocity(byte value)
+            {
+                // TODO: Figure out if this is necessary
+                // This assumes the max from the kit is 0x04
+                // value = (byte)(value * 0x40 - 1);
 
-            //     return (short)(
-            //         (~value.ScaleToUInt16()) >> 1
-            //     );
-            // }
+                return (short)(
+                    // Bitwise invert to flip the value, then shift down one to exclude the sign bit
+                    (~value.ScaleToUInt16()) >> 1
+                );
+            }
 
             /// <summary>
             /// Scales a byte to a negative drums velocity value.
             /// </summary>
-            // short ByteToVelocityNegative(byte value)
-            // {
-            //     // TODO: Figure out if this is necessary
-            //     // Currently, this assumes the max from the kit is 0x04
-            //     value = (byte)(value * 0x40 - 1);
+            short ByteToVelocityNegative(byte value)
+            {
+                // TODO: Figure out if this is necessary
+                // This assumes the max from the kit is 0x04
+                // value = (byte)(value * 0x40 - 1);
 
-            //     return (short)(
-            //         ((~value.ScaleToUInt16()) >> 1) | 0x8000
-            //     );
-            // }
+                return (short)(
+                    // Bitwise invert to flip the value, then shift down one to exclude the sign bit, then add our own
+                    ((~value.ScaleToUInt16()) >> 1) | 0x8000
+                );
+            }
         }
 
         /// <summary>
