@@ -44,9 +44,10 @@ namespace RB4InstrumentMapper.Parsing
                 case Length.Input_Drums:
                     ParseDrums(data);
                     break;
-                
+
                 default:
-                    break;
+                    // Don't parse unknown input reports
+                    return;
             }
 
             // Send data
