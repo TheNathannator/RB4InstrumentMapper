@@ -1,5 +1,8 @@
 using System;
+using System.Runtime.CompilerServices;
 using vJoyInterfaceWrap;
+
+using Button = RB4InstrumentMapper.Parsing.VjoyStatic.Button;
 
 namespace RB4InstrumentMapper.Parsing
 {
@@ -65,21 +68,31 @@ namespace RB4InstrumentMapper.Parsing
         }
 
         /// <summary>
+        /// Sets the state of the specified button.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void SetButton(uint button, bool condition)
+        {
+            if (condition)
+            {
+                state.Buttons |= button;
+            }
+            else
+            {
+                state.Buttons &= ~button;
+            }
+        }
+
+        /// <summary>
         /// Parses common button data from an input report.
         /// </summary>
         private void ParseCoreButtons(ushort buttons)
         {
             // Menu
-            if ((buttons & GamepadButton.Menu) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Fifteen;
-            }
+            SetButton(Button.Fifteen, (buttons & GamepadButton.Menu) != 0);
 
             // Options
-            if ((buttons & GamepadButton.Options) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Sixteen;
-            }
+            SetButton(Button.Sixteen, (buttons & GamepadButton.Options) != 0);
 
             // D-pad to POV
             if ((buttons & GamepadButton.DpadUp) != 0)
@@ -143,30 +156,11 @@ namespace RB4InstrumentMapper.Parsing
             byte frets = data[GuitarOffset.UpperFrets];
             frets |= data[GuitarOffset.LowerFrets];
 
-            if ((frets & GuitarFret.Green) != 0)
-            {
-                state.Buttons = VjoyStatic.Button.One;
-            }
-
-            if ((frets & GuitarFret.Red) != 0)
-            {
-                state.Buttons = VjoyStatic.Button.Two;
-            }
-
-            if ((frets & GuitarFret.Yellow) != 0)
-            {
-                state.Buttons = VjoyStatic.Button.Three;
-            }
-
-            if ((frets & GuitarFret.Blue) != 0)
-            {
-                state.Buttons = VjoyStatic.Button.Four;
-            }
-
-            if ((frets & GuitarFret.Orange) != 0)
-            {
-                state.Buttons = VjoyStatic.Button.Five;
-            }
+            SetButton(Button.One, (frets & GuitarFret.Green) != 0);
+            SetButton(Button.Two, (frets & GuitarFret.Red) != 0);
+            SetButton(Button.Three, (frets & GuitarFret.Yellow) != 0);
+            SetButton(Button.Four, (frets & GuitarFret.Blue) != 0);
+            SetButton(Button.Five, (frets & GuitarFret.Orange) != 0);
 
             // Whammy
             // Value ranges from 0 (not pressed) to 255 (fully pressed)
@@ -192,63 +186,19 @@ namespace RB4InstrumentMapper.Parsing
             ParseCoreButtons(data.GetUInt16BE(DrumOffset.Buttons));
 
             // Pads
-            // Red pad
-            if ((data[DrumOffset.PadVels] & DrumPadVel.Red) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.One;
-            }
-
-            // Yellow pad
-            if ((data[DrumOffset.PadVels] & DrumPadVel.Yellow) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Two;
-            }
-
-            // Blue pad
-            if ((data[DrumOffset.PadVels] & DrumPadVel.Blue) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Three;
-            }
-
-            // Green pad
-            if ((data[DrumOffset.PadVels] & DrumPadVel.Green) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Four;
-            }
-
+            SetButton(Button.One, (data[DrumOffset.PadVels] & DrumPadVel.Red) != 0);
+            SetButton(Button.Two, (data[DrumOffset.PadVels] & DrumPadVel.Yellow) != 0);
+            SetButton(Button.Three, (data[DrumOffset.PadVels] & DrumPadVel.Blue) != 0);
+            SetButton(Button.Four, (data[DrumOffset.PadVels] & DrumPadVel.Green) != 0);
 
             // Cymbals
-            // Yellow cymbal
-            if ((data[DrumOffset.CymbalVels] & DrumCymVel.Yellow) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Six;
-            }
-
-            // Blue cymbal
-            if ((data[DrumOffset.CymbalVels] & DrumCymVel.Blue) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Seven;
-            }
-
-            // Green cymbal
-            if ((data[DrumOffset.CymbalVels] & DrumCymVel.Green) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Eight;
-            }
-
+            SetButton(Button.Six, (data[DrumOffset.CymbalVels] & DrumCymVel.Yellow) != 0);
+            SetButton(Button.Seven, (data[DrumOffset.CymbalVels] & DrumCymVel.Blue) != 0);
+            SetButton(Button.Eight, (data[DrumOffset.CymbalVels] & DrumCymVel.Green) != 0);
 
             // Kick pedals
-            // Kick 1
-            if ((data[DrumOffset.Buttons] & DrumButton.KickOne) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Five;
-            }
-
-            // Kick 2
-            if ((data[DrumOffset.Buttons] & DrumButton.KickTwo) != 0)
-            {
-                state.Buttons |= VjoyStatic.Button.Nine;
-            }
+            SetButton(Button.Five, (data[DrumOffset.Buttons] & DrumButton.KickOne) != 0);
+            SetButton(Button.Nine, (data[DrumOffset.Buttons] & DrumButton.KickTwo) != 0);
         }
 
         /// <summary>
@@ -269,7 +219,7 @@ namespace RB4InstrumentMapper.Parsing
             // Only respond to the Left Windows keycode, as this is what the guide button reports.
             if (data[KeycodeOffset.Keycode] == Keycodes.LeftWin)
             {
-                state.Buttons |= (data[KeycodeOffset.PressedState] != 0) ? VjoyStatic.Button.Fourteen : 0;
+                SetButton(Button.Fourteen, data[KeycodeOffset.PressedState] != 0);
                 VjoyStatic.Client.UpdateVJD(deviceId, ref state);
             }
         }
