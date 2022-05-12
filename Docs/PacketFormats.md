@@ -202,15 +202,17 @@ Bytes:
   - Bit 14 (`0x4000`) - Blue Pad (equivalent to X Button)
   - Bit 15 (`0x8000`) - Yellow Pad (equivalent to Y Button)
 - Bytes 32-33 - Pad velocities
-  - Bits 0-3 (`0x000F`) - Green Pad?
-  - Bits 4-7 (`0x00F0`) - Blue Pad?
-  - Bits 8-11 (`0x0F00`) - Yellow Pad?
-  - Bits 12-15 (`0xF000`) - Red Pad?
+  - Bits 0-3 (`0x000F`) - Green Pad
+  - Bits 4-7 (`0x00F0`) - Blue Pad
+  - Bits 8-11 (`0x0F00`) - Yellow Pad
+  - Bits 12-15 (`0xF000`) - Red Pad
+  - Seem to range from 0-7
 - Bytes 34-35 - Cymbal velocities
   - Bits 0-3 (`0x000F`) - Unused?
   - Bits 4-7 (`0x00F0`) - Green Cymbal
   - Bits 8-11 (`0x0F00`) - Blue Cymbal
   - Bits 12-15 (`0xF000`) - Yellow Cymbal
+  - Seem to range from 0-7
 
 ### Drum Packet Samples
 
