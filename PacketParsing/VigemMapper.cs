@@ -190,9 +190,8 @@ namespace RB4InstrumentMapper.Parsing
             /// </summary>
             short ByteToVelocity(byte value)
             {
-                // TODO: Figure out if this is necessary
-                // This assumes the max from the kit is 0x04
-                // value = (byte)(value * 0x40 - 1);
+                // Scale the value to fill the byte
+                value = (byte)(value * 0x11);
 
                 return (short)(
                     // Bitwise invert to flip the value, then shift down one to exclude the sign bit
@@ -205,9 +204,8 @@ namespace RB4InstrumentMapper.Parsing
             /// </summary>
             short ByteToVelocityNegative(byte value)
             {
-                // TODO: Figure out if this is necessary
-                // This assumes the max from the kit is 0x04
-                // value = (byte)(value * 0x40 - 1);
+                // Scale the value to fill the byte
+                value = (byte)(value * 0x11);
 
                 return (short)(
                     // Bitwise invert to flip the value, then shift down one to exclude the sign bit, then add our own
