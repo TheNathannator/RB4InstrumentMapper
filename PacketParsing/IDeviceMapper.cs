@@ -10,12 +10,12 @@ namespace RB4InstrumentMapper.Parsing
         /// <summary>
         /// Parses an input packet.
         /// </summary>
-        void ParseInput(ReadOnlySpan<byte> data, byte length);
+        void ParseInput(ReadOnlySpan<byte> data, byte length, byte sequenceCount);
 
         /// <summary>
         /// Parses a virtual keycode packet.
         /// </summary>
-        void ParseVirtualKey(ReadOnlySpan<byte> data, byte length);
+        void ParseVirtualKey(ReadOnlySpan<byte> data, byte length, byte sequenceCount);
 
         /// <summary>
         /// Performs cleanup for the mapper.

@@ -48,13 +48,13 @@ namespace RB4InstrumentMapper.Parsing
             switch (commandData[CommandOffset.CommandId])
             {
                 case CommandId.Input:
-                    deviceMapper.ParseInput(commandData.Slice(Length.CommandHeader), commandData[CommandOffset.DataLength]);
+                    deviceMapper.ParseInput(commandData.Slice(Length.CommandHeader), commandData[CommandOffset.DataLength], commandData[CommandOffset.SequenceCount]);
                     break;
 
                 // Probably don't actually want to parse the guide button and output it to the device,
                 // so as to not interfere with Windows processes that use it
                 // case CommandId.VirtualKey:
-                //     deviceMapper.ParseVirtualKey(commandData.Slice(Length.CommandHeader), commandData[CommandOffset.DataLength]);
+                //     deviceMapper.ParseVirtualKey(commandData.Slice(Length.CommandHeader), commandData[CommandOffset.DataLength], commandData[CommandOffset.SequenceCount]);
                 //     break;
 
                 default:

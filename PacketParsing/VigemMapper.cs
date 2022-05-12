@@ -17,6 +17,9 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         private bool deviceConnected = false;
 
+        private int prevInputSeqCount = -1;
+        private int prevVirtualKeySeqCount = -1;
+
         /// <summary>
         /// Creates a new VigemMapper.
         /// </summary>
@@ -64,8 +67,18 @@ namespace RB4InstrumentMapper.Parsing
         /// <summary>
         /// Parses an input report.
         /// </summary>
-        public void ParseInput(ReadOnlySpan<byte> data, byte length)
+        public void ParseInput(ReadOnlySpan<byte> data, byte length, byte sequenceCount)
         {
+            // Don't parse the same report twice
+            if (sequenceCount == prevInputSeqCount)
+            {
+                return;
+            }
+            else
+            {
+                prevInputSeqCount = sequenceCount;
+            }
+
             if (!deviceConnected)
             {
                 // Device has not connected yet
@@ -217,8 +230,18 @@ namespace RB4InstrumentMapper.Parsing
         /// <summary>
         /// Parses a virtual key report.
         /// </summary>
-        public void ParseVirtualKey(ReadOnlySpan<byte> data, byte length)
+        public void ParseVirtualKey(ReadOnlySpan<byte> data, byte length, byte sequenceCount)
         {
+            // Don't parse the same report twice
+            if (sequenceCount == prevVirtualKeySeqCount)
+            {
+                return;
+            }
+            else
+            {
+                prevVirtualKeySeqCount = sequenceCount;
+            }
+
             // Only respond to the Left Windows keycode, as this is what the guide button reports.
             if (data[KeycodeOffset.Keycode] == Keycodes.LeftWin)
             {
