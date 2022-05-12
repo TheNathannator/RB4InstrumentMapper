@@ -127,10 +127,33 @@ namespace RB4InstrumentMapper.Parsing
             ParseCoreButtons(data.GetUInt16BE(GuitarOffset.Buttons));
 
             // Frets
-            // The fret data aligns with how we want it to be set in the vJoy device, so it can be mapped directly
-            state.Buttons |= (uint)(data[GuitarOffset.UpperFrets] & GuitarFret.All);
-            // Lower frets are mapped on top of the upper frets to allow both sets to be used in-game
-            state.Buttons |= (uint)(data[GuitarOffset.LowerFrets] & GuitarFret.All);
+            byte frets = data[GuitarOffset.UpperFrets];
+            frets |= data[GuitarOffset.LowerFrets];
+
+            if ((frets & GuitarFret.Green) != 0)
+            {
+                state.Buttons = VjoyStatic.Button.One;
+            }
+
+            if ((frets & GuitarFret.Red) != 0)
+            {
+                state.Buttons = VjoyStatic.Button.Two;
+            }
+
+            if ((frets & GuitarFret.Yellow) != 0)
+            {
+                state.Buttons = VjoyStatic.Button.Three;
+            }
+
+            if ((frets & GuitarFret.Blue) != 0)
+            {
+                state.Buttons = VjoyStatic.Button.Four;
+            }
+
+            if ((frets & GuitarFret.Orange) != 0)
+            {
+                state.Buttons = VjoyStatic.Button.Five;
+            }
 
             // Whammy
             // Value ranges from 0 (not pressed) to 255 (fully pressed)
