@@ -1,27 +1,34 @@
 ﻿# RB4InstrumentMapper
 
-A utility that connects up to three Xbox One Rock Band 4 instruments (2 guitars and 1 drumkit) for use in [Clone Hero](https://clonehero.net/).
+A program that maps packets from Xbox One Rock Band 4 instruments to virtual controllers, for use in [Clone Hero](https://clonehero.net/).
 
 ![RB4InstrumentMapper Application Screenshot](/Docs/Images/ProgramScreenshot.png "RB4InstrumentMapper Application Screenshot")
 
-Almost all features for guitars and drums are supported.
+Both guitars and drums are supported through an Xbox One wireless receiver.
 
-## Requirements
+## Software Requirements
 
-- Xbox One Wireless Receiver
-- Xbox One RB4 Guitars (up to 2)
-  - For Jaguar guitars, you will need to install a [firmware update](https://bit.ly/2UHzonU).
-- Xbox One RB4 Drums
-  - Note that PDP drums don't seem to work, they turn off after syncing to the receiver.
 - Windows 10 64-bit
-- Npcap in WinPcap compatibility mode, or WinPcap
-- USBPcap
-- ViGEmBus or vJoy
+- [WinPCap](https://www.winpcap.org/install/default.htm)
+- [USBPCap](https://desowin.org/usbpcap/)
+- [ViGEmBus](https://github.com/ViGEm/ViGEmBus/releases/latest) or [vJoy](https://github.com/jshafer817/vJoy/releases/latest)
+
+## Hardware Notes
+
+Jaguar guitars require a firmware update in order to connect to the receiver.
+
+- [Instructions](https://bit.ly/2UHzonU)
+- [Firmware installer backup](https://drive.google.com/file/d/1DQxkkbBfi-UOqdX6vp5TaX6F2N2OBDra/view?usp=drivesdk)
+
+RB4 drums made by PDP don't seem to work, they turn off after syncing to the receiver. You may be able to get them to connect with these steps:
+
+- Go to Windows settings > `Devices` > `Bluetooth & other devices`
+- Click `Add Bluetooth or other device` and pick the `Everything else` option.
 
 ## Installation
 
-1. Install [WinPCap](https://www.winpcap.org/install/default.htm) (recommended as that seems to work best), or [Npcap](https://nmap.org/npcap/#download) in WinPCap compatibility mode.
-   - Make sure you only install one or the other. Installing both at the same time may cause issues.
+1. Install [WinPCap](https://www.winpcap.org/install/default.htm).
+   - Do not install Npcap, as it doesn't seem to work with Xbox One receivers.
 2. Install [USBPCap](https://desowin.org/usbpcap/).
 3. Install [ViGEmBus](https://github.com/ViGEm/ViGEmBus/releases/latest) (recommended) or [vJoy](https://github.com/jshafer817/vJoy/releases/latest).
    - If you installed vJoy, configure it:
@@ -41,30 +48,27 @@ Almost all features for guitars and drums are supported.
 1. Configure the selected Pcap device:
    - Click the `Auto-Detect Pcap` button and follow its instructions.
    - If that doesn't work, then if you installed WinPcap, try installing Npcap instead, or vice versa.
-2. Configure the selected controller device for each guitar and drumkit:
-   - If you installed vJoy:
-     - Pick one of the vJoy devices that you configured for each instrument you will be using.
-   - If you installed ViGEmBus:
-     - Pick the `ViGEmBus Device` item in the dropdown for each instrument you will be using. One emulated Xbox 360 controller will be created for each instrument that has this selected.
+2. Select either vJoy or ViGEmBus in the Controller Type dropdown.
 3. Connect your instruments if you haven't yet.
-4. Assign the instrument ID for each instrument:
-   - Click the `Auto-Detect ID` button next to each ID field.
-     - Guitars should auto-detect automatically as they are constantly sending packets. Retry if duplicate IDs were detected (and rejected).
-     - Drums require an action such as a button press on the instrument you are assigning within 2 seconds after 'Auto-Detect' was clicked.
-5. Click the Start button.
-   - Note: launch *joy.cpl* to check Controller inputs.
-6. Map the controls for each instrument in Clone Hero:
+4. Click the Start button. Devices will be detected automatically.
+5. Map the controls for each instrument in Clone Hero:
    1. Press Space on the main menu.
-   2. Click the Assign Controller button and do an action on the instrument to be assigned.
-   3. Click the slots in the Controller column to map the controls for one of the instruments.
-   4. Repeat for Player 2 and 3.
+   2. Click the Assign Controller button and press a button on the instrument for it to be assigned.
+   3. Click the slots in the Controller column to map each of the controls.
+   4. Repeat for each connected device.
    5. Click `Done`.
 
-Selections and IDs are saved and should persist across program sessions.
+Selections are saved and should persist across program sessions.
+
+## Packet Logs
+
+RB4InstrumentMapper is capable of logging packets to a file for debugging purposes. To do so, enable both the `Show Packets (for debugging)` and `Log packets to file` checkboxes, then hit Start. Packet logs get saved to a `RB4InstrumentMapper` > `PacketLogs` folder inside your Documents folder. Make sure to include it when getting help or creating an issue report for packet parsing issues.
+
+Note that these settings are meant for debugging purposes only, leaving them enabled can reduce the performance of the program somewhat.
 
 ## Error Logs
 
-In the case that the program crashes, an error log is saved to a `RB4InstrumentMapper` > `Logs` folder inside your Documents folder. Make sure to include it when creating an issue report for a crash or when getting help for a crash.
+In the case that the program crashes, an error log is saved to a `RB4InstrumentMapper` > `Logs` folder inside your Documents folder. Make sure to include it when getting help or creating an issue report for the crash.
 
 ## References
 
@@ -75,18 +79,14 @@ Packet Data:
 
 - [GuitarSniffer guitar packet logs](https://1drv.ms/f/s!AgQGk0OeTMLwhA-uDO9IQHEHqGhv)
 - GuitarSniffer guitar packet spreadsheets: [New](https://docs.google.com/spreadsheets/d/1ITZUvRniGpfS_HV_rBpSwlDdGukc3GC1CeOe7SavQBo/edit?usp=sharing), [Old](https://1drv.ms/x/s!AgQGk0OeTMLwg3GBDXFUC3Erj4Wb)
-- See [PacketFormats.md](PacketFormats.md) for a breakdown of the known packet data.
+- See [PacketFormats.md](/Docs/PacketFormats.md) for a breakdown of the known packet data.
 
-## Build Tools
+## Building
 
-Compile was done with Visual Studio 2019 Community edition.
+To build this program, you will need:
 
-Installer was created using the following tools:
-
-- https://wixtoolset.org/
-  - https://wixtoolset.org/releases/v3.11.2/stable
-  - https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2019Extension
-  - https://marketplace.visualstudio.com/items?itemName=TomEnglert.Wax
+- Visual Studio (or MSBuild + your code editor of choice) for the program
+- [WiX Toolset](https://wixtoolset.org/) for the installer
 
 ## License
 
