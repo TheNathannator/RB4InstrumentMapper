@@ -26,6 +26,7 @@
     <Feature Id="ProductFeature" Title="MsiInstaller" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentRef Id="DesktopShortcut" />
+      <ComponentRef Id="StartMenuShortcut" />
     </Feature>
   </Product>
 
@@ -35,6 +36,9 @@
         <Directory Id="INSTALLFOLDER" Name="RB4InstrumentMapper" />
       </Directory>
       <Directory Id="DesktopFolder" Name="Desktop" />
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="RB4InstrumentMapper"/>
+      </Directory>
     </Directory>
   </Fragment>
   
@@ -81,6 +85,7 @@
   </Fragment>
 
   <Fragment>
+    <Icon Id="Icon.ico" SourceFile="$(var.ResourcesDir)Icon.ico" />
     <Component Id="DesktopShortcut" Directory="INSTALLFOLDER" Guid="BC673EF6-B5A1-4AA3-BAC4-EC0BAEBB6B98">
       <RegistryValue Id="RegShortcutDesktop"
               Root="HKCU"
@@ -95,9 +100,30 @@
               Directory="DesktopFolder"
               Icon="Icon.ico"
               Name="RB4InstrumentMapper"
-              Advertise="no" >
-        <Icon Id="Icon.ico" SourceFile="$(var.ResourcesDir)Icon.ico" />
-      </Shortcut>
+              Advertise="no" />
+      <RemoveFile Id="RemoveDesktopShortcut"
+              Directory="DesktopFolder"
+              Name="RB4InstrumentMapper"
+              On="uninstall" />
+    </Component>
+    <Component Id="StartMenuShortcut" Directory="INSTALLFOLDER" Guid="9E3ED7F2-4298-4334-9936-BC9983EEBAC7">
+      <RegistryValue Id="RegShortcutStartMenu"
+              Root="HKCU"
+              Key="Software\AndreasSchiffler\RB4InstrumentMapper"
+              Name="StartMenuShortcut"
+              Type="integer"
+              Value="1"
+              KeyPath="yes" />
+      <Shortcut Id="StartMenuShortcut" 
+              Target="[INSTALLFOLDER]RB4InstrumentMapper.exe"
+              WorkingDirectory="INSTALLFOLDER"
+              Directory="ApplicationProgramsFolder"
+              Icon="Icon.ico"
+              Name="RB4InstrumentMapper"
+              Advertise="no" />
+      <RemoveFolder Id="RemoveStartMenuShortcut"
+              Directory="ApplicationProgramsFolder"
+              On="uninstall" />
     </Component>
   </Fragment>
 
