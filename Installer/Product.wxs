@@ -44,24 +44,32 @@
       <Component Id="COMP_NefariusViGEmClientdll" Guid="04BB3091-EA32-4F10-8F2B-7BA22FF8309A">
         <File Id="FILE_NefariusViGEmClientdll" Name="Nefarius.ViGEm.Client.dll" Source="$(var.BinariesDir)Nefarius.ViGEm.Client.dll" KeyPath="yes" />
       </Component>
-      <Component Id="COMP_PcapDotNetBasedll" Guid="6A914948-A7EF-4A9D-BC33-7C9915A3ED32">
-        <File Id="FILE_PcapDotNetBasedll" Name="PcapDotNet.Base.dll" Source="$(var.BinariesDir)PcapDotNet.Base.dll" KeyPath="yes" />
-      </Component>
-      <Component Id="COMP_PcapDotNetCoredll" Guid="23E885D9-CD4C-4BCA-84F0-3D3369C3C035">
-        <File Id="FILE_PcapDotNetCoredll" Name="PcapDotNet.Core.dll" Source="$(var.BinariesDir)PcapDotNet.Core.dll" KeyPath="yes" />
-      </Component>
-      <Component Id="COMP_PcapDotNetCoreExtensionsdll" Guid="BBB69010-18C6-4AB4-8F2E-15257DC7433F">
-        <File Id="FILE_PcapDotNetCoreExtensionsdll" Name="PcapDotNet.Core.Extensions.dll" Source="$(var.BinariesDir)PcapDotNet.Core.Extensions.dll" KeyPath="yes" />
-      </Component>
-      <Component Id="COMP_PcapDotNetPacketsdll" Guid="C43DDB63-9F8E-4843-BFE9-0E60FC34B561">
-        <File Id="FILE_PcapDotNetPacketsdll" Name="PcapDotNet.Packets.dll" Source="$(var.BinariesDir)PcapDotNet.Packets.dll" KeyPath="yes" />
+      <Component Id="COMP_PacketDotNetdll" Guid="BA4A1B0F-9DE7-47C5-8F00-8C246EACFE03">
+        <File Id="FILE_PacketDotNetdll" Name="PacketDotNet.dll" Source="$(var.BinariesDir)PacketDotNet.dll" KeyPath="yes" />
       </Component>
       <Component Id="COMP_RB4InstrumentMapperexe" Guid="4D1C894A-DA1B-4C6F-AB06-0A89DE716835">
-        <File Id="FILE_RB4InstrumentMapperexe" Name="RB4InstrumentMapper.exe" Source="$(var.BinariesDir)RB4InstrumentMapper.exe" KeyPath="yes" >
-        </File>
+        <File Id="FILE_RB4InstrumentMapperexe" Name="RB4InstrumentMapper.exe" Source="$(var.BinariesDir)RB4InstrumentMapper.exe" KeyPath="yes" />
       </Component>
       <Component Id="COMP_RB4InstrumentMapperexeconfig" Guid="5DB2E840-D3B5-4B9D-AEF9-523A8C8CD09C">
         <File Id="FILE_RB4InstrumentMapperexeconfig" Name="RB4InstrumentMapper.exe.config" Source="$(var.BinariesDir)RB4InstrumentMapper.exe.config" KeyPath="yes" />
+      </Component>
+      <Component Id="COMP_SharpPcapdll" Guid="C0C8FEE8-8DD2-4CB4-B6E1-4EACE930B682">
+        <File Id="FILE_SharpPcapdll" Name="SharpPcap.dll" Source="$(var.BinariesDir)SharpPcap.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="COMP_SystemBuffersdll" Guid="7F40011E-7E13-4756-AB3D-C8805C1014E9">
+        <File Id="FILE_SystemBuffersdll" Name="System.Buffers.dll" Source="$(var.BinariesDir)System.Buffers.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="COMP_SystemMemorydll" Guid="EB825758-667F-4D27-9CC3-AB7FAAC423F9">
+        <File Id="FILE_SystemMemorydll" Name="System.Memory.dll" Source="$(var.BinariesDir)System.Memory.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="COMP_SystemNumericsVectorsdll" Guid="60F548E8-3F05-4046-BC55-07BA456DA02D">
+        <File Id="FILE_SystemNumericsVectorsdll" Name="System.Numerics.Vectors.dll" Source="$(var.BinariesDir)System.Numerics.Vectors.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="COMP_SystemRuntimeCompilerServicesUnsafedll" Guid="57876592-7661-4C2D-AB23-2FAD5BAACCF7">
+        <File Id="FILE_SystemRuntimeCompilerServicesUnsafedll" Name="System.Runtime.CompilerServices.Unsafe.dll" Source="$(var.BinariesDir)System.Runtime.CompilerServices.Unsafe.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="COMP_SystemTextEncodingCodePagesdll" Guid="E21C634A-1279-4BB1-8194-DFAE5DA5CD23">
+        <File Id="FILE_SystemTextEncodingCodePagesdll" Name="System.Text.Encoding.CodePages.dll" Source="$(var.BinariesDir)System.Text.Encoding.CodePages.dll" KeyPath="yes" />
       </Component>
       <Component Id="COMP_vJoyInterfacedll" Guid="CB9CA948-3098-44B6-B5DA-3807C6C1CA97">
         <File Id="FILE_vJoyInterfacedll" Name="vJoyInterface.dll" Source="$(var.BinariesDir)vJoyInterface.dll" KeyPath="yes" />
