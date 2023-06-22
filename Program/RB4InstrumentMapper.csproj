@@ -131,7 +131,6 @@
     <Compile Include="PacketParsing\ParsingUtils.cs" />
     <Compile Include="PacketParsing\XboxClient.cs" />
     <Compile Include="PacketParsing\XboxDevice.cs" />
-    <Compile Include="MainWindow\ParsingHelpers.cs" />
     <Compile Include="MainWindow\PcapDeviceExtensions.cs" />
     <Compile Include="MainWindow\TextBoxConsole.cs" />
     <Compile Include="Vigem\VigemClient.cs" />
