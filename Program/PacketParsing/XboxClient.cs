@@ -10,9 +10,6 @@ namespace RB4InstrumentMapper.Parsing
     /// </summary>
     internal class XboxClient : IDisposable
     {
-        public ushort VendorId { get; private set; }
-        public ushort ProductId { get; private set; }
-
         /// <summary>
         /// The descriptor of the client.
         /// </summary>
@@ -71,12 +68,10 @@ namespace RB4InstrumentMapper.Parsing
             {
                 // Commands to ignore
                 case CommandId.Acknowledgement:
+                case CommandId.Arrival:
                 case CommandId.Authentication:
                 case CommandId.SerialNumber:
                     break;
-
-                case CommandId.Arrival:
-                    return HandleArrival(commandData);
 
                 case CommandId.Status:
                     return HandleStatus(commandData);
@@ -177,22 +172,6 @@ namespace RB4InstrumentMapper.Parsing
             // Copy data to buffer
             chunkData.CopyTo(chunkBuffer.AsSpan(bufferIndex, chunkData.Length));
             return XboxResult.Pending;
-        }
-
-        /// <summary>
-        /// Handles the arrival message of the device.
-        /// </summary>
-        private unsafe XboxResult HandleArrival(ReadOnlySpan<byte> data)
-        {
-            if (VendorId != 0 || ProductId != 0)
-                return XboxResult.Success;
-
-            if (data.Length < sizeof(DeviceArrival) || MemoryMarshal.TryRead(data, out DeviceArrival arrival))
-                return XboxResult.InvalidMessage;
-
-            VendorId = arrival.VendorId;
-            ProductId = arrival.ProductId;
-            return XboxResult.Success;
         }
 
         /// <summary>
