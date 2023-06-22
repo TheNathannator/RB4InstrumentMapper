@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -311,8 +311,9 @@ namespace RB4InstrumentMapper
             }
 
             // Check if the device is still present
+            pcapDeviceList.Refresh();
             bool deviceStillPresent = false;
-            foreach (var device in CaptureDeviceList.Instance)
+            foreach (var device in pcapDeviceList)
             {
                 if (device.Name == pcapSelectedDevice.Name)
                 {
