@@ -106,7 +106,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LogUtils.cs" />
+    <Compile Include="MainWindow\PcapDeviceExtensions.cs" />
+    <Compile Include="MainWindow\TextBoxWriter.cs" />
     <Compile Include="PacketParsing\Backends\PcapBackend.cs" />
     <Compile Include="PacketParsing\Mappers\DrumsVigemMapper.cs" />
     <Compile Include="PacketParsing\Mappers\DrumsVjoyMapper.cs" />
@@ -131,13 +132,12 @@
     <Compile Include="PacketParsing\ParsingUtils.cs" />
     <Compile Include="PacketParsing\XboxClient.cs" />
     <Compile Include="PacketParsing\XboxDevice.cs" />
-    <Compile Include="MainWindow\PcapDeviceExtensions.cs" />
-    <Compile Include="MainWindow\TextBoxConsole.cs" />
     <Compile Include="Vigem\VigemClient.cs" />
     <Compile Include="Vjoy\VjoyClient.cs" />
     <Compile Include="Vjoy\VjoyDefinitions.cs" />
     <Compile Include="Vjoy\VjoyException.cs" />
     <Compile Include="Vjoy\VjoyExtensions.cs" />
+    <Compile Include="Logging.cs" />
     <Page Include="MainWindow\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

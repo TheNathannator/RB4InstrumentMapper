@@ -72,7 +72,7 @@ namespace RB4InstrumentMapper.Parsing
             // Menu and Options
             device.SetButtonState(Xbox360Button.Start, report.Menu);
             device.SetButtonState(Xbox360Button.Back, report.Options);
-            
+
             // Sticks
             device.SetAxisValue(Xbox360Axis.LeftThumbX, report.LeftStickX);
             device.SetAxisValue(Xbox360Axis.LeftThumbY, report.LeftStickY);

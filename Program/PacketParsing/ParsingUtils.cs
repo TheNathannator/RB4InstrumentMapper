@@ -43,37 +43,6 @@ namespace RB4InstrumentMapper.Parsing
         }
 
         /// <summary>
-        /// Scales this byte to an int, starting from the negative end.
-        /// </summary>
-        public static int ScaleToInt32(this byte input)
-        {
-            // Duplicate the input value to the higher 8-bit regions by multiplying by a number with the
-            // first bit of each region set to 1, then XOR with the negative bit to make the range start from the negative end
-            return (int)((input * 0x01010101) ^ 0x80000000);
-        }
-
-        /// <summary>
-        /// Scales this short to an int.
-        /// </summary>
-        public static int ScaleToInt32(this short input)
-        {
-            // Duplicate the input value to the higher 16-bit regions by multiplying by a number with the
-            // first bit of each region set to 1
-            // Shorts already
-            return input * 0x00010001;
-        }
-
-        /// <summary>
-        /// Scales this byte to a uint.
-        /// </summary>
-        public static uint ScaleToUInt32(this byte input)
-        {
-            // Duplicate the input value to the higher 8-bit regions by multiplying by a number with the
-            // first bit of each region set to 1
-            return (uint)(input * 0x01010101);
-        }
-
-        /// <summary>
         /// Scales a byte to a short, starting from the negative end.
         /// </summary>
         public static short ScaleToInt16(this byte input)

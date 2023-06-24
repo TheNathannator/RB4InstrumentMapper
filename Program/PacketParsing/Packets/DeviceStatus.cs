@@ -20,12 +20,12 @@ namespace RB4InstrumentMapper.Parsing
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DeviceStatus
+    internal readonly struct DeviceStatus
     {
-        private byte status;
-        private byte unk1;
-        private byte unk2;
-        private byte unk3;
+        private readonly byte status;
+        private readonly byte unk1;
+        private readonly byte unk2;
+        private readonly byte unk3;
 
         public bool Connected => (status & 0b1100_0000) != 0;
         public BatteryType BatteryType => (BatteryType)(status & 0b0000_1100);

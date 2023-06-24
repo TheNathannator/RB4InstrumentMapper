@@ -6,21 +6,19 @@ using SharpPcap;
 
 namespace RB4InstrumentMapper.Parsing
 {
-    public delegate void PacketReceivedHandler(DateTime timestamp, ReadOnlySpan<byte> data);
-
     /// <summary>
     /// A standard IEEE 802.11 QoS header.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal unsafe struct QoSHeader
     {
-        ushort frameControl;
-        ushort durationId;
-        fixed byte receiverAddress[6];
-        fixed byte transmitterAddress[6];
-        fixed byte destinationAddress[6];
-        ushort sequenceControl;
-        ushort qosControl;
+        private readonly ushort frameControl;
+        private readonly ushort durationId;
+        private fixed byte receiverAddress[6];
+        private fixed byte transmitterAddress[6];
+        private fixed byte destinationAddress[6];
+        private readonly ushort sequenceControl;
+        private readonly ushort qosControl;
 
         public byte FrameType => (byte)((frameControl & 0xC) >> 2);
         public byte FrameSubtype => (byte)((frameControl & 0xF0) >> 4);
@@ -41,14 +39,23 @@ namespace RB4InstrumentMapper.Parsing
         }
     }
 
+    /// <summary>
+    /// Backend for handling controllers via Pcap.
+    /// </summary>
     public static class PcapBackend
     {
-        public static bool LogPackets = false;
+        /// <summary>
+        /// Whether or not packets should be logged to the console.
+        /// </summary>
+        public static bool LogPackets { get; set; } = false;
+
+        /// <summary>
+        /// Event fired when packet capture stops automatically.
+        /// </summary>
+        public static event Action OnCaptureStop;
 
         private static ILiveDevice captureDevice = null;
         private static readonly Dictionary<ulong, XboxDevice> devices = new Dictionary<ulong, XboxDevice>();
-
-        public static event Action OnCaptureStop;
 
         /// <summary>
         /// Starts capturing packets from the given device.
@@ -65,7 +72,7 @@ namespace RB4InstrumentMapper.Parsing
 
             // Configure packet receive event handler
             device.OnPacketArrival += OnPacketArrival;
-            
+
             // Start capture
             device.StartCapture();
             captureDevice = device;

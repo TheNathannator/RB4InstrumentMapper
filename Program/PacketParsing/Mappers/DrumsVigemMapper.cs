@@ -29,10 +29,14 @@ namespace RB4InstrumentMapper.Parsing
             }
         }
 
+        // Constants for the d-pad masks
+        private const int yellowBit = 0x01;
+        private const int blueBit = 0x02;
+
         // The previous state of the yellow/blue cymbals
-        int previousDpadCymbals;
+        private int previousDpadCymbals;
         // The current state of the d-pad mask from the hit yellow/blue cymbals
-        int dpadMask;
+        private int dpadMask;
 
         /// <summary>
         /// Parses an input report.
@@ -54,10 +58,6 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         internal static void HandleReport(IXbox360Controller device, in DrumInput report, ref int previousDpadCymbals, ref int dpadMask)
         {
-            // Constants for the d-pad masks
-            const int yellowBit = 0x01;
-            const int blueBit = 0x02;
-
             // Menu and Options
             var buttons = (GamepadButton)report.Buttons;
             device.SetButtonState(Xbox360Button.Start, (buttons & GamepadButton.Menu) != 0);
@@ -130,9 +130,9 @@ namespace RB4InstrumentMapper.Parsing
                 (yellowCym | blueCym | greenCym) != 0);
 
             // Pedals
-            device.SetButtonState(Xbox360Button.LeftShoulder, 
+            device.SetButtonState(Xbox360Button.LeftShoulder,
                 (report.Buttons & (ushort)DrumButton.KickOne) != 0);
-            device.SetButtonState(Xbox360Button.LeftThumb, 
+            device.SetButtonState(Xbox360Button.LeftThumb,
                 (report.Buttons & (ushort)DrumButton.KickTwo) != 0);
 
             // Velocities

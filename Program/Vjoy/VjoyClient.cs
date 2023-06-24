@@ -1,3 +1,4 @@
+using System;
 using vJoyInterfaceWrap;
 
 namespace RB4InstrumentMapper.Vjoy
@@ -51,6 +52,45 @@ namespace RB4InstrumentMapper.Vjoy
         }
 
         /// <summary>
+        /// Counts the number of available vJoy devices.
+        /// </summary>
+        public static int GetAvailableDeviceCount()
+        {
+            if (!Enabled)
+            {
+                return 0;
+            }
+
+            // Loop through vJoy IDs and populate list
+            int freeDeviceCount = 0;
+            for (uint id = 1; id <= 16; id++)
+            {
+                if (IsDeviceAvailable(id))
+                {
+                    freeDeviceCount++;
+                }
+            }
+
+            switch (freeDeviceCount)
+            {
+                case 0:
+                    Console.WriteLine($"No vJoy devices available! Please configure some in the Configure vJoy application.");
+                    Console.WriteLine($"Devices must be configured with 16 or more buttons, 1 or more continuous POV hats, and have the X, Y, and Z axes.");
+                    break;
+
+                case 1:
+                    Console.WriteLine($"{freeDeviceCount} vJoy device available.");
+                    break;
+
+                default:
+                    Console.WriteLine($"{freeDeviceCount} vJoy devices available.");
+                    break;
+            }
+
+            return freeDeviceCount;
+        }
+
+        /// <summary>
         /// Gets the next available device ID.
         /// </summary>
         public static uint GetNextAvailableID()
@@ -59,7 +99,7 @@ namespace RB4InstrumentMapper.Vjoy
             for (uint deviceId = 1; deviceId <= 16; deviceId++)
             {
                 // Ensure device is available
-                if (client.GetVJDStatus(deviceId) == VjdStat.VJD_STAT_FREE && IsDeviceCompatible(deviceId))
+                if (IsDeviceAvailable(deviceId))
                 {
                     return deviceId;
                 }

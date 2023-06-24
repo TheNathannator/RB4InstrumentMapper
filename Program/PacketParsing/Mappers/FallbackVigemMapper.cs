@@ -28,9 +28,9 @@ namespace RB4InstrumentMapper.Parsing
         }
 
         // The previous state of the yellow/blue cymbals
-        int previousDpadCymbals;
+        private int previousDpadCymbals;
         // The current state of the d-pad mask from the hit yellow/blue cymbals
-        int dpadMask;
+        private int dpadMask;
 
         /// <summary>
         /// Parses an input report.

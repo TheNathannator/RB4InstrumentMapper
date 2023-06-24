@@ -1,33 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Runtime.InteropServices;
 using System.Windows.Threading;
-using SharpPcap;
-using SharpPcap.LibPcap;
 using RB4InstrumentMapper.Parsing;
-using RB4InstrumentMapper.Vjoy;
+using RB4InstrumentMapper.Properties;
 using RB4InstrumentMapper.Vigem;
+using RB4InstrumentMapper.Vjoy;
+using SharpPcap;
 
 namespace RB4InstrumentMapper
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         /// <summary>
@@ -61,10 +48,13 @@ namespace RB4InstrumentMapper
         private bool packetDebugLog = false;
 
         /// <summary>
-        /// Common name for Pcap combo box items.
+        /// Prefix for Pcap combo box items.
         /// </summary>
-        private const string pcapComboBoxItemName = "pcapDeviceComboBoxItem";
+        private const string pcapComboBoxPrefix = "pcapDeviceComboBoxItem";
 
+        /// <summary>
+        /// Available controller emulation types.
+        /// </summary>
         private enum ControllerType
         {
             None = -1,
@@ -72,9 +62,6 @@ namespace RB4InstrumentMapper
             VigemBus = 1
         }
 
-        /// <summary>
-        /// Initializes a new MainWindow.
-        /// </summary>
         public MainWindow()
         {
             // Assign event handler for unhandled exceptions
@@ -82,30 +69,28 @@ namespace RB4InstrumentMapper
 
             InitializeComponent();
 
-            Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
-            versionLabel.Content = $"v{version.ToString()}";
+            var version = Assembly.GetEntryAssembly().GetName().Version;
+            versionLabel.Content = $"v{version}";
 #if DEBUG
             versionLabel.Content += " Debug";
 #endif
 
             // Capture Dispatcher object for use in callback
-            uiDispatcher = this.Dispatcher;
+            uiDispatcher = Dispatcher;
         }
 
         /// <summary>
         /// Called when the window loads.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Connect to console
-            TextBoxConsole.RedirectConsoleToTextBox(messageConsole, displayLinesWithTimestamp: false);
+            TextBoxWriter.RedirectConsoleToTextBox(messageConsole, displayLinesWithTimestamp: false);
 
             // Load saved settings
-            packetDebugCheckBox.IsChecked = Properties.Settings.Default.packetDebug;
-            packetLogCheckBox.IsChecked = Properties.Settings.Default.packetDebugLog;
-            int deviceType = controllerDeviceTypeCombo.SelectedIndex = Properties.Settings.Default.controllerDeviceType;
+            packetDebugCheckBox.IsChecked = Settings.Default.packetDebug;
+            packetLogCheckBox.IsChecked = Settings.Default.packetDebugLog;
+            int deviceType = controllerDeviceTypeCombo.SelectedIndex = Settings.Default.controllerDeviceType;
 
             // Check for vJoy
             bool vjoyFound = VjoyClient.Enabled;
@@ -120,7 +105,7 @@ namespace RB4InstrumentMapper
                     Console.WriteLine($"WARNING: vJoy library version (0x{libraryVersion:X8}) does not match driver version (0x{driverVersion:X8})! vJoy mode may cause errors!");
                 }
 
-                if (CountAvailableVjoyDevices() > 0)
+                if (VjoyClient.GetAvailableDeviceCount() > 0)
                 {
                     (controllerDeviceTypeCombo.Items[0] as ComboBoxItem).IsEnabled = true;
                 }
@@ -178,8 +163,6 @@ namespace RB4InstrumentMapper
         /// <summary>
         /// Called when the window has closed.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Window_Closed(object sender, EventArgs e)
         {
             // Shutdown
@@ -215,16 +198,16 @@ namespace RB4InstrumentMapper
             }
 
             // Load saved device name
-            string currentPcapSelection = Properties.Settings.Default.pcapDevice;
+            string currentPcapSelection = Settings.Default.pcapDevice;
 
             // Populate combo and print the list
             for (int i = 0; i < pcapDeviceList.Count; i++)
             {
-                ILiveDevice device = pcapDeviceList[i];
+                var device = pcapDeviceList[i];
                 string itemNumber = $"{i + 1}";
 
                 string deviceName = $"{itemNumber}. {device.GetDisplayName()}";
-                string itemName = pcapComboBoxItemName + itemNumber;
+                string itemName = pcapComboBoxPrefix + itemNumber;
                 bool isSelected = device.Name.Equals(currentPcapSelection) || device.Name.Equals(pcapSelectedDevice?.Name);
 
                 if (isSelected || (string.IsNullOrEmpty(currentPcapSelection) && device.IsXboxOneReceiver()))
@@ -251,51 +234,11 @@ namespace RB4InstrumentMapper
             Console.WriteLine($"Discovered {pcapDeviceList.Count} Pcap devices.");
         }
 
-        /// <summary>
-        /// Populates the controller device list as vJoy.
-        /// </summary>
-        private int CountAvailableVjoyDevices()
-        {
-            if (!VjoyClient.Enabled)
-            {
-                return 0;
-            }
-
-            // Loop through vJoy IDs and populate list
-            int freeDeviceCount = 0;
-            for (uint id = 1; id <= 16; id++)
-            {
-                if (VjoyClient.IsDeviceAvailable(id))
-                {
-                    freeDeviceCount++;
-                }
-            }
-
-            switch (freeDeviceCount)
-            {
-                case 0:
-                    Console.WriteLine($"No vJoy devices available! Please configure some in the Configure vJoy application.");
-                    Console.WriteLine($"Devices must be configured with 16 or more buttons, 1 or more continuous POV hats, and have the X, Y, and Z axes.");
-                    break;
-
-                case 1:
-                    Console.WriteLine($"{freeDeviceCount} vJoy device available.");
-                    break;
-
-                default:
-                    Console.WriteLine($"{freeDeviceCount} vJoy devices available.");
-                    break;
-            }
-
-            return freeDeviceCount;
-        }
-
         private void SetStartButtonEnabled()
         {
-            startButton.IsEnabled = (
+            startButton.IsEnabled =
                 controllerDeviceTypeCombo.SelectedIndex != (int)ControllerType.None &&
-                pcapDeviceCombo.SelectedIndex != -1
-            );
+                pcapDeviceCombo.SelectedIndex != -1;
         }
 
         /// <summary>
@@ -388,7 +331,7 @@ namespace RB4InstrumentMapper
             bool doPacketLogMessage = Logging.PacketLogExists;
             // Close packet log file
             Logging.ClosePacketLog();
-            
+
             // Disable packet capture active flag
             packetCaptureActive = false;
 
@@ -421,22 +364,20 @@ namespace RB4InstrumentMapper
         private void pcapDeviceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Get selected combo box item
-            ComboBoxItem selection = pcapDeviceCombo.SelectedItem as ComboBoxItem;
-            if (selection == null)
+            if (!(pcapDeviceCombo.SelectedItem is ComboBoxItem selection))
             {
                 // Disable start button
                 startButton.IsEnabled = false;
 
                 // Clear saved device
-                Properties.Settings.Default.pcapDevice = String.Empty;
-                Properties.Settings.Default.Save();
+                Settings.Default.pcapDevice = String.Empty;
+                Settings.Default.Save();
                 return;
             }
             string itemName = selection.Name;
 
             // Get index of selected Pcap device
-            int pcapDeviceIndex = -1;
-            if (int.TryParse(itemName.Substring(pcapComboBoxItemName.Length), out pcapDeviceIndex))
+            if (int.TryParse(itemName.Substring(pcapComboBoxPrefix.Length), out int pcapDeviceIndex))
             {
                 // Adjust index count (UI->Logical)
                 pcapDeviceIndex -= 1;
@@ -449,16 +390,14 @@ namespace RB4InstrumentMapper
                 SetStartButtonEnabled();
 
                 // Remember selected Pcap device's name
-                Properties.Settings.Default.pcapDevice = pcapSelectedDevice.Name;
-                Properties.Settings.Default.Save();
+                Settings.Default.pcapDevice = pcapSelectedDevice.Name;
+                Settings.Default.Save();
             }
         }
 
         /// <summary>
         /// Handles the click of the Start button.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
             if (!packetCaptureActive)
@@ -483,8 +422,8 @@ namespace RB4InstrumentMapper
             packetDebugLog = packetLogCheckBox.IsChecked.GetValueOrDefault();
 
             // Remember selected packet debug state
-            Properties.Settings.Default.packetDebug = true;
-            Properties.Settings.Default.Save();
+            Settings.Default.packetDebug = true;
+            Settings.Default.Save();
         }
 
         /// <summary>
@@ -499,8 +438,8 @@ namespace RB4InstrumentMapper
             packetDebugLog = false;
 
             // Remember selected packet debug state
-            Properties.Settings.Default.packetDebug = false;
-            Properties.Settings.Default.Save();
+            Settings.Default.packetDebug = false;
+            Settings.Default.Save();
         }
 
         /// <summary>
@@ -513,8 +452,8 @@ namespace RB4InstrumentMapper
             packetDebugLog = true;
 
             // Remember selected packet debug state
-            Properties.Settings.Default.packetDebugLog = true;
-            Properties.Settings.Default.Save();
+            Settings.Default.packetDebugLog = true;
+            Settings.Default.Save();
         }
 
         /// <summary>
@@ -527,8 +466,8 @@ namespace RB4InstrumentMapper
             packetDebugLog = false;
 
             // Remember selected packet debug state
-            Properties.Settings.Default.packetDebugLog = false;
-            Properties.Settings.Default.Save();
+            Settings.Default.packetDebugLog = false;
+            Settings.Default.Save();
         }
 
         /// <summary>
@@ -549,10 +488,10 @@ namespace RB4InstrumentMapper
             {
                 // vJoy
                 case 0:
-                    if (CountAvailableVjoyDevices() > 0)
+                    if (VjoyClient.GetAvailableDeviceCount() > 0)
                     {
                         XboxDevice.MapperMode = MappingMode.vJoy;
-                        Properties.Settings.Default.controllerDeviceType = (int)ControllerType.vJoy;
+                        Settings.Default.controllerDeviceType = (int)ControllerType.vJoy;
                     }
                     else
                     {
@@ -566,18 +505,18 @@ namespace RB4InstrumentMapper
                 // ViGEmBus
                 case 1:
                     XboxDevice.MapperMode = MappingMode.ViGEmBus;
-                    Properties.Settings.Default.controllerDeviceType = (int)ControllerType.VigemBus;
+                    Settings.Default.controllerDeviceType = (int)ControllerType.VigemBus;
                     break;
 
                 default:
                     XboxDevice.MapperMode = 0;
-                    Properties.Settings.Default.controllerDeviceType = (int)ControllerType.None;
+                    Settings.Default.controllerDeviceType = (int)ControllerType.None;
                     break;
             }
 
             // Save setting
-            Properties.Settings.Default.controllerDeviceType = controllerDeviceTypeCombo.SelectedIndex;
-            Properties.Settings.Default.Save();
+            Settings.Default.controllerDeviceType = controllerDeviceTypeCombo.SelectedIndex;
+            Settings.Default.Save();
 
             // Enable start button
             SetStartButtonEnabled();
@@ -614,8 +553,8 @@ namespace RB4InstrumentMapper
                     pcapSelectedDevice = device;
 
                     // Remember the new device
-                    Properties.Settings.Default.pcapDevice = pcapSelectedDevice.Name;
-                    Properties.Settings.Default.Save();
+                    Settings.Default.pcapDevice = pcapSelectedDevice.Name;
+                    Settings.Default.Save();
 
                     // Refresh the dropdown
                     PopulatePcapDropdown();
@@ -630,7 +569,7 @@ namespace RB4InstrumentMapper
             if (!foundDevice)
             {
                 result = MessageBox.Show(
-                    "No Xbox One receivers could be found through checking device properties.\nYou will now be guided through a second auto-detection process. Press Cancel at any time to cancel the process.",
+                    "No Xbox One receivers could be found through checking device \nYou will now be guided through a second auto-detection process. Press Cancel at any time to cancel the process.",
                     "Auto-Detect Receiver",
                     MessageBoxButton.OKCancel
                 );
@@ -652,7 +591,7 @@ namespace RB4InstrumentMapper
             }
 
             // Get the list of devices for when receiver is unplugged
-            CaptureDeviceList notPlugged = CaptureDeviceList.New();
+            var notPlugged = CaptureDeviceList.New();
 
             // Prompt user to plug in their receiver
             result = MessageBox.Show(
@@ -666,22 +605,22 @@ namespace RB4InstrumentMapper
             }
 
             // Get the list of devices for when receiver is plugged in
-            CaptureDeviceList plugged = CaptureDeviceList.New();
+            var plugged = CaptureDeviceList.New();
 
             // Get device names for both not plugged and plugged lists
-            List<string> notPluggedNames = new List<string>();
-            List<string> pluggedNames = new List<string>();
-            foreach (ILiveDevice oldDevice in notPlugged)
+            var notPluggedNames = new List<string>();
+            var pluggedNames = new List<string>();
+            foreach (var oldDevice in notPlugged)
             {
                 notPluggedNames.Add(oldDevice.Name);
             }
-            foreach (ILiveDevice newDevice in plugged)
+            foreach (var newDevice in plugged)
             {
                 pluggedNames.Add(newDevice.Name);
             }
 
             // Compare the lists and find what notPlugged doesn't contain
-            List<string> newNames = new List<string>();
+            var newNames = new List<string>();
             foreach (string pluggedName in pluggedNames)
             {
                 if (!notPluggedNames.Contains(pluggedName))
@@ -691,8 +630,8 @@ namespace RB4InstrumentMapper
             }
 
             // Create a list of new devices based on the list of new device names
-            List<ILiveDevice> newDevices = new List<ILiveDevice>();
-            foreach (ILiveDevice newDevice in plugged)
+            var newDevices = new List<ILiveDevice>();
+            foreach (var newDevice in plugged)
             {
                 if (newNames.Contains(newDevice.Name))
                 {
@@ -707,8 +646,8 @@ namespace RB4InstrumentMapper
                 pcapSelectedDevice = newDevices.First();
 
                 // Remember the new device
-                Properties.Settings.Default.pcapDevice = pcapSelectedDevice.Name;
-                Properties.Settings.Default.Save();
+                Settings.Default.pcapDevice = pcapSelectedDevice.Name;
+                Settings.Default.Save();
             }
             else
             {
@@ -729,18 +668,15 @@ namespace RB4InstrumentMapper
         }
 
         /// <summary>
-        /// Event handler for AppDomain.CurrentDomain.UnhandledException.
+        /// Logs unhandled exceptions to a file and prompts the user with the exception message.
         /// </summary>
-        /// <remarks>
-        /// Logs the exception info to a file and prompts the user with the exception message.
-        /// </remarks>
         public static void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
             // The unhandled exception
-            Exception unhandledException = args.ExceptionObject as Exception;
+            var unhandledException = args.ExceptionObject as Exception;
 
             // MessageBox message
-            StringBuilder message = new StringBuilder();
+            var message = new StringBuilder();
             message.AppendLine("An unhandled error has occured:");
             message.AppendLine();
             message.AppendLine(unhandledException.GetFirstLine());
@@ -761,7 +697,7 @@ namespace RB4InstrumentMapper
                 message.AppendLine("A log of the error has been created, do you want to open it?");
 
                 // Display message
-                MessageBoxResult result = MessageBox.Show(message.ToString(), "Unhandled Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                var result = MessageBox.Show(message.ToString(), "Unhandled Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
                 // If user requested to, open the log
                 if (result == MessageBoxResult.Yes)
                 {
@@ -780,7 +716,7 @@ namespace RB4InstrumentMapper
             // Close the log files
             Logging.CloseAll();
             // Save settings
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
 
             // Close program
             MessageBox.Show("The program will now shut down.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);

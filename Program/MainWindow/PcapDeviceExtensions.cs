@@ -5,9 +5,9 @@ namespace RB4InstrumentMapper
     public static class PcapDeviceExtensions
     {
         /// <summary>
-        /// Gets the display name for a capture device.
+        /// Gets the display name for this capture device.
         /// </summary>
-        public static string GetDisplayName(this ILiveDevice device)
+        public static string GetDisplayName(this ICaptureDevice device)
         {
             if (!string.IsNullOrWhiteSpace(device.Description))
             {
@@ -18,9 +18,9 @@ namespace RB4InstrumentMapper
         }
 
         /// <summary>
-        /// Determines whether or not a capture device is an Xbox One receiver.
+        /// Determines whether or not this capture device is an Xbox One receiver.
         /// </summary>
-        public static bool IsXboxOneReceiver(this ILiveDevice device)
+        public static bool IsXboxOneReceiver(this ICaptureDevice device)
         {
             // Depending on the receiver, there are two ways of detection:
             // - Description of "MT7612US_RL"

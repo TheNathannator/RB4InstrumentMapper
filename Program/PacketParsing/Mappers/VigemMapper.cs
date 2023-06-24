@@ -113,8 +113,13 @@ namespace RB4InstrumentMapper.Parsing
             if (disposing)
             {
                 // Reset report
-                try { device?.ResetReport(); } catch {}
-                try { device?.SubmitReport(); } catch {}
+                try
+                {
+                    device?.ResetReport(); 
+                    device?.SubmitReport();
+                }
+                catch
+                { }
 
                 // Disconnect device
                 try { device?.Disconnect(); } catch {}

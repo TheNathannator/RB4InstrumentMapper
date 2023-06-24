@@ -11,7 +11,7 @@ namespace RB4InstrumentMapper.Parsing
     internal static class MapperFactory
     {
         // Device interface GUIDs to check when getting the device mapper
-        private static Dictionary<Guid, Func<MappingMode, IDeviceMapper>> guidToMapper = new Dictionary<Guid, Func<MappingMode, IDeviceMapper>>()
+        private static readonly Dictionary<Guid, Func<MappingMode, IDeviceMapper>> guidToMapper = new Dictionary<Guid, Func<MappingMode, IDeviceMapper>>()
         {
             { DeviceGuids.MadCatzGuitar, GetGuitarMapper },
             { DeviceGuids.PdpGuitar, GetGuitarMapper },

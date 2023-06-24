@@ -1,22 +1,18 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Controls;
-using System.Linq;
-
-// Adds a Debug/Output Console to WPF application
-// - XAML: <TextBox Name="messageConsole" />
-// - MainWindow(): TextBoxOutputter.RedirectConsoleToTextBox(messageConsole);
 
 namespace RB4InstrumentMapper
 {
     /// <summary>
-    /// Adds a Debug/Output Console to WPF application
+    /// A text writer which redirects the standard output stream to a WPF textbox.
     /// </summary>
     /// <remarks>
     /// https://social.technet.microsoft.com/wiki/contents/articles/12347.wpfhowto-add-a-debugoutput-console-to-your-application.aspx
     /// </remarks>
-    public class TextBoxConsole : TextWriter
+    public class TextBoxWriter : TextWriter
     {
         /// <summary>
         /// Default maximum number of lines to keep in console.
@@ -26,7 +22,7 @@ namespace RB4InstrumentMapper
         /// <summary>
         /// Line split characters.
         /// </summary>
-        private static char[] newlineChars = Environment.NewLine.ToCharArray();
+        private static readonly char[] newlineChars = Environment.NewLine.ToCharArray();
 
         /// <summary>
         /// Cache for current line.
@@ -41,25 +37,21 @@ namespace RB4InstrumentMapper
         /// <summary>
         /// Text box handle that displays text.
         /// </summary>
-        private TextBox textBox = null;
+        private readonly TextBox textBox = null;
 
         /// <summary>
         /// Display lines in reverse order (newest first) if set. Defaults to false.
         /// </summary>
-        private bool displayLinesInReverseOrder = false;
+        private readonly bool displayLinesInReverseOrder = false;
 
         /// <summary>
         /// Display timestamp for each line. Defaults to true.
         /// </summary>
-        private bool displayLinesWithTimestamp = true;
+        private readonly bool displayLinesWithTimestamp = true;
 
         /// <summary>
         /// Connects console output to a given text box.
         /// </summary>
-        /// <param name="textBox">Text box to receive console output.</param>
-        /// <param name="maxNumberOfLines">Maximum number of lines to display in the text box. Defaults to 100.</param>
-        /// <param name="displayLinesInReverseOrder">Display lines in reverse order (newest first). Defaults to true.</param>
-        /// <param name="displayLinesWithTimestamp">Display timestamp for each line. Defaults to true.</param>
         public static void RedirectConsoleToTextBox(
             TextBox textBox,
             int maxNumberOfLines = DefaultMaxNumberLines,
@@ -67,18 +59,16 @@ namespace RB4InstrumentMapper
             bool displayLinesWithTimestamp = true
         )
         {
-            TextBoxConsole textBoxOutputter = new TextBoxConsole(textBox, displayLinesInReverseOrder, displayLinesWithTimestamp);
-            Console.SetOut(textBoxOutputter);
+            var textboxConsole = new TextBoxWriter(textBox, displayLinesInReverseOrder, displayLinesWithTimestamp);
+            Console.SetOut(textboxConsole);
             currentLineCache = new StringBuilder();
             visibleTextCache = new FixedSizeConcurrentQueue<string>(maxNumberOfLines);
         }
 
         /// <summary>
-        /// Creates a TextBoxOutputter instance.
+        /// Creates a new TextBoxConsole.
         /// </summary>
-        /// <param name="output">Target text box</param>
-        /// <param name="reverse"> Reverse text.</param>
-        public TextBoxConsole(TextBox output, bool reverse = false, bool timestamp = true)
+        public TextBoxWriter(TextBox output, bool reverse = false, bool timestamp = true)
         {
             textBox = output;
             displayLinesInReverseOrder = reverse;
@@ -88,7 +78,6 @@ namespace RB4InstrumentMapper
         /// <summary>
         /// Write text to outputter.
         /// </summary>
-        /// <param name="value"></param>
         public override void Write(char value)
         {
             base.Write(value);
@@ -132,9 +121,6 @@ namespace RB4InstrumentMapper
         /// <summary>
         /// Gets the encoding of the outputter.
         /// </summary>
-        public override Encoding Encoding
-        {
-            get { return System.Text.Encoding.UTF8; }
-        }
+        public override Encoding Encoding => Encoding.UTF8;
     }
 }

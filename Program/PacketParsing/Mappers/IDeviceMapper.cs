@@ -7,6 +7,9 @@ namespace RB4InstrumentMapper.Parsing
     /// </summary>
     internal interface IDeviceMapper : IDisposable
     {
+        /// <summary>
+        /// Whether or not the guide button should be mapped.
+        /// </summary>
         bool MapGuideButton { get; set; }
 
         /// <summary>

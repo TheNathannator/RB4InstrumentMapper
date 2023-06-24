@@ -44,9 +44,9 @@ namespace RB4InstrumentMapper.Parsing
         public byte PickupSwitch;
         public byte UpperFrets;
         public byte LowerFrets;
-        byte unk1;
-        byte unk2;
-        byte unk3;
+        private readonly byte unk1;
+        private readonly byte unk2;
+        private readonly byte unk3;
 
         public bool Green => ((UpperFrets | LowerFrets) & (byte)GuitarFret.Green) != 0;
         public bool Red => ((UpperFrets | LowerFrets) & (byte)GuitarFret.Red) != 0;
