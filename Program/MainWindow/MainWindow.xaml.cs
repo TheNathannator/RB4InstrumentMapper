@@ -222,6 +222,7 @@ namespace RB4InstrumentMapper
                 if (isSelected || (string.IsNullOrEmpty(currentPcapSelection) && device.IsXboxOneReceiver()))
                 {
                     pcapSelectedDevice = device;
+                    isSelected = true;
                 }
 
                 pcapDeviceCombo.Items.Add(new ComboBoxItem()
