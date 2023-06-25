@@ -23,11 +23,6 @@ namespace RB4InstrumentMapper
         private static Dispatcher uiDispatcher = null;
 
         /// <summary>
-        /// List of available Pcap devices.
-        /// </summary>
-        private readonly CaptureDeviceList pcapDeviceList = CaptureDeviceList.Instance;
-
-        /// <summary>
         /// The selected Pcap device.
         /// </summary>
         private ILiveDevice pcapSelectedDevice = null;
@@ -157,7 +152,20 @@ namespace RB4InstrumentMapper
             }
 
             // Initialize Pcap dropdown
-            PopulatePcapDropdown();
+            try
+            {
+                PopulatePcapDropdown();
+            }
+            catch (DllNotFoundException ex)
+            {
+                MessageBox.Show("Could not load Pcap interface! Please ensure WinPcap is installed on your system.", "Couldn't Find WinPcap", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+
+                // Log exception
+                Logging.Main_WriteException(ex);
+
+                return;
+            }
         }
 
         /// <summary>
@@ -190,6 +198,7 @@ namespace RB4InstrumentMapper
             pcapDeviceCombo.Items.Clear();
 
             // Refresh the device list
+            var pcapDeviceList = CaptureDeviceList.Instance;
             pcapDeviceList.Refresh();
             if (pcapDeviceList.Count == 0)
             {
@@ -254,6 +263,7 @@ namespace RB4InstrumentMapper
             }
 
             // Check if the device is still present
+            var pcapDeviceList = CaptureDeviceList.Instance;
             pcapDeviceList.Refresh();
             bool deviceStillPresent = false;
             foreach (var device in pcapDeviceList)
@@ -383,7 +393,7 @@ namespace RB4InstrumentMapper
                 pcapDeviceIndex -= 1;
 
                 // Assign device
-                pcapSelectedDevice = pcapDeviceList[pcapDeviceIndex];
+                pcapSelectedDevice = CaptureDeviceList.Instance[pcapDeviceIndex];
                 Console.WriteLine($"Selected Pcap device {pcapSelectedDevice.GetDisplayName()}");
 
                 // Enable start button
@@ -532,6 +542,7 @@ namespace RB4InstrumentMapper
             MessageBoxResult result;
 
             // Refresh and check for Xbox One receivers
+            var pcapDeviceList = CaptureDeviceList.Instance;
             pcapDeviceList.Refresh();
             bool foundDevice = false;
             foreach (var device in pcapDeviceList)
