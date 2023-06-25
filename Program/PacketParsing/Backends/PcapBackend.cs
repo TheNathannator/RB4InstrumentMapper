@@ -137,7 +137,7 @@ namespace RB4InstrumentMapper.Parsing
             ulong deviceId = header.DeviceId;
             if (!devices.TryGetValue(deviceId, out var device))
             {
-                device = new XboxDevice();
+                device = new XboxDevice(deviceId);
                 devices.Add(deviceId, device);
                 Console.WriteLine($"Device with ID {deviceId:X12} was connected");
             }
