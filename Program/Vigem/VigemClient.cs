@@ -23,7 +23,7 @@ namespace RB4InstrumentMapper.Vigem
         /// Whether or not new devices can be created.
         /// </summary>
         public static bool AreDevicesAvailable => Initialized && canCreateDevices;
-        private static bool canCreateDevices;
+        private static bool canCreateDevices = false;
 
         public static bool TryInitialize()
         {
@@ -33,11 +33,13 @@ namespace RB4InstrumentMapper.Vigem
             try
             {
                 client = new ViGEmClient();
+                canCreateDevices = true;
                 return true;
             }
             catch
             {
                 client = null;
+                canCreateDevices = false;
                 return false;
             }
         }
