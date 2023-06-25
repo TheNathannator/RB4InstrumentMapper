@@ -51,17 +51,6 @@ namespace RB4InstrumentMapper.Parsing
                 }
                 int messageLength = headerLength + header.DataLength;
 
-                // Chunked messages
-                if ((header.Flags & CommandFlags.ChunkPacket) != 0)
-                {
-                    if (!ParsingUtils.DecodeLEB128(data.Slice(headerLength), out int _, out int indexLength))
-                    {
-                        return XboxResult.InvalidMessage;
-                    }
-
-                    messageLength += indexLength;
-                }
-
                 // Verify bounds
                 if (data.Length < messageLength)
                 {
@@ -69,7 +58,7 @@ namespace RB4InstrumentMapper.Parsing
                 }
 
                 var messageData = data.Slice(0, messageLength);
-                var commandData = messageData.Slice(headerLength); // Chunk index is not removed here, as message handling needs it
+                var commandData = messageData.Slice(headerLength);
 
                 if (!clients.TryGetValue(header.Client, out var client))
                 {

@@ -30,6 +30,13 @@ namespace RB4InstrumentMapper.Parsing
         /// </summary>
         internal unsafe XboxResult HandleMessage(CommandHeader header, ReadOnlySpan<byte> commandData)
         {
+            // Verify packet length
+            if (header.DataLength != commandData.Length)
+            {
+                Debug.Fail($"Command header length does not match buffer length! Header: {header.DataLength}  Buffer: {commandData.Length}");
+                return XboxResult.InvalidMessage;
+            }
+
             // Chunked packets
             if ((header.Flags & CommandFlags.ChunkPacket) != 0)
             {
@@ -45,13 +52,6 @@ namespace RB4InstrumentMapper.Parsing
 
                 header.DataLength = commandData.Length;
                 header.Flags &= ~(CommandFlags.ChunkPacket | CommandFlags.ChunkStart);
-            }
-
-            // Ensure lengths match
-            if (header.DataLength != commandData.Length)
-            {
-                Debug.Fail($"Command header length does not match buffer length! Header: {header.DataLength}  Buffer: {commandData.Length}");
-                return XboxResult.InvalidMessage;
             }
 
             // Don't handle the same packet twice
@@ -102,19 +102,7 @@ namespace RB4InstrumentMapper.Parsing
 
         private unsafe XboxResult ProcessPacketChunk(CommandHeader header, ref ReadOnlySpan<byte> chunkData)
         {
-            // Get sequence length/index
-            if (!ParsingUtils.DecodeLEB128(chunkData, out int bufferIndex, out int bytesRead))
-            {
-                return XboxResult.InvalidMessage;
-            }
-            chunkData = chunkData.Slice(bytesRead);
-
-            // Verify packet length
-            if (header.DataLength != chunkData.Length)
-            {
-                Debug.Fail($"Command header length does not match buffer length! Header: {header.DataLength}  Buffer: {chunkData.Length}");
-                return XboxResult.InvalidMessage;
-            }
+            int bufferIndex = header.ChunkIndex;
 
             // Do nothing with chunks of length 0
             if (bufferIndex <= 0)

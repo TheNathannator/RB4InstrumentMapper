@@ -42,6 +42,7 @@ namespace RB4InstrumentMapper.Parsing
         public int Client;
         public byte SequenceCount;
         public int DataLength;
+        public int ChunkIndex;
 
         public static bool TryParse(ReadOnlySpan<byte> data, out CommandHeader header, out int bytesRead)
         {
@@ -52,20 +53,35 @@ namespace RB4InstrumentMapper.Parsing
                 return false;
             }
 
-            if (!ParsingUtils.DecodeLEB128(data.Slice(3), out int dataLength, out int byteLength))
-            {
-                return false;
-            }
-
+            // Command info
             header = new CommandHeader()
             {
                 CommandId = (CommandId)data[0],
                 Flags = (CommandFlags)(data[1] & 0xF0),
                 Client = data[1] & 0x0F,
                 SequenceCount = data[2],
-                DataLength = dataLength
             };
-            bytesRead = 3 + byteLength;
+            bytesRead += 3;
+
+            // Message length
+            if (!ParsingUtils.DecodeLEB128(data.Slice(bytesRead), out int dataLength, out int byteLength))
+            {
+                return false;
+            }
+            header.DataLength = dataLength;
+            bytesRead += byteLength;
+
+            // Chunk index/length
+            if ((header.Flags & CommandFlags.ChunkPacket) != 0)
+            {
+                if (!ParsingUtils.DecodeLEB128(data.Slice(bytesRead), out int chunkIndex, out byteLength))
+                {
+                    return false;
+                }
+
+                header.ChunkIndex = chunkIndex;
+                bytesRead += byteLength;
+            }
 
             return true;
         }
