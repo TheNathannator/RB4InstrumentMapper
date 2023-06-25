@@ -10,7 +10,6 @@ Both guitars and drums are supported through an Xbox One wireless receiver.
 
 - Windows 10 64-bit
 - [WinPCap](https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe)
-- [USBPCap](https://desowin.org/usbpcap/)
 - [ViGEmBus](https://github.com/ViGEm/ViGEmBus/releases/latest) or [vJoy](https://github.com/jshafer817/vJoy/releases/latest)
 
 ## Hardware Notes
@@ -31,8 +30,7 @@ Some guitars/drumkits might not sync properly when using just the sync button. T
 ## Installation
 
 1. Install [WinPCap](https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe).
-2. Install [USBPCap](https://desowin.org/usbpcap/).
-3. Install [ViGEmBus](https://github.com/ViGEm/ViGEmBus/releases/latest) (recommended) or [vJoy](https://github.com/jshafer817/vJoy/releases/latest).
+2. Install [ViGEmBus](https://github.com/ViGEm/ViGEmBus/releases/latest) (recommended) or [vJoy](https://github.com/jshafer817/vJoy/releases/latest).
    - If you installed vJoy, configure it:
      1. Open your Start menu, find the `vJoy` folder, and open the `Configure vJoy` program inside it.
      2. Configure one device for each one of your guitars/drumkits, using these settings:
@@ -44,17 +42,13 @@ Some guitars/drumkits might not sync properly when using just the sync button. T
 
      3. Click Apply.
    - If you installed ViGEmBus, there's no configuration required. Outputs for guitars and drums will match that of their Xbox 360 counterparts.
-4. Restart your PC.
+3. Restart your PC.
 
 ## Usage
 
 1. Select your Xbox One receiver from the dropdown menu.
-   - Xbox receivers should be detected automatically by device name.
+   - Xbox receivers should be detected automatically.
    - If they are not, click the `Auto-Detect Pcap` button and follow its instructions.
-   - You can also check the device list yourself for a device called `MT7612US_RL`.
-   - If that doesn't work:
-     - Make sure you are not using a USB 3.0 port, as those may cause the receiver to not show up for some reason.
-     - If you installed WinPcap, try installing Npcap instead, or vice versa.
 2. Select either vJoy or ViGEmBus in the Controller Type dropdown.
 3. Connect your instruments if you haven't yet.
 4. Click the Start button. Devices will be detected automatically.
