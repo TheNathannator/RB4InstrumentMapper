@@ -31,38 +31,43 @@ All Xbox One instruments are supported (RB4 guitars/drums, GHL guitar), along wi
 ### Software
 
 - Windows 10/11 64-bit
-- [WinPCap](https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe) (for wireless peripherals)
+- [WinPCap](https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe) (only for Wireless Devices, see [Hardware](#hardware))
 - [ViGEmBus](https://github.com/ViGEm/ViGEmBus/releases/latest) or [vJoy](https://github.com/jshafer817/vJoy/releases/latest)
 
 ### Hardware
 
-- Xbox One wireless receiver (for wireless peripherals)
+- Wireless: Xbox One wireless receiver
   - This is *not* the same as Xbox 360 wireless receivers! You must get an Xbox One (or just "Xbox") receiver, such as [this one](https://amzn.to/2W7qQbt). Third-party receivers are untested, and they will not be deliberately supported.
+- Wired: Guitar Hero Live Xbox One wireless dongle.
+- Wired: Rock Band 4 wireless legacy adapter.
 
 ## Installation
 
 ### Wireless Devices (Pcap)
 
-Rock Band 4 guitars and drumkits, connected through an Xbox One receiver. This section of setup is not required if you will only be using USB devices.
+*This section of setup is not required if you will only be using Wired Devices. Note that the Guitar Hero Live guitar is not considered a wireless device to RB4InstrumentMapper, as its dongle acts as a wired device. Skip to the [Wired Devices (USB)](#wired-devices-usb) section for setup.*
+
+Rock Band 4 guitars and drumkits, connected through an Xbox One receiver.
 
 Install [WinPCap](https://www.winpcap.org/install/bin/WinPcap_4_1_3.exe). This will be used to capture packets from the Xbox One receiver.
 
-*Note that the Guitar Hero Live guitar is not considered a wireless device to RB4InstrumentMapper, as its dongle acts as a wired device. See the section below for setup.*
 
 ### Wired Devices (USB)
 
-Rock Band 4 wireless legacy adapter, Guitar Hero Live guitar/dongle. This section of setup is not required if you will only be using wireless devices through an Xbox One receiver.
+*This section of setup is not required if you will only be using Wireless Devices.*
+
+Rock Band 4 wireless legacy adapter, Guitar Hero Live guitar + GHL Xbox One dongle.
 
 No additional software installation is needed for USB devices. However, you will need to install the WinUSB driver on each device you wish to use; covered later.
 
 ### Controller Emulation Driver
 
-This is the part that allows RB4InstrumentMapper to send inputs based on the packets it receives. It is required for both wired and wireless devices.
+This is the part that allows RB4InstrumentMapper to send inputs based on the packets it receives. It is required for both Wired Devices and Wireless Devices.
 
-- Both of these can be installed simultaneously if desired, however RB4InstrumentMapper will only use one of them at a time.
-- Option 1: [ViGEmBus](https://github.com/ViGEm/ViGEmBus/releases/latest)
+*Both of these can be installed simultaneously if desired, however RB4InstrumentMapper will only use one of them at a time.*
+#### Option 1: [ViGEmBus](https://github.com/ViGEm/ViGEmBus/releases/latest)
   - Recommended, as it requires no configuration and is significantly easier to use. All device outputs will match those of their Xbox 360 counterparts.
-- Option 2: [vJoy](https://github.com/jshafer817/vJoy/releases/latest)
+#### Option 2: [vJoy](https://github.com/jshafer817/vJoy/releases/latest)
   - Supported as an alternative to ViGEmBus, in case of issues. Requires some setup:
   1. Download and install vJoy.
   2. After installing, open your Start menu, find the `vJoy` folder, and open the `Configure vJoy` program inside it.
@@ -118,6 +123,8 @@ Select either ViGEmBus or vJoy in the Controller Type dropdown, then hit the Sta
 
 ### Mapping your controls in Clone Hero
 
+*Guitar Hero Live guitars paired with the GHL Xbox One dongle should have the correct mappings by default. If the strum bar or the lower frets don't register during songs, RB4InstrumentMapper may not be working correctly, remapping your controls will not fix this.*
+
 Now that the program is running, map your controls for each instrument in Clone Hero:
 
 1. Press Space on the main menu.
@@ -138,7 +145,9 @@ In the case that the program crashes, an error log is saved to a `RB4InstrumentM
 
 ## Alternate WinUSB Install Instructions
 
-RB4InstrumentMapper is capable of installing the WinUSB driver on Xbox One devices directly, through the `Configure Devices` button on its main menu. However, if you run into any issues with it, this method of installing the driver will work as an alternative.
+*Wireless Devices: **DO NOT INSTALL THE DRIVER ON YOUR XBOX ONE RECEIVER!** RB4InstrumentMapper is not capable of handling it in this state, and it will become nonfunctional until you uninstall the device in Device Manager!*
+
+Wired Devices: RB4InstrumentMapper is capable of installing the WinUSB driver on an Xbox One dongle directly, through the `Configure Devices` button on its main menu. However, if you run into any issues with it, this method of installing the driver will work as an alternative.
 
 1. Download [Zadig](https://zadig.akeo.ie/) and run it.
 2. Under Options, select `List All Devices`.
@@ -149,8 +158,6 @@ RB4InstrumentMapper is capable of installing the WinUSB driver on Xbox One devic
 4. Hit `Replace Driver`, and repeat for any additional peripherals you wish to use.
 
 To undo this process, press Windows + X and select `Device Manager`, then find the device under the `Universal Serial Bus devices` category (*not `Universal Serial Bus controllers`*), right-click it and hit Uninstall, and check the checkbox that says `Uninstall driver software for this device.`.
-
-***DO NOT INSTALL THE DRIVER ON YOUR XBOX ONE RECEIVER!!!*** RB4InstrumentMapper is not capable of handling it in this state, and it will become nonfunctional until you uninstall the device in Device Manager!
 
 ## Building
 
