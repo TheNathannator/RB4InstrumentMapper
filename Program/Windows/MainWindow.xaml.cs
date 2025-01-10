@@ -113,7 +113,7 @@ namespace RB4InstrumentMapper
             // Load console/log settings
             SetPacketDebug(Settings.Default.packetDebug);
             SetPacketDebugLog(Settings.Default.packetDebugLog);
-            SetVerboseLogging(Settings.Default.verboseLogging);
+            Logging.PrintVerbose = Settings.Default.verboseLogging;
 
             // Load backend settings
             // Done after initializing virtual controller clients
@@ -125,7 +125,7 @@ namespace RB4InstrumentMapper
             GameInputBackend.Initialize();
             SetGameInputInitialized(GameInputBackend.Initialized);
 
-            if (Settings.Default.autoStart)
+            if (Settings.Default.autoStart && startButton.IsEnabled)
             {
                 StartCapture();
             }
@@ -203,7 +203,8 @@ namespace RB4InstrumentMapper
 
             packetDebugCheckBox.IsEnabled = false;
             packetLogCheckBox.IsEnabled = false;
-            verboseLogCheckBox.IsEnabled = false;
+
+            settingsButton.IsEnabled = false;
 
             startStatusLabel.Content = "Running...";
             startButton.Content = "Stop";
@@ -242,7 +243,8 @@ namespace RB4InstrumentMapper
 
             packetDebugCheckBox.IsEnabled = true;
             packetLogCheckBox.IsEnabled = true;
-            verboseLogCheckBox.IsEnabled = true;
+
+            settingsButton.IsEnabled = true;
 
             controllerDeviceTypeCombo.IsEnabled = true;
 
@@ -318,18 +320,6 @@ namespace RB4InstrumentMapper
             }
 
             packetDebugLog = Settings.Default.packetDebugLog = enabled;
-        }
-
-        private void SetVerboseLogging(bool enabled)
-        {
-            if (verboseLogCheckBox.IsChecked != enabled)
-            {
-                verboseLogCheckBox.IsChecked = enabled;
-                return;
-            }
-
-            Settings.Default.verboseLogging = enabled;
-            Logging.PrintVerbose = enabled;
         }
 
         private void SetDeviceType(ControllerType type)
@@ -431,14 +421,6 @@ namespace RB4InstrumentMapper
         }
 
         /// <summary>
-        /// Handles the auto-start checkbox being checked/unchecked.
-        /// </summary>
-        private void autoStartCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            Settings.Default.autoStart = autoStartCheckBox.IsChecked.GetValueOrDefault();
-        }
-
-        /// <summary>
         /// Handles the packet debug checkbox being checked/unchecked.
         /// </summary>
         private void packetDebugCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
@@ -454,15 +436,6 @@ namespace RB4InstrumentMapper
         {
             bool packetDebugLog = packetLogCheckBox.IsChecked.GetValueOrDefault();
             SetPacketDebugLog(packetDebugLog);
-        }
-
-        /// <summary>
-        /// Handles the verbose error checkbox being checked.
-        /// </summary>
-        private void verboseLogCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            bool verboseErrors = verboseLogCheckBox.IsChecked.GetValueOrDefault();
-            SetVerboseLogging(verboseErrors);
         }
 
         /// <summary>
@@ -487,6 +460,20 @@ namespace RB4InstrumentMapper
         private void controllerDeviceTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SetDeviceType((ControllerType)controllerDeviceTypeCombo.SelectedIndex);
+        }
+
+        /// <summary>
+        /// Handles the click of the Settings button.
+        /// </summary>
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SettingsWindow();
+
+            // Position relative to the top-right of the main window
+            window.Left = this.Left + (this.Width - window.Width - 50);
+            window.Top = this.Top + 50;
+
+            window.ShowDialog();
         }
 
         /// <summary>
