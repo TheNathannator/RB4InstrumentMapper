@@ -44,8 +44,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="UsbDeviceListWindow\Icons\USB.png" />
-    <Resource Include="UsbDeviceListWindow\Icons\Xbox.png" />
+    <Resource Include="Windows\Icons\USB.png" />
+    <Resource Include="Windows\Icons\Xbox.png" />
   </ItemGroup>
 
   <ItemGroup>
