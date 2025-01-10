@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,8 +29,39 @@ namespace RB4InstrumentMapper
 
             InitializeComponent();
 
+            bool disallowSwitch = false;
+            try
+            {
+                const string vidString = "VID_";
+                const string pidString = "PID_";
+
+                foreach (string id in PnpDevice.HardwareIds)
+                {
+                    int vidIndex = id.IndexOf(vidString);
+                    int pidIndex = id.IndexOf(pidString);
+                    if (vidIndex < 0 || pidIndex < 0)
+                        continue;
+
+                    string vid = id.Substring(vidIndex + vidString.Length, 4);
+                    string pid = id.Substring(pidIndex + pidString.Length, 4);
+                    ushort vendorId = ushort.Parse(vid, NumberStyles.HexNumber);
+                    ushort productId = ushort.Parse(pid, NumberStyles.HexNumber);
+
+                    disallowSwitch = vendorId == 0x0E6F && productId == 0x0248;
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Main_WriteException(ex, $"Failed to check VID/PID for device '{devicePath}'!");
+            }
+
             if (IsWinUsb)
             {
+                switchDriverButton.Content = "Revert Driver";
+                xboxIconImage.Visibility = Visibility.Hidden;
+                usbIconImage.Visibility = Visibility.Visible;
+
                 try
                 {
                     var usbDevice = WinUsbBackend.GetUsbDevice(devicePath);
@@ -43,12 +75,17 @@ namespace RB4InstrumentMapper
                     nameLabel.Content = "(Failed to get name)";
                 }
 
-                switchDriverButton.Content = "Revert Driver";
-                xboxIconImage.Visibility = Visibility.Hidden;
-                usbIconImage.Visibility = Visibility.Visible;
+                if (disallowSwitch)
+                {
+                    switchDriverButton.Content = "Please Revert";
+                }
             }
             else
             {
+                switchDriverButton.Content = "Switch Driver";
+                xboxIconImage.Visibility = Visibility.Visible;
+                usbIconImage.Visibility = Visibility.Hidden;
+
                 try
                 {
                     manufacturerLabel.Content = PnpDevice.GetProperty<string>(DevicePropertyKey.Device_Manufacturer);
@@ -61,9 +98,11 @@ namespace RB4InstrumentMapper
                     nameLabel.Content = "(Failed to get name)";
                 }
 
-                switchDriverButton.Content = "Switch Driver";
-                xboxIconImage.Visibility = Visibility.Visible;
-                usbIconImage.Visibility = Visibility.Hidden;
+                if (disallowSwitch)
+                {
+                    switchDriverButton.Content = "Do Not Switch";
+                    switchDriverButton.IsEnabled = false;
+                }
             }
         }
 
