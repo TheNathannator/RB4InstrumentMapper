@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using Nefarius.Drivers.WinUSB;
 using Nefarius.Utilities.DeviceManagement.Extensions;
 using Nefarius.Utilities.DeviceManagement.PnP;
@@ -29,9 +31,9 @@ namespace RB4InstrumentMapper
             if (!Settings.Default.switchDriverDisclaimerShown)
             {
                 MessageBox.Show(
-@"This driver switching process has proven itself to be unstable for some users. If you continue, and the procedure fails, your device may become stuck in a non-functional driver state which requires manual intervention to fix.
-
-You have been warned! Refer to the manual instructions listed in the GitHub readme if you run into trouble.",
+                    "This driver switching process has proven itself to be unstable for some users. " +
+                    "If you continue, and the procedure fails, your device may become stuck in a non-functional driver state that requires manual intervention to fix.\n\n" +
+                    "You have been warned! Refer to the manual uninstallation instructions linked in this window if you run into trouble.",
                     "DISCLAIMER",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning
@@ -197,6 +199,20 @@ You have been warned! Refer to the manual instructions listed in the GitHub read
 
             devices.Children.Clear();
             devices.UpdateLayout();
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            MessageBox.Show(
+                "Manually switching device drivers is for advanced users, and must be performed carefully. " +
+                "You are responsible for any problems that may arise from this process, and you are largely on your own if something bugs out.\n\n" +
+                "You have been warned!",
+                "DISCLAIMER",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
+            Process.Start(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
     }
 }

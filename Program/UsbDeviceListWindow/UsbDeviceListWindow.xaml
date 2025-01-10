@@ -23,11 +23,16 @@
                 'Switch Driver' button to have RB4InstrumentMapper provide support for
                 them through virtual controllers.
             </TextBlock>
-            <Border BorderThickness="1" Margin="0,115,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}">
+            <Border BorderThickness="1" Margin="0,115,0,22" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}">
                 <ScrollViewer Padding="0,5,0,5">
                     <StackPanel x:Name="xgipDeviceList"/>
                 </ScrollViewer>
             </Border>
+            <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                <Hyperlink NavigateUri="https://github.com/TheNathannator/RB4InstrumentMapper/blob/main/Docs/WinUSB/manual-winusb-install.md" RequestNavigate="Hyperlink_RequestNavigate">
+                    Manual installation instructions
+                </Hyperlink>
+            </TextBlock>
         </Grid>
 
         <Border BorderThickness="1" Margin="0,0,-1,0" Width="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
@@ -40,11 +45,16 @@
                 will also not work in games that already support them natively, unless
                 they also support Xbox 360 or generic input devices.
             </TextBlock>
-            <Border BorderThickness="1" Margin="0,115,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}">
+            <Border BorderThickness="1" Margin="0,115,0,22" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}">
                 <ScrollViewer Padding="0,5,0,5">
                     <StackPanel x:Name="winUsbDeviceList"/>
                 </ScrollViewer>
             </Border>
+            <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <Hyperlink NavigateUri="https://github.com/TheNathannator/RB4InstrumentMapper/blob/main/Docs/WinUSB/manual-winusb-install.md#remove-winusb" RequestNavigate="Hyperlink_RequestNavigate">
+                    Manual uninstallation instructions
+                </Hyperlink>
+            </TextBlock>
         </Grid>
     </Grid>
 </Window>
