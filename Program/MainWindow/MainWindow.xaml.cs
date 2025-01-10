@@ -125,6 +125,11 @@ namespace RB4InstrumentMapper
             GameInputBackend.DeviceCountChanged += GameInputDeviceCountChanged;
             GameInputBackend.Initialize();
             SetGameInputInitialized(GameInputBackend.Initialized);
+
+            if (Settings.Default.autoStart)
+            {
+                StartCapture();
+            }
         }
 
         /// <summary>
@@ -424,6 +429,14 @@ namespace RB4InstrumentMapper
         {
             bool usbEnabled = usbEnabledCheckBox.IsChecked.GetValueOrDefault();
             SetUsbEnabled(usbEnabled);
+        }
+
+        /// <summary>
+        /// Handles the auto-start checkbox being checked/unchecked.
+        /// </summary>
+        private void autoStartCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.autoStart = autoStartCheckBox.IsChecked.GetValueOrDefault();
         }
 
         /// <summary>
