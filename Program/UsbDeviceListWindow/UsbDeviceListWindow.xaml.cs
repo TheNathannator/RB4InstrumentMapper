@@ -28,19 +28,6 @@ namespace RB4InstrumentMapper
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            if (!Settings.Default.switchDriverDisclaimerShown)
-            {
-                MessageBox.Show(
-                    "This driver switching process has proven itself to be unstable for some users. " +
-                    "If you continue, and the procedure fails, your device may become stuck in a non-functional driver state that requires manual intervention to fix.\n\n" +
-                    "You have been warned! Refer to the manual uninstallation instructions linked in this window if you run into trouble.",
-                    "DISCLAIMER",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning
-                );
-                Settings.Default.switchDriverDisclaimerShown = true;
-            }
-
             watcher.DeviceArrived += DeviceArrived;
             watcher.DeviceRemoved += DeviceRemoved;
             watcher.StartListen(DeviceInterfaceIds.UsbDevice);
