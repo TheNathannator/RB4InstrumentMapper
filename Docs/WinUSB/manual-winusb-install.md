@@ -2,6 +2,14 @@
 <!-- Provided in a separate file to make it less directly visible, as this should ideally only be used as a fallback -->
 RB4InstrumentMapper is capable of installing the WinUSB driver on Xbox One devices directly, through the `Configure Devices` button on its main menu. However, if you run into any issues, it is possible to install the driver manually as an alternative.
 
+## Disclaimer: This page is for advanced users!
+
+Manually switching device drivers is a potentially dangerous process if not done carefully. You are responsible for any problems that may arise from this process, and you are largely on your own if something bugs out.
+
+If you are using a Riffmaster and a guide has directed you to this page, you are either being misdirected or are receiving outdated info. This process is not required for the Riffmaster, use the GameInput backend instead and make sure you're using the [latest version of RB4InstrumentMapper](https://github.com/TheNathannator/RB4InstrumentMapper/releases/latest).
+
+**You have been warned!**
+
 ## Warning
 
 ***DO NOT INSTALL THE DRIVER ON YOUR XBOX ONE RECEIVER!!!*** 
@@ -10,7 +18,7 @@ RB4InstrumentMapper is capable of installing the WinUSB driver on Xbox One devic
 
 RB4InstrumentMapper is not capable of handling it in this state, and it will become nonfunctional until you uninstall the device in Device Manager!
 
-The driver should only be installed on the Wireless Legacy Adapter and Guitar Hero Live dongle.
+The driver should only be installed on the Wireless Legacy Adapter or Guitar Hero Live dongle.
 
 ## Install WinUSB
 
