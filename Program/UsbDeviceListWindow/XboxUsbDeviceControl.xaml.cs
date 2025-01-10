@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -109,7 +110,19 @@ namespace RB4InstrumentMapper
 
             // Otherwise, do it in a separate admin process
             if (!await Program.StartRevertProcess(PnpDevice.InstanceId))
-                MessageBox.Show("Failed to revert device to its original driver!", "Failed To Switch Driver", MessageBoxButton.OK, MessageBoxImage.Warning);
+            {
+                var response = MessageBox.Show(
+                    "Failed to revert device to its original driver!\n\nDo you want to open the manual uninstallation guide?",
+                    "Failed To Switch Driver",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Error
+                );
+
+                if (response == MessageBoxResult.Yes)
+                {
+                    Process.Start("https://github.com/TheNathannator/RB4InstrumentMapper/blob/main/Docs/WinUSB/manual-winusb-install.md#remove-winusb");
+                }
+            }
         }
     }
 }
