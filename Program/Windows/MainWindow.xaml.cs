@@ -121,7 +121,7 @@ namespace RB4InstrumentMapper
             SetStartButtonState();
 
             // Auto-start capture if applicable
-            if (Settings.Default.autoStart && startButton.IsEnabled)
+            if ((Program.AutoStart || Settings.Default.autoStart) && startButton.IsEnabled)
             {
                 StartCapture();
             }

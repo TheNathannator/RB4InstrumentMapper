@@ -11,9 +11,12 @@ namespace RB4InstrumentMapper
 {
     public class Program
     {
+        private const string AutoStartOption = "--autostart";
         private const string WinUsbOption = "--winusb";
         private const string RevertOption = "--revert";
         private const string ReplayOption = "--replay";
+
+        public static bool AutoStart { get; private set; } = false;
 
         [STAThread]
         public static int Main(string[] args)
@@ -26,30 +29,55 @@ namespace RB4InstrumentMapper
                 App.Main();
                 return 0;
             }
-            else if (args.Length < 2)
-            {
-                Console.WriteLine("Not enough arguments!");
-                return -1;
-            }
 
-            string type = args[0];
-            string path = args[1];
             int exitCode;
-            switch (type)
+            switch (args[0])
             {
+                case AutoStartOption:
+                {
+                    AutoStart = true;
+                    App.Main();
+                    return 0;
+                }
                 case WinUsbOption:
-                    exitCode = WinUsbBackend.SwitchDeviceToWinUSB(path) ? 0 : -1;
+                {
+                    if (args.Length < 2)
+                    {
+                        Console.WriteLine("Missing device instance ID argument");
+                        return -1;
+                    }
+
+                    exitCode = WinUsbBackend.SwitchDeviceToWinUSB(args[1]) ? 0 : -1;
                     break;
+                }
                 case RevertOption:
-                    exitCode = WinUsbBackend.RevertDevice(path) ? 0 : -1;
+                {
+                    if (args.Length < 2)
+                    {
+                        Console.WriteLine("Missing device instance ID argument");
+                        return -1;
+                    }
+
+                    exitCode = WinUsbBackend.RevertDevice(args[1]) ? 0 : -1;
                     break;
+                }
                 case ReplayOption:
-                    exitCode = ReplayBackend.ReplayLog(path) ? 0 : -1;
+                {
+                    if (args.Length < 2)
+                    {
+                        Console.WriteLine("Missing log path argument");
+                        return -1;
+                    }
+
+                    exitCode = ReplayBackend.ReplayLog(args[1]) ? 0 : -1;
                     break;
+                }
                 default:
-                    Console.WriteLine($"Invalid option '{type}'!");
+                {
+                    Console.WriteLine($"Invalid option '{args[0]}'");
                     exitCode = -1;
                     break;
+                }
             }
 
             Logging.CloseAll();
