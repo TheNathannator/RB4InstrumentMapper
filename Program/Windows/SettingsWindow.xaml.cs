@@ -17,7 +17,6 @@ namespace RB4InstrumentMapper
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             autoStartCheckBox.IsChecked = Settings.Default.autoStart;
-            verboseLogCheckBox.IsChecked = Settings.Default.verboseLogging;
         }
 
         private void WindowClosed(object sender, EventArgs e)
@@ -28,9 +27,6 @@ namespace RB4InstrumentMapper
         private void saveButton_Click(object sender, RoutedEventArgs args)
         {
             Settings.Default.autoStart = autoStartCheckBox.IsChecked.GetValueOrDefault();
-
-            Settings.Default.verboseLogging = verboseLogCheckBox.IsChecked.GetValueOrDefault();
-            Logging.PrintVerbose = Settings.Default.verboseLogging;
 
             Close();
         }

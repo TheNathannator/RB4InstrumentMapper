@@ -25,54 +25,6 @@ namespace RB4InstrumentMapper.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool packetDebug {
-            get {
-                return ((bool)(this["packetDebug"]));
-            }
-            set {
-                this["packetDebug"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool packetDebugLog {
-            get {
-                return ((bool)(this["packetDebugLog"]));
-            }
-            set {
-                this["packetDebugLog"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool verboseLogging {
-            get {
-                return ((bool)(this["verboseLogging"]));
-            }
-            set {
-                this["verboseLogging"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool usbEnabled {
-            get {
-                return ((bool)(this["usbEnabled"]));
-            }
-            set {
-                this["usbEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("-1")]
         public int controllerDeviceType {
             get {

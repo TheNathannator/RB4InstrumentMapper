@@ -6,34 +6,34 @@
         xmlns:local="clr-namespace:RB4InstrumentMapper"
         mc:Ignorable="d"
         Title="RB4InstrumentMapper"
-        Height="540" Width="700" MinWidth="700" MinHeight="2" ResizeMode="CanMinimize"
+        Height="540" Width="610"
+        ResizeMode="CanMinimize"
         Loaded="Window_Loaded" Closed="Window_Closed">
 
     <Grid Margin="10,10,10,10">
         <Label Name="mainTitleLabel" Content="Rock Band 4 Instrument Mapper" FontSize="24" FontWeight="Bold" Height="44" Width="381" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
         <Label x:Name="versionLabel" Content="vX.X.X.X" FontSize="18" Height="44" Width="375" VerticalAlignment="Top" HorizontalAlignment="Right" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-        <GroupBox Header="GameInput Backend" Margin="0,50,0,0" Width="290" Height="75" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <GroupBox Header="GameInput Backend" Margin="0,50,0,0" Width="285" Height="75" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Grid Margin="10,10,10,10">
-                <Label x:Name="gameInputDeviceCountLabel" Content="Count: 0" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                <Button x:Name="gameInputRefreshButton" Content="Refresh" Width="175" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Click="gameInputRefreshButton_Click"/>
+                <Label x:Name="gameInputDeviceCountLabel" Content="Count: 9999" Width="75" Margin="-5,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <Button x:Name="gameInputRefreshButton" Content="Refresh" Width="170" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Click="gameInputRefreshButton_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="WinUSB Backend" Margin="0,50,0,0" Width="370" Height="75" VerticalAlignment="Top" HorizontalAlignment="Right">
+        <GroupBox Header="WinUSB Backend" Margin="0,50,0,0" Width="285" Height="75" VerticalAlignment="Top" HorizontalAlignment="Right">
             <Grid Margin="10,10,10,10">
-                <CheckBox x:Name="usbEnabledCheckBox" Content="Enabled" Margin="0,6,0,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="usbEnabledCheckBox_CheckedChanged" Unchecked="usbEnabledCheckBox_CheckedChanged"/>
-                <Label x:Name="usbDeviceCountLabel" Content="Count: 0" Margin="0,0,180,0" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                <Button x:Name="usbConfigureDevicesButton" Content="Configure USB Devices" Width="175" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Click="usbConfigureDevicesButton_Click"/>
+                <Label x:Name="usbDeviceCountLabel" Content="Count: 9999" Width="75" Margin="-5,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <Button x:Name="usbConfigureDevicesButton" Content="Configure USB Devices" Width="170" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Click="usbConfigureDevicesButton_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Settings" Width="230" Height="104" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <GroupBox Header="Settings" Width="200" Height="104" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Grid Margin="10,10,10,10">
                 <Button x:Name="settingsButton" Content="Settings" FontSize="18" Height="40" Width="150" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Click="settingsButton_Click"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Capture" Width="430" Height="104" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Right">
+        <GroupBox Header="Capture" Width="370" Height="104" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Right">
             <Grid Margin="10,10,10,10">
                 <Label x:Name="controllerDeviceTypeLabel" Content="Controller Emulation Mode" Height="30" Width="170" Margin="-5,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                <ComboBox x:Name="controllerDeviceTypeCombo" Height="30" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectionChanged="controllerDeviceTypeCombo_SelectionChanged">
+                <ComboBox x:Name="controllerDeviceTypeCombo" Height="30" Width="160" VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectionChanged="controllerDeviceTypeCombo_SelectionChanged">
                     <ComboBoxItem x:Name="vjoyDeviceTypeOption" Content="vJoy" IsEnabled="False"/>
                     <ComboBoxItem x:Name="vigemDeviceTypeOption" Content="ViGEmBus" IsEnabled="False"/>
                     <ComboBoxItem x:Name="rpcs3DeviceTypeOption" Content="ViGEmBus (RPCS3 compatibility)" IsEnabled="False"/>
@@ -45,7 +45,8 @@
         <GroupBox Header="Console" Margin="0,239,0,0">
             <Grid Margin="10,10,10,10">
                 <CheckBox x:Name="packetDebugCheckBox" Content="Show packets (for debugging)" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="packetDebugCheckBox_CheckedChanged" Unchecked="packetDebugCheckBox_CheckedChanged"/>
-                <CheckBox x:Name="packetLogCheckBox" Content="Log packets to file" Margin="195,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="packetLogCheckBox_CheckedChanged" Unchecked="packetLogCheckBox_CheckedChanged"/>
+                <CheckBox x:Name="packetLogCheckBox" Content="Log packets to file" Margin="190,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <CheckBox x:Name="verboseLogCheckBox" Content="Show verbose (unimportant) messages" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                 <TextBox Name="messageConsole" Margin="0,26,0,0" FontSize="12" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
             </Grid>
         </GroupBox>

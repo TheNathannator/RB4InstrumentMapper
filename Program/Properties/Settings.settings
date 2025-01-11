@@ -2,18 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RB4InstrumentMapper.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="packetDebug" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="packetDebugLog" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="verboseLogging" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="usbEnabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="controllerDeviceType" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-1</Value>
     </Setting>

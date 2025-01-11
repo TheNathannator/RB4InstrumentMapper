@@ -50,6 +50,8 @@ namespace RB4InstrumentMapper.Parsing
             }
 
             Initialized = true;
+
+            DeviceCountChanged?.Invoke();
         }
 
         public static void Uninitialize()
@@ -66,6 +68,8 @@ namespace RB4InstrumentMapper.Parsing
                 pair.Value.Dispose();
             }
             devices.Clear();
+
+            DeviceCountChanged?.Invoke();
 
             gameInput?.Dispose();
             gameInput = null;
@@ -102,6 +106,8 @@ namespace RB4InstrumentMapper.Parsing
                 Logging.WriteLine($"Failed to register GameInput device callback: 0x{result:X8}");
                 return;
             }
+
+            DeviceCountChanged?.Invoke();
         }
 
         public static void StartCapture()

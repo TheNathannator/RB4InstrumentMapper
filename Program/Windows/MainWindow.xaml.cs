@@ -22,11 +22,6 @@ namespace RB4InstrumentMapper
         private bool packetCaptureActive = false;
 
         /// <summary>
-        /// Whether or not packets should be logged to a file.
-        /// </summary>
-        private bool packetDebugLog = false;
-
-        /// <summary>
         /// Available controller emulation types.
         /// </summary>
         private enum ControllerType
@@ -110,21 +105,22 @@ namespace RB4InstrumentMapper
                 return;
             }
 
-            // Load console/log settings
-            SetPacketDebug(Settings.Default.packetDebug);
-            SetPacketDebugLog(Settings.Default.packetDebugLog);
-            Logging.PrintVerbose = Settings.Default.verboseLogging;
-
             // Load backend settings
             // Done after initializing virtual controller clients
             SetDeviceType((ControllerType)Settings.Default.controllerDeviceType);
-            SetUsbEnabled(Settings.Default.usbEnabled);
 
-            // Initialize GameInput
+            // Initialize backends
             GameInputBackend.DeviceCountChanged += GameInputDeviceCountChanged;
             GameInputBackend.Initialize();
             SetGameInputInitialized(GameInputBackend.Initialized);
 
+            WinUsbBackend.DeviceCountChanged += WinUsbDeviceCountChanged;
+            WinUsbBackend.Initialize();
+
+            // Ensure start button state is up-to-date
+            SetStartButtonState();
+
+            // Auto-start capture if applicable
             if (Settings.Default.autoStart && startButton.IsEnabled)
             {
                 StartCapture();
@@ -196,7 +192,6 @@ namespace RB4InstrumentMapper
             packetCaptureActive = true;
 
             // Set window controls
-            usbEnabledCheckBox.IsEnabled = false;
             usbConfigureDevicesButton.IsEnabled = false;
 
             controllerDeviceTypeCombo.IsEnabled = false;
@@ -210,11 +205,10 @@ namespace RB4InstrumentMapper
             startButton.Content = "Stop";
 
             // Initialize packet log
-            if (packetDebugLog)
+            if (packetLogCheckBox.IsEnabled && (packetLogCheckBox.IsChecked ?? false))
             {
                 if (!Logging.CreatePacketLog())
                 {
-                    packetDebugLog = false;
                     // Remaining context for this message is inside of the log creation
                     Console.WriteLine("Disabled packet logging for this capture session.");
                 }
@@ -238,8 +232,7 @@ namespace RB4InstrumentMapper
             packetCaptureActive = false;
 
             // Set window controls
-            usbEnabledCheckBox.IsEnabled = true;
-            SetUsbEnabled(Settings.Default.usbEnabled);
+            usbConfigureDevicesButton.IsEnabled = true;
 
             packetDebugCheckBox.IsEnabled = true;
             packetLogCheckBox.IsEnabled = true;
@@ -264,62 +257,6 @@ namespace RB4InstrumentMapper
         {
             gameInputDeviceCountLabel.IsEnabled = enabled;
             gameInputRefreshButton.Content = enabled ? "Refresh" : "Initialize";
-        }
-
-        private void SetUsbEnabled(bool enabled)
-        {
-            if (usbEnabledCheckBox.IsChecked != enabled)
-            {
-                usbEnabledCheckBox.IsChecked = enabled;
-                return;
-            }
-
-            Settings.Default.usbEnabled = enabled;
-
-            usbDeviceCountLabel.IsEnabled = enabled;
-            usbConfigureDevicesButton.IsEnabled = enabled;
-
-            if (WinUsbBackend.Initialized != enabled)
-            {
-                if (enabled)
-                {
-                    WinUsbBackend.DeviceCountChanged += WinUsbDeviceCountChanged;
-                    WinUsbBackend.Initialize();
-                }
-                else
-                {
-                    WinUsbBackend.Uninitialize();
-                    WinUsbBackend.DeviceCountChanged -= WinUsbDeviceCountChanged;
-                }
-            }
-
-            SetStartButtonState();
-        }
-
-        private void SetPacketDebug(bool enabled)
-        {
-            if (packetDebugCheckBox.IsChecked != enabled)
-            {
-                packetDebugCheckBox.IsChecked = enabled;
-                return;
-            }
-
-            Settings.Default.packetDebug = enabled;
-
-            BackendSettings.LogPackets = enabled;
-            packetLogCheckBox.IsEnabled = enabled;
-            packetDebugLog = enabled && packetLogCheckBox.IsChecked.GetValueOrDefault();
-        }
-
-        private void SetPacketDebugLog(bool enabled)
-        {
-            if (packetLogCheckBox.IsChecked != enabled)
-            {
-                packetLogCheckBox.IsChecked = enabled;
-                return;
-            }
-
-            packetDebugLog = Settings.Default.packetDebugLog = enabled;
         }
 
         private void SetDeviceType(ControllerType type)
@@ -412,30 +349,22 @@ namespace RB4InstrumentMapper
         }
 
         /// <summary>
-        /// Handles the verbose error checkbox being checked.
-        /// </summary>
-        private void usbEnabledCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            bool usbEnabled = usbEnabledCheckBox.IsChecked.GetValueOrDefault();
-            SetUsbEnabled(usbEnabled);
-        }
-
-        /// <summary>
         /// Handles the packet debug checkbox being checked/unchecked.
         /// </summary>
         private void packetDebugCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
         {
-            bool packetDebug = packetDebugCheckBox.IsChecked.GetValueOrDefault();
-            SetPacketDebug(packetDebug);
+            bool enabled = packetDebugCheckBox.IsChecked.GetValueOrDefault();
+
+            BackendSettings.LogPackets = enabled;
+            packetLogCheckBox.IsEnabled = enabled;
         }
 
         /// <summary>
-        /// Handles the packet debug checkbox being checked.
+        /// Handles the verbose error checkbox being checked.
         /// </summary>
-        private void packetLogCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
+        private void verboseLogCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
         {
-            bool packetDebugLog = packetLogCheckBox.IsChecked.GetValueOrDefault();
-            SetPacketDebugLog(packetDebugLog);
+            Logging.PrintVerbose = verboseLogCheckBox.IsChecked.GetValueOrDefault();
         }
 
         /// <summary>

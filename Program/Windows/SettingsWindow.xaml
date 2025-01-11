@@ -11,7 +11,6 @@
         Loaded="WindowLoaded" Closed="WindowClosed">
     <Grid Margin="10,10,10,10">
         <CheckBox x:Name="autoStartCheckBox" Content="Auto-start capture on program load" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-        <CheckBox x:Name="verboseLogCheckBox" Content="Show verbose (unimportant) messages in console" Margin="0,22,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
         <Button x:Name="saveButton" Content="Save" Height="25" Width="75" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="saveButton_Click"/>
         <Button x:Name="cancelButton" Content="Cancel" Height="25" Width="75" Margin="0,0,85,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="cancelButton_Click"/>
     </Grid>

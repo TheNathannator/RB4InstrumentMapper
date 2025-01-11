@@ -31,6 +31,8 @@ namespace RB4InstrumentMapper.Parsing
                 AddDevice(deviceInfo.DevicePath);
             }
 
+            DeviceCountChanged?.Invoke();
+
             watcher.DeviceArrived += DeviceArrived;
             watcher.DeviceRemoved += DeviceRemoved;
             watcher.StartListen(DeviceInterfaceIds.UsbDevice);
@@ -63,6 +65,8 @@ namespace RB4InstrumentMapper.Parsing
             }
 
             devices.Clear();
+
+            DeviceCountChanged?.Invoke();
         }
 
         private static void DeviceArrived(DeviceEventArgs args)
