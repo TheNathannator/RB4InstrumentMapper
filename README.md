@@ -131,9 +131,9 @@ Some guitars/drumkits might not sync properly when using just the sync button. T
 
 You will need to install the WinUSB driver onto the Guitar Hero Live dongle or Rock Band 4 wireless legacy adapter before using it. RB4InstrumentMapper is capable of doing this directly, through the `Configure Devices` button on its main menu:
 
-1. Check the `Enable` checkbox under the `USB` group, then click the `Configure Devices` button underneath it.
+1. Click the `Configure Devices` button under the `USB` group.
 
-   ![USB enable checkbox](Docs/Images/Readme/usb-checkbox.png)
+   ![USB enable checkbox](Docs/Images/Readme/usb-configure-button.png)
 
 2. Find the device you want to use on the left side of the menu.
 
@@ -150,17 +150,13 @@ If you run into any issues with this process, you may try [installing the driver
 
 ### Usage
 
-1. Check the `Enable` checkbox under the `USB` group.
-
-   ![USB enable checkbox](Docs/Images/Readme/usb-checkbox.png)
-
-2. **Ensure you have [installed WinUSB](#setup-1) on the devices you want to use! They will not be recognized otherwise!**
-3. In the `Controller Emulation Mode` dropdown, select the controller emulation mode you want to use.
+1. **Ensure you have [installed WinUSB](#setup-1) on the devices you want to use! They will not be recognized otherwise!**
+2. In the `Controller Emulation Mode` dropdown, select the controller emulation mode you want to use.
 
    ![Controller emulation mode selection](Docs/Images/Readme/controller-emulation-mode.png)
 
-4. Hit the `Start` button to begin reading inputs.
-5. [Map your controls in the game you'll be playing](#mapping-your-controls).
+3. Hit the `Start` button to begin reading inputs.
+4. [Map your controls in the game you'll be playing](#mapping-your-controls).
 
 Devices will be detected automatically as they are connected/removed, though they will not be read until you hit Start.
 

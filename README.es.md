@@ -134,7 +134,7 @@ Vas a necesitar instalar el controlador de WinUSB al receptor de Guitar Hero Liv
 
 1. Activa la opción `Enable` bajo el grupo de `USB`, y luego haz click en `Configure Devices` abajo de eso.
 
-   ![Recuadro para activar USB](Docs/Images/Readme/usb-checkbox.png)
+   ![Recuadro para activar USB](Docs/Images/Readme/usb-configure-button.png)
 
 2. Encuentra el dispositivo que quieres usar en el menú del lado izquierdo.
    
