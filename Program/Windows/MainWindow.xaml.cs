@@ -336,10 +336,7 @@ namespace RB4InstrumentMapper
         /// </summary>
         private void packetDebugCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
         {
-            bool enabled = packetDebugCheckBox.IsChecked.GetValueOrDefault();
-
-            PacketLogging.LogPackets = enabled;
-            packetLogCheckBox.IsEnabled = enabled;
+            PacketLogging.LogPackets = packetDebugCheckBox.IsChecked.GetValueOrDefault();
         }
 
         /// <summary>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RB4InstrumentMapper"
         mc:Ignorable="d"
         Title="RB4InstrumentMapper"
-        Height="540" Width="610"
+        Height="520" Width="610"
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded" Closed="Window_Closed">
 
@@ -44,7 +44,7 @@
         <GroupBox Header="Console" Margin="0,239,0,0">
             <Grid Margin="10,10,10,10">
                 <CheckBox x:Name="packetDebugCheckBox" Content="Show packets (for debugging)" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="packetDebugCheckBox_CheckedChanged" Unchecked="packetDebugCheckBox_CheckedChanged"/>
-                <CheckBox x:Name="packetLogCheckBox" Content="Log packets to file" Margin="190,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <CheckBox x:Name="packetLogCheckBox" Content="Log packets to file" Margin="190,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="{Binding IsChecked, ElementName=packetDebugCheckBox}"/>
                 <CheckBox x:Name="verboseLogCheckBox" Content="Show verbose (unimportant) messages" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                 <TextBox Name="messageConsole" Margin="0,26,0,0" FontSize="12" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
             </Grid>
