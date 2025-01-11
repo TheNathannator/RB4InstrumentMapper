@@ -14,6 +14,11 @@ namespace RB4InstrumentMapper.Parsing
         private const string inStr = "->";
         private const string outStr = "<-";
 
+        /// <summary>
+        /// Whether or not packets should be logged to the console.
+        /// </summary>
+        public static bool LogPackets { get; set; } = false;
+
         public static void WriteLine(string message)
         {
             Debug.WriteLine(message);
@@ -23,7 +28,7 @@ namespace RB4InstrumentMapper.Parsing
 
         public static void WritePacket(ReadOnlySpan<byte> header, ReadOnlySpan<byte> data, PacketDirection direction)
         {
-            if (!BackendSettings.LogPackets)
+            if (!LogPackets)
                 return;
 
             var time = DateTime.Now;

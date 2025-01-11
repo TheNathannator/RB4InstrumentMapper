@@ -57,7 +57,7 @@ namespace RB4InstrumentMapper.Mapping
             device.SetButtonState(Xbox360Button.Back, (buttons & XboxGamepadButton.Options) != 0);
 
             // Dpad
-            DrumsViGEmMapper.MapDpad(device, report, ref previousDpadCymbals, ref dpadMask);
+            DrumsViGEmMapper.MapDpad_HardwareAccurate(device, report, ref previousDpadCymbals, ref dpadMask);
 
             // Pads and cymbals
             byte redPad    = report.RedPad;

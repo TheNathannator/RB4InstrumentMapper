@@ -51,19 +51,28 @@ namespace RB4InstrumentMapper.Mapping
             device.SetButtonState(Xbox360Button.Start, (buttons & XboxGamepadButton.Menu) != 0);
             device.SetButtonState(Xbox360Button.Back, (buttons & XboxGamepadButton.Options) != 0);
 
-            // Dpad
-            // MapDpad(device, report, ref previousDpadCymbals, ref dpadMask);
-            device.SetButtonState(Xbox360Button.Up, (buttons & XboxGamepadButton.DpadUp) != 0);
-            device.SetButtonState(Xbox360Button.Down, (buttons & XboxGamepadButton.DpadDown) != 0);
-            device.SetButtonState(Xbox360Button.Left, (buttons & XboxGamepadButton.DpadLeft) != 0);
-            device.SetButtonState(Xbox360Button.Right, (buttons & XboxGamepadButton.DpadRight) != 0);
+            if (MappingSettings.UseAccurateDrumMappings)
+            {
+                // Dpad
+                MapDpad_HardwareAccurate(device, report, ref previousDpadCymbals, ref dpadMask);
 
-            // Pads and cymbals
-            // MapDrums_HardwareAccurate(device, report);
-            MapDrums_Individual(device, report);
+                // Pads and cymbals
+                MapDrums_HardwareAccurate(device, report);
+            }
+            else
+            {
+                // Dpad
+                device.SetButtonState(Xbox360Button.Up, (buttons & XboxGamepadButton.DpadUp) != 0);
+                device.SetButtonState(Xbox360Button.Down, (buttons & XboxGamepadButton.DpadDown) != 0);
+                device.SetButtonState(Xbox360Button.Left, (buttons & XboxGamepadButton.DpadLeft) != 0);
+                device.SetButtonState(Xbox360Button.Right, (buttons & XboxGamepadButton.DpadRight) != 0);
+
+                // Pads and cymbals
+                MapDrums_Individual(device, report);
+            }
         }
 
-        internal static void MapDpad(IXbox360Controller device, in XboxDrumInput report, ref int previousDpadCymbals, ref int dpadMask)
+        internal static void MapDpad_HardwareAccurate(IXbox360Controller device, in XboxDrumInput report, ref int previousDpadCymbals, ref int dpadMask)
         {
             const int yellowBit = 0x01;
             const int blueBit = 0x02;

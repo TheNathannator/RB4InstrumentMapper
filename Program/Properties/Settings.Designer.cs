@@ -58,5 +58,17 @@ namespace RB4InstrumentMapper.Properties {
                 this["autoStart"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool accurateDrumMaps {
+            get {
+                return ((bool)(this["accurateDrumMaps"]));
+            }
+            set {
+                this["accurateDrumMaps"] = value;
+            }
+        }
     }
 }

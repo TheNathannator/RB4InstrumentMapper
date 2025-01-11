@@ -17,6 +17,7 @@ namespace RB4InstrumentMapper
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             autoStartCheckBox.IsChecked = Settings.Default.autoStart;
+            accurateDrumMapsCheckBox.IsChecked = Settings.Default.accurateDrumMaps;
         }
 
         private void WindowClosed(object sender, EventArgs e)
@@ -27,6 +28,7 @@ namespace RB4InstrumentMapper
         private void saveButton_Click(object sender, RoutedEventArgs args)
         {
             Settings.Default.autoStart = autoStartCheckBox.IsChecked.GetValueOrDefault();
+            Settings.Default.accurateDrumMaps = accurateDrumMapsCheckBox.IsChecked.GetValueOrDefault();
 
             Close();
         }

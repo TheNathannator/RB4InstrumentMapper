@@ -27,7 +27,7 @@
         </GroupBox>
         <GroupBox Header="Settings" Width="200" Height="104" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Grid Margin="10,10,10,10">
-                <Button x:Name="settingsButton" Content="Settings" FontSize="18" Height="40" Width="150" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Click="settingsButton_Click"/>
+                <Button x:Name="settingsButton" Content="Settings" FontSize="18" Margin="10,10,10,10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="settingsButton_Click"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Capture" Width="370" Height="104" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Right">

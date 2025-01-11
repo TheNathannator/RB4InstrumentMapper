@@ -185,10 +185,12 @@ namespace RB4InstrumentMapper
         /// </summary>
         private async void StartCapture()
         {
+            // Apply settings
+            MappingSettings.UseAccurateDrumMappings = Settings.Default.accurateDrumMaps;
+
+            // Start capture in backends
             await WinUsbBackend.StartCapture();
             GameInputBackend.StartCapture();
-
-            // Enable packet capture active flag
             packetCaptureActive = true;
 
             // Set window controls
@@ -355,7 +357,7 @@ namespace RB4InstrumentMapper
         {
             bool enabled = packetDebugCheckBox.IsChecked.GetValueOrDefault();
 
-            BackendSettings.LogPackets = enabled;
+            PacketLogging.LogPackets = enabled;
             packetLogCheckBox.IsEnabled = enabled;
         }
 
