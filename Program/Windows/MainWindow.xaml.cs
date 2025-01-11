@@ -107,7 +107,7 @@ namespace RB4InstrumentMapper
 
             // Load backend settings
             // Done after initializing virtual controller clients
-            SetDeviceType((ControllerType)Settings.Default.controllerDeviceType);
+            LoadBackendSettings();
 
             // Initialize backends
             GameInputBackend.DeviceCountChanged += GameInputDeviceCountChanged;
@@ -122,6 +122,12 @@ namespace RB4InstrumentMapper
             {
                 StartCapture();
             }
+        }
+
+        private void LoadBackendSettings()
+        {
+            SetDeviceType((ControllerType)Settings.Default.controllerDeviceType);
+            MappingSettings.UseAccurateDrumMappings = Settings.Default.accurateDrumMaps;
         }
 
         /// <summary>
@@ -162,9 +168,6 @@ namespace RB4InstrumentMapper
         /// </summary>
         private async void StartCapture()
         {
-            // Apply settings
-            MappingSettings.UseAccurateDrumMappings = Settings.Default.accurateDrumMaps;
-
             // Start capture in backends
             await WinUsbBackend.StartCapture();
             GameInputBackend.StartCapture();
@@ -383,6 +386,8 @@ namespace RB4InstrumentMapper
             window.Top = this.Top + 50;
 
             window.ShowDialog();
+
+            LoadBackendSettings();
         }
 
         /// <summary>
