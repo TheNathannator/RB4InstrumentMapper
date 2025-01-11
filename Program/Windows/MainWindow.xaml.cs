@@ -117,9 +117,6 @@ namespace RB4InstrumentMapper
             WinUsbBackend.DeviceCountChanged += WinUsbDeviceCountChanged;
             WinUsbBackend.Initialize();
 
-            // Ensure start button state is up-to-date
-            SetStartButtonState();
-
             // Auto-start capture if applicable
             if ((Program.AutoStart || Settings.Default.autoStart) && startButton.IsEnabled)
             {
@@ -148,26 +145,6 @@ namespace RB4InstrumentMapper
             Settings.Default.Save();
             Logging.CloseAll();
             ViGEmInstance.Dispose();
-        }
-
-        private void SetStartButtonState()
-        {
-            bool startEnabled = true;
-
-            // Emulation type must be selected
-            bool emulationTypeSelected = MapperFactory.MapperMode != MappingMode.NotSet;
-            controllerDeviceTypeLabel.FontWeight = !emulationTypeSelected &&
-                controllerDeviceTypeLabel.IsEnabled ? FontWeights.Bold : FontWeights.Normal;
-            startEnabled &= emulationTypeSelected;
-
-            // Enable start button if all the conditions above pass
-            startButton.IsEnabled = startEnabled;
-
-            // Display a message explaining the current start button state
-            if (startEnabled)
-                startStatusLabel.Content = "Ready to run!";
-            else if (!emulationTypeSelected)
-                startStatusLabel.Content = "Please select a controller emulation mode.";
         }
 
         private void GameInputDeviceCountChanged()
@@ -203,7 +180,6 @@ namespace RB4InstrumentMapper
 
             settingsButton.IsEnabled = false;
 
-            startStatusLabel.Content = "Running...";
             startButton.Content = "Stop";
 
             // Initialize packet log
@@ -332,7 +308,9 @@ namespace RB4InstrumentMapper
                     break;
             }
 
-            SetStartButtonState();
+            // Enable start button if a mapping mode is set
+            startButton.IsEnabled = MapperFactory.MapperMode != MappingMode.NotSet;
+            controllerDeviceTypeLabel.FontWeight = !startButton.IsEnabled ? FontWeights.Bold : FontWeights.Normal;
         }
 
         /// <summary>
