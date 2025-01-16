@@ -9,5 +9,6 @@ namespace RB4InstrumentMapper.Parsing
         /// Whether or not to use accurate drum mappings (only applies to ViGEmBus mode).
         /// </summary>
         public static bool UseAccurateDrumMappings { get; set; } = false;
+        public static double RiffmasterSensitivity { get; set; } = 1.5;
     }
 }

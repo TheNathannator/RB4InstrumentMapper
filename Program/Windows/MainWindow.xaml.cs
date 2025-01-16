@@ -29,7 +29,8 @@ namespace RB4InstrumentMapper
             None = -1,
             vJoy = 0,
             ViGEmBus = 1,
-            RPCS3 = 2
+            RPCS3 = 2,
+            shadPS4 = 3,
         }
 
         public MainWindow()
@@ -87,6 +88,7 @@ namespace RB4InstrumentMapper
                 Console.WriteLine("ViGEmBus found!");
                 vigemDeviceTypeOption.IsEnabled = true;
                 rpcs3DeviceTypeOption.IsEnabled = true;
+                shadPS4DeviceTypeOption.IsEnabled = true;
             }
             else
             {
@@ -95,6 +97,8 @@ namespace RB4InstrumentMapper
                 vigemDeviceTypeOption.IsSelected = false;
                 rpcs3DeviceTypeOption.IsEnabled = false;
                 rpcs3DeviceTypeOption.IsSelected = false;
+                shadPS4DeviceTypeOption.IsEnabled = false;
+                shadPS4DeviceTypeOption.IsSelected = false;
             }
 
             // Exit if neither ViGEmBus nor vJoy are installed
@@ -128,6 +132,7 @@ namespace RB4InstrumentMapper
         {
             SetDeviceType((ControllerType)Settings.Default.controllerDeviceType);
             MappingSettings.UseAccurateDrumMappings = Settings.Default.accurateDrumMaps;
+            MappingSettings.RiffmasterSensitivity = Settings.Default.riffmasterTiltSensitivity;
         }
 
         /// <summary>
@@ -290,6 +295,21 @@ namespace RB4InstrumentMapper
                     if (rpcs3DeviceTypeOption.IsEnabled && ViGEmInstance.Initialized)
                     {
                         MapperFactory.MapperMode = MappingMode.RPCS3;
+                    }
+                    else
+                    {
+                        // Reset device type selection
+                        // Setting this fires off the handler again, no extra handling is needed
+                        MapperFactory.MapperMode = MappingMode.NotSet;
+                        controllerDeviceTypeCombo.SelectedIndex = -1;
+                        return;
+                    }
+                    break;
+                
+                case ControllerType.shadPS4:
+                    if (shadPS4DeviceTypeOption.IsEnabled && ViGEmInstance.Initialized)
+                    {
+                        MapperFactory.MapperMode = MappingMode.shadPS4;
                     }
                     else
                     {
