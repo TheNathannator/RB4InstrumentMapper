@@ -116,6 +116,7 @@ namespace RB4InstrumentMapper
 
             WinUsbBackend.DeviceCountChanged += WinUsbDeviceCountChanged;
             WinUsbBackend.Initialize();
+            SetWinUsbInitialized(WinUsbBackend.Initialized);
 
             // Auto-start capture if applicable
             if ((Program.AutoStart || Settings.Default.autoStart) && startButton.IsEnabled)
@@ -237,7 +238,15 @@ namespace RB4InstrumentMapper
         private void SetGameInputInitialized(bool enabled)
         {
             gameInputDeviceCountLabel.IsEnabled = enabled;
+            gameInputDeviceCountLabel.Content = enabled ? $"Count: {GameInputBackend.DeviceCount}" : "0";
             gameInputRefreshButton.Content = enabled ? "Refresh" : "Initialize";
+        }
+
+        private void SetWinUsbInitialized(bool enabled)
+        {
+            usbDeviceCountLabel.IsEnabled = enabled;
+            usbDeviceCountLabel.Content = enabled ? $"Count: {WinUsbBackend.DeviceCount}" : "0";
+            usbConfigureDevicesButton.Content = enabled ? "Configure USB Devices" : "Initialize";
         }
 
         private void SetDeviceType(ControllerType type)
@@ -348,22 +357,6 @@ namespace RB4InstrumentMapper
         }
 
         /// <summary>
-        /// Handles the click of the GameInput Refresh button.
-        /// </summary>
-        private void gameInputRefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (GameInputBackend.Initialized)
-            {
-                GameInputBackend.Refresh();
-            }
-            else
-            {
-                GameInputBackend.Initialize();
-                SetGameInputInitialized(GameInputBackend.Initialized);
-            }
-        }
-
-        /// <summary>
         /// Handles the controller type setting being changed.
         /// </summary>
         private void controllerDeviceTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -388,10 +381,32 @@ namespace RB4InstrumentMapper
         }
 
         /// <summary>
+        /// Handles the click of the GameInput Refresh button.
+        /// </summary>
+        private void gameInputRefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!GameInputBackend.Initialized)
+            {
+                GameInputBackend.Initialize();
+                SetGameInputInitialized(GameInputBackend.Initialized);
+                return;
+            }
+
+            GameInputBackend.Refresh();
+        }
+
+        /// <summary>
         /// Handles the click of the USB Configure Devices button.
         /// </summary>
         private void usbConfigureDevicesButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!WinUsbBackend.Initialized)
+            {
+                WinUsbBackend.Initialize();
+                SetWinUsbInitialized(GameInputBackend.Initialized);
+                return;
+            }
+
             // Disable GameInput to prevent weird issues
             // Otherwise, devices switched over aren't disconnected on the GameInput side,
             // and devices reverted aren't picked up unless it's plugged in before RB4IM starts.
