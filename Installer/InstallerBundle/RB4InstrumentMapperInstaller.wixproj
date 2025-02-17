@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="WixToolset.Bal.wixext" Version="5.0.0" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="5.0.0" />
 
     <PackageReference Include="Microsoft.GameInput" Version="0.2303.22621.3038" PrivateAssets="all" GeneratePathProperty="true" />
     <ProjectReference Include="..\ProgramPackage\RB4InstrumentMapperPackage.wixproj" />
