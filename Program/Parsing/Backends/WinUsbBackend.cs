@@ -26,9 +26,18 @@ namespace RB4InstrumentMapper.Parsing
             if (Initialized)
                 return;
 
-            foreach (var deviceInfo in USBDevice.GetDevices(DeviceInterfaceIds.UsbDevice))
+            try
             {
-                AddDevice(deviceInfo.DevicePath);
+                foreach (var deviceInfo in USBDevice.GetDevices(DeviceInterfaceIds.UsbDevice))
+                {
+                    AddDevice(deviceInfo.DevicePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteException("Failed to initialize WinUSB backend!", ex);
+                ResetDevices();
+                return;
             }
 
             DeviceCountChanged?.Invoke();
