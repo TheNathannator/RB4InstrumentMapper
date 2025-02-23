@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RB4InstrumentMapper"
         mc:Ignorable="d"
         Title="Settings"
-        Height="140" Width="350"
+        Height="180" Width="350"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         Loaded="WindowLoaded" Closed="WindowClosed">
     <Grid Margin="10,10,10,10">
@@ -14,6 +14,8 @@
             ToolTip="Automatically starts capture/mapping when RB4InstrumentMapper starts up."/>
         <CheckBox x:Name="accurateDrumMapsCheckBox" Content="Use accurate drum mappings (ViGEmBus)" Margin="0,22,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch"
             ToolTip="Changes mappings for drums in ViGEmBus mode to match how Xbox 360 drumkits behave, for compatibility with tools like rb4.app which require accurate behavior. This may cause issues in games and should only be enabled if it's necessary."/>
+        <Label Margin="0, 44, 0, 0" Padding="0, 0, 0, 0" BorderThickness="0">Riffmaster Overdrive Sensitivity</Label>
+        <Slider x:Name="riffmasterTiltSensitivity" Margin="0, 66, 0, 0" Minimum="1" Maximum="2"></Slider>
         <Button x:Name="saveButton" Content="Save" Height="25" Width="75" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="saveButton_Click"/>
         <Button x:Name="cancelButton" Content="Cancel" Height="25" Width="75" Margin="0,0,85,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="cancelButton_Click"/>
     </Grid>
