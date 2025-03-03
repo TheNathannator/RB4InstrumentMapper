@@ -119,7 +119,7 @@ namespace RB4InstrumentMapper.Parsing
             // We unfortunately can't rely on timestamp to determine state change,
             // as guitar axis changes do not change the timestamp
             // ulong lastTimestamp = 0;
-            while (!threadStop.WaitOne(0))
+            while (!threadStop.WaitOne(1))
             {
                 int hResult = gameInput.GetCurrentReading(GameInputKind.RawDeviceReport, device, out var reading);
                 if (hResult < 0)
