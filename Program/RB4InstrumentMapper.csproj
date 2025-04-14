@@ -17,6 +17,15 @@
     <Error Condition="'$(Platform)' != 'x64'">This project only supports x64 platforms!</Error>
   </PropertyGroup>
 
+  <!-- CLI Configuration Property Group -->
+  <PropertyGroup Condition="'$(Configuration)' == 'CLI'">
+    <OutputType>Exe</OutputType>
+    <StartupObject>RB4InstrumentMapper.ProgramCLI</StartupObject>
+    <DefineConstants>CLI</DefineConstants>
+    <UseWPF>false</UseWPF>
+    <AssemblyName>RB4InstrumentMapperCLI</AssemblyName>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Nefarius.Drivers.WinUSB" Version="4.3.83" />
     <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="3.17.406" />
@@ -43,7 +52,8 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- Items specific to the GUI version -->
+  <ItemGroup Condition="'$(Configuration)' != 'CLI'">
     <Resource Include="Windows\Icons\USB.png" />
     <Resource Include="Windows\Icons\Xbox.png" />
   </ItemGroup>
