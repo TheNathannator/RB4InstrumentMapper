@@ -261,6 +261,11 @@ The CLI version supports the following command-line options:
 - `--wait-for-devices [timeout]`: Wait for devices to be detected before starting mapping (default timeout: 30 seconds)
 - `--help`: Display the help message
 
+Quick Script
+```bash
+Program\bin\x64\CLI\net472\RB4InstrumentMapperCLI.exe --mode vigem --verbose
+```
+
 ### Example Batch Script
 
 The repository includes a sample batch script `run_mapper_cli.bat` that demonstrates how to use the CLI version:
