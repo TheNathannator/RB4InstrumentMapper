@@ -34,6 +34,7 @@
     <AssemblyName>RB4InstrumentMapperCLI</AssemblyName>
   </PropertyGroup>
 
+  <!-- Common dependencies for both GUI and CLI -->
   <ItemGroup>
     <PackageReference Include="Nefarius.Drivers.WinUSB" Version="4.3.83" />
     <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="3.17.406" />
@@ -43,6 +44,7 @@
     <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
   </ItemGroup>
 
+  <!-- External libraries for both GUI and CLI -->
   <ItemGroup>
     <Reference Include="vJoyInterfaceWrap, Version=2.2.0.0, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
@@ -60,39 +62,50 @@
     </Reference>
   </ItemGroup>
 
-  <!-- Items specific to the GUI version -->
-  <ItemGroup Condition="'$(Configuration)' != 'CLI'">
-    <Resource Include="Windows\Icons\USB.png" />
-    <Resource Include="Windows\Icons\Xbox.png" />
-    <ApplicationDefinition Include="App.xaml" />
-    <Page Include="Windows\**\*.xaml" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-
-  <!-- Exclude WPF files from CLI build -->
-  <ItemGroup Condition="'$(Configuration)' == 'CLI'">
-    <Compile Remove="Windows\**\*.cs" />
-    <Compile Remove="App.xaml.cs" />
-    <Compile Remove="Properties\AssemblyInfo.cs" />
-    <None Include="Windows\**\*.cs" />
-    <None Include="App.xaml.cs" />
-    <None Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Assembly.CLI.cs" />
-  </ItemGroup>
-
+  <!-- Settings related files for both GUI and CLI -->
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <!-- Items specific to the GUI version -->
+  <ItemGroup Condition="'$(Configuration)' != 'CLI'">
+    <!-- GUI Assets -->
+    <Resource Include="Windows\Icons\USB.png" />
+    <Resource Include="Windows\Icons\Xbox.png" />
+    <ApplicationDefinition Include="App.xaml" />
+    <Page Include="Windows\**\*.xaml" />
+    
+    <!-- GUI Source Files -->
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="App.xaml.cs" DependentUpon="App.xaml" />
+    <Compile Include="Windows\**\*.cs" />
+  </ItemGroup>
+
+  <!-- Items specific to the CLI version -->
+  <ItemGroup Condition="'$(Configuration)' == 'CLI'">
+    <!-- CLI Source Files -->
+    <Compile Include="Properties\Assembly.CLI.cs" />
+    <Compile Include="main_cli.cs" />
+    
+    <!-- Exclude GUI-specific files -->
+    <Compile Remove="Windows\**\*.cs" />
+    <Compile Remove="App.xaml.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    
+    <!-- Mark excluded files as None to prevent compilation -->
+    <None Include="Windows\**\*.cs" />
+    <None Include="App.xaml.cs" />
+    <None Include="Properties\AssemblyInfo.cs" />
+    <None Include="Windows\**\*.xaml" />
+    <None Include="App.xaml" />
   </ItemGroup>
 
 </Project>
