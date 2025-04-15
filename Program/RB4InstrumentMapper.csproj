@@ -15,6 +15,9 @@
     <Error Condition="'$(Platform)' != 'x64'">This project only supports x64 platforms!</Error>
   </PropertyGroup>
 
+  <!-- Import custom targets for CLI build -->
+  <Import Project="CLI.targets" Condition="'$(Configuration)' == 'CLI'" />
+
   <!-- GUI Configuration -->
   <PropertyGroup Condition="'$(Configuration)' != 'CLI'">
     <UseWPF>true</UseWPF>
@@ -63,14 +66,18 @@
     <Resource Include="Windows\Icons\Xbox.png" />
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="Windows\**\*.xaml" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
   <!-- Exclude WPF files from CLI build -->
   <ItemGroup Condition="'$(Configuration)' == 'CLI'">
     <Compile Remove="Windows\**\*.cs" />
     <Compile Remove="App.xaml.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
     <None Include="Windows\**\*.cs" />
     <None Include="App.xaml.cs" />
+    <None Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Assembly.CLI.cs" />
   </ItemGroup>
 
   <ItemGroup>
