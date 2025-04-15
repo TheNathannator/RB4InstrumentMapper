@@ -22,7 +22,7 @@ echo Press Ctrl+C to stop the mapping process and exit
 echo.
 
 REM Launch the CLI application
-Program\bin\x64\CLI\RB4InstrumentMapperCLI.exe --mode %MODE% --wait-for-devices %WAIT_TIMEOUT% --log-file %LOG_FILE% --accurate-drums --verbose
+Program\bin\x64\CLI\net472\RB4InstrumentMapperCLI.exe --mode %MODE% --wait-for-devices %WAIT_TIMEOUT% --log-file %LOG_FILE% --accurate-drums --verbose
 
 REM If we get here, check if the application exited with an error
 if %ERRORLEVEL% NEQ 0 (

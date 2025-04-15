@@ -23,7 +23,7 @@ if %ERRORLEVEL% == 0 (
 if %ERRORLEVEL% == 0 (
     echo.
     echo Build completed successfully!
-    echo The CLI executable is located at: Program\bin\x64\CLI\RB4InstrumentMapperCLI.exe
+    echo The CLI executable is located at: Program\bin\x64\CLI\net472\RB4InstrumentMapperCLI.exe
     echo.
     echo You can run it using: run_mapper_cli.bat
 ) else (
