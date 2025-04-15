@@ -79,6 +79,7 @@ namespace RB4InstrumentMapper
                 else if (arg == VerboseOption)
                 {
                     verboseLogging = true;
+                    Logging.PrintVerbose = true;
                 }
                 else if (arg == AccurateDrumsOption)
                 {
@@ -271,7 +272,7 @@ namespace RB4InstrumentMapper
         private static void PrintHelp()
         {
             Console.WriteLine("RB4InstrumentMapper CLI");
-            Console.WriteLine("Usage: RB4InstrumentMapper [options]");
+            Console.WriteLine("Usage: RB4InstrumentMapperCLI [options]");
             Console.WriteLine();
             Console.WriteLine("Options:");
             Console.WriteLine("  --mode <mode>          Mapping mode: vigem, vjoy, or rpcs3");

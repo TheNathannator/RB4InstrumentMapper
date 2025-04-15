@@ -86,6 +86,31 @@ namespace RB4InstrumentMapper
         }
 
         /// <summary>
+        /// Creates a file stream with a specific path.
+        /// </summary>
+        private static StreamWriter CreateFileStreamAtPath(string filePath)
+        {
+            try
+            {
+                // Create directory if it doesn't exist
+                string directoryPath = Path.GetDirectoryName(filePath);
+                if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                return new StreamWriter(filePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Couldn't create log file {filePath}:");
+                Console.WriteLine(ex.GetFirstLine());
+                Debug.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Creates the main log file.
         /// </summary>
         public static bool CreateMainLog()
@@ -105,6 +130,29 @@ namespace RB4InstrumentMapper
             }
 
             Console.WriteLine("Created main log file.");
+            return true;
+        }
+
+        /// <summary>
+        /// Creates the main log file at the specified path.
+        /// </summary>
+        public static bool CreateMainLog(string logFilePath)
+        {
+            lock (mainLock)
+            {
+                if (!allowMainLogCreation || mainLog != null)
+                    return true;
+
+                mainLog = CreateFileStreamAtPath(logFilePath);
+                if (mainLog == null)
+                {
+                    // Log could not be created, don't allow creating it again to prevent console spam
+                    allowMainLogCreation = false;
+                    return false;
+                }
+            }
+
+            Console.WriteLine($"Created main log file at: {logFilePath}");
             return true;
         }
 
@@ -200,47 +248,38 @@ namespace RB4InstrumentMapper
             ClosePacketLog();
         }
 
-        // Extension method for getting the first line of Exception.ToString(),
-        // since Exception.Message doesn't include the exception type
         /// <summary>
-        /// Gets the first line of the <see cref="Exception.ToString()"/> method, to include the exception type in the message.
+        /// Gets the first line of an exception.
         /// </summary>
-        /// <param name="ex">
-        /// The exception being extended with this method.
-        /// </param>
         public static string GetFirstLine(this Exception ex)
         {
-            return ex.ToString().Split('\n')[0];
+            if (ex == null)
+                return "(null exception)";
+
+            int newLine = ex.Message.IndexOfAny(new[] { '\r', '\n' });
+            if (newLine != -1)
+                return ex.Message.Substring(0, newLine);
+            else
+                return ex.Message;
         }
 
-        // Extension method for logging exceptions to streams in a customized manner
         /// <summary>
-        /// Writes an exception to the stream in a particularly emphasized fashion.
+        /// Writes an exception + stack trace to a stream writer.
         /// </summary>
-        /// <param name="stream">
-        /// The StreamWriter being extended with this method.
-        /// </param>
-        /// <param name="ex">
-        /// The exception to log.
-        /// </param>
-        /// <param name="context">
-        /// Additional context for the exception.
-        /// </param>
         public static void WriteException(this StreamWriter stream, Exception ex, string context = null)
         {
-            stream.WriteLine(GetMessageHeader("EXCEPTION"));
-            stream.WriteLine("------------------------------");
-            // Prevent writing an empty line if context is not provided
             if (context != null)
                 stream.WriteLine(context);
-            stream.WriteLine(ex.ToString());
-            stream.WriteLine("------------------------------");
+            stream.WriteLine(ex);
+            stream.WriteLine();
         }
 
+        /// <summary>
+        /// Gets a message header with a timestamp.
+        /// </summary>
         private static string GetMessageHeader(string message)
         {
-            string timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
-            return $"[{timestamp}] {message}";
+            return $"[{DateTime.Now.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)}] {message}";
         }
     }
 }

@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+#if !CLI
 using System.Windows;
+#endif
 using RB4InstrumentMapper.Parsing;
 using RB4InstrumentMapper.Properties;
 
@@ -18,7 +20,9 @@ namespace RB4InstrumentMapper
 
         public static bool AutoStart { get; private set; } = false;
 
+#if !CLI
         [STAThread]
+#endif
         public static int Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
@@ -26,8 +30,15 @@ namespace RB4InstrumentMapper
             // Regular app startup
             if (args.Length == 0)
             {
+#if !CLI
                 App.Main();
                 return 0;
+#else
+                Console.WriteLine("This is the GUI version of RB4InstrumentMapper.");
+                Console.WriteLine("For CLI usage, run the RB4InstrumentMapperCLI executable instead.");
+                Console.WriteLine("Use --help for command-line options.");
+                return 1;
+#endif
             }
 
             int exitCode;
@@ -36,8 +47,13 @@ namespace RB4InstrumentMapper
                 case AutoStartOption:
                 {
                     AutoStart = true;
+#if !CLI
                     App.Main();
                     return 0;
+#else
+                    Console.WriteLine("The --autostart option is not supported in CLI mode.");
+                    return 1;
+#endif
                 }
                 case WinUsbOption:
                 {
@@ -129,12 +145,17 @@ namespace RB4InstrumentMapper
             // The unhandled exception
             var unhandledException = args.ExceptionObject as Exception;
 
+#if !CLI
             // MessageBox message
             var message = new StringBuilder();
             message.AppendLine("An unhandled error has occured:");
             message.AppendLine();
             message.AppendLine(unhandledException.GetFirstLine());
             message.AppendLine();
+#else
+            Console.WriteLine("An unhandled error has occured:");
+            Console.WriteLine(unhandledException.GetFirstLine());
+#endif
 
             // Create log if it hasn't been created yet
             Logging.CreateMainLog();
@@ -147,6 +168,7 @@ namespace RB4InstrumentMapper
                 Logging.Main_WriteLine("-------------------");
                 Logging.Main_WriteException(unhandledException, "Unhandled exception!");
 
+#if !CLI
                 // Complete the message buffer
                 message.AppendLine("A log of the error has been created, do you want to open it?");
 
@@ -157,14 +179,22 @@ namespace RB4InstrumentMapper
                 {
                     Process.Start(Logging.LogFolderPath);
                 }
+#else
+                Console.WriteLine("A log of the error has been created at:");
+                Console.WriteLine(Logging.LogFolderPath);
+#endif
             }
             else
             {
+#if !CLI
                 // Complete the message buffer
                 message.AppendLine("An error log was unable to be created.");
 
                 // Display message
                 MessageBox.Show(message.ToString(), "Unhandled Error", MessageBoxButton.OK, MessageBoxImage.Error);
+#else
+                Console.WriteLine("An error log was unable to be created.");
+#endif
             }
 
             // Close the log files
