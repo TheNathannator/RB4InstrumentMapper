@@ -30,10 +30,11 @@ All Xbox One instruments are supported (RB4 guitars/drums, GHL guitar), along wi
 - [Packet Logs](#packet-logs)
 - [Error Logs](#error-logs)
 - [Command-Line Interface](#command-line-interface)
-  - [Building the CLI Version](#building-the-cli-version)
   - [CLI Options](#cli-options)
   - [Example Batch Script](#example-batch-script)
 - [Building](#building)
+  - [With MSBuild](#with-msbuild)
+  - [With the .NET SDK](#with-the-net-sdk)
 - [References](#references)
 - [License](#license)
 
@@ -236,16 +237,6 @@ In the case that the program crashes, an error log is saved to a `RB4InstrumentM
 
 RB4InstrumentMapper now includes a command-line interface (CLI) mode that allows you to use the mapping functionality without the GUI. This is particularly useful for automating the setup of instruments in arcade cabinets or similar scenarios where you want to run the tool without user interaction.
 
-### Building the CLI Version
-
-To build the CLI version, use the following command in the solution directory:
-
-```
-dotnet build Program/RB4InstrumentMapper.csproj -c CLI
-```
-
-This will create the CLI executable in the `Program/bin/x64/CLI/net472` directory.
-
 ### CLI Options
 
 The CLI version supports the following command-line options:
@@ -315,8 +306,39 @@ You can customize this script to suit your specific needs. For example, in an ar
 
 To build this program, you will need:
 
-- Visual Studio, or MSBuild/[the .NET SDK](https://dotnet.microsoft.com/en-us/download) + your code editor of choice.
+- Visual Studio, or MSBuild/[the .NET SDK](https://dotnet.microsoft.com/en-us/download).
 - [WiX Toolset v4](https://wixtoolset.org/) if you wish to build the installer.
+
+### With MSBuild
+
+With MSBuild, use the following commands in the project folder:
+
+```
+msbuild -t:Restore -verbosity:minimal
+msbuild "-p:Configuration=Release;Platform=x64" -verbosity:minimal
+```
+
+This will result in the following build output paths:
+
+- CLI: `RB4InstrumentMapper.CLI\bin\x64\Release\net472`
+- GUI: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
+- GUI installer: `RB4InstrumentMapper.GUI.Installer\bin\x64\Release`
+
+### With the .NET SDK
+
+With the .NET SDK, use the following command in the project folder:
+
+```
+dotnet build "-p:Configuration=Release;Platform=x64" -verbosity:minimal
+```
+
+This will result in the same build output paths as using MSBuild:
+
+- CLI: `RB4InstrumentMapper.CLI\bin\x64\Release\net472`
+- GUI: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
+- GUI installer: `RB4InstrumentMapper.GUI.Installer\bin\x64\Release`
+
+The .NET SDK is easier to use, since it will handle restoring NuGet packages for you automatically. With MSBuild, you need to explicitly restore packages through a separate build target before doing the actual build.
 
 ## References
 
