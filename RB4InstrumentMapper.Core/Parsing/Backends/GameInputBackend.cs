@@ -22,15 +22,15 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         public static bool Initialized { get; private set; } = false;
 
-        public static void Initialize()
+        public static bool Initialize()
         {
             if (Initialized)
-                return;
+                return true;
 
             if (!GameInput.Create(out gameInput, out int result))
             {
                 Logging.WriteLine($"Failed to create GameInput instance: 0x{result:X8}");
-                return;
+                return false;
             }
 
             if (!gameInput.RegisterDeviceCallback(
@@ -46,12 +46,12 @@ namespace RB4InstrumentMapper.Core.Parsing
             {
                 gameInput?.Dispose();
                 Logging.WriteLine($"Failed to register GameInput device callback: 0x{result:X8}");
-                return;
+                return false;
             }
 
             Initialized = true;
-
             DeviceCountChanged?.Invoke();
+            return true;
         }
 
         public static void Uninitialize()

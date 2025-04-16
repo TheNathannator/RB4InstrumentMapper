@@ -13,7 +13,7 @@ namespace RB4InstrumentMapper.Core
         public static MappingMode MapperMode { get; set; } = MappingMode.NotSet;
 
         /// <summary>
-        /// Whether to use accurate drum mappings (only applies to ViGEmBus mode).
+        /// Whether to use hardware-accurate drum mappings (only applies to ViGEmBus mode).
         /// </summary>
         public static bool UseAccurateDrumMappings { get; set; } = false;
 

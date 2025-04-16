@@ -190,11 +190,7 @@ namespace RB4InstrumentMapper.GUI
             // Initialize packet log
             if (packetLogCheckBox.IsEnabled && (packetLogCheckBox.IsChecked ?? false))
             {
-                if (!Logging.CreatePacketLog())
-                {
-                    // Remaining context for this message is inside of the log creation
-                    Console.WriteLine("Disabled packet logging for this capture session.");
-                }
+                Logging.CreatePacketLog();
             }
         }
 
@@ -232,7 +228,7 @@ namespace RB4InstrumentMapper.GUI
             Console.WriteLine("Stopped capture.");
             if (doPacketLogMessage)
             {
-                Console.WriteLine($"Packet logs may be found in {Logging.PacketLogFolderPath}");
+                Console.WriteLine($"Packet log was written to {Logging.PacketLogPath}");
             }
         }
 

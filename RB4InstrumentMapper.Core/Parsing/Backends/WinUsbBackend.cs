@@ -23,10 +23,10 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         public static bool Initialized { get; private set; } = false;
 
-        public static void Initialize()
+        public static bool Initialize()
         {
             if (Initialized)
-                return;
+                return true;
 
             try
             {
@@ -39,7 +39,7 @@ namespace RB4InstrumentMapper.Core.Parsing
             {
                 Logging.WriteException("Failed to initialize WinUSB backend!", ex);
                 ClearDevices();
-                return;
+                return false;
             }
 
             DeviceCountChanged?.Invoke();
@@ -49,6 +49,7 @@ namespace RB4InstrumentMapper.Core.Parsing
             watcher.StartListen(DeviceInterfaceIds.UsbDevice);
 
             Initialized = true;
+            return true;
         }
 
         public static void Uninitialize()

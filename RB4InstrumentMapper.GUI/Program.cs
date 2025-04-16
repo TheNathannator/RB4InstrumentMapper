@@ -127,27 +127,32 @@ namespace RB4InstrumentMapper.GUI
         /// </summary>
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
-            // The unhandled exception
-            var unhandledException = args.ExceptionObject as Exception;
+            // Log message; built all at once to ensure no other messages cut into it.
+            var message = new StringBuilder();
+            message.AppendLine("-------------------");
+            message.AppendLine("UNHANDLED EXCEPTION");
+            message.AppendLine("-------------------");
+            message.AppendLine(args.ExceptionObject?.ToString() ?? "(null error)");
+            // Note for the check below: this will implicitly create the log
+            Logging.Main_WriteLine(message.ToString());
 
             // MessageBox message
-            var message = new StringBuilder();
+            message.Clear();
             message.AppendLine("An unhandled error has occured:");
             message.AppendLine();
-            message.AppendLine(unhandledException.GetFirstLine());
+            if (args.ExceptionObject is Exception ex)
+            {
+                message.AppendLine(ex.GetFirstLine());
+            }
+            else
+            {
+                message.AppendLine(args.ExceptionObject?.ToString() ?? "(null error)");
+            }
             message.AppendLine();
 
-            // Create log if it hasn't been created yet
-            Logging.CreateMainLog();
             // Use an alternate message if log couldn't be created
             if (Logging.MainLogExists)
             {
-                // Log exception
-                Logging.Main_WriteLine("-------------------");
-                Logging.Main_WriteLine("UNHANDLED EXCEPTION");
-                Logging.Main_WriteLine("-------------------");
-                Logging.Main_WriteException(unhandledException, "Unhandled exception!");
-
                 // Complete the message buffer
                 message.AppendLine("A log of the error has been created, do you want to open it?");
 
@@ -156,7 +161,7 @@ namespace RB4InstrumentMapper.GUI
                 // If user requested to, open the log
                 if (result == MessageBoxResult.Yes)
                 {
-                    Process.Start(Logging.LogFolderPath);
+                    Process.Start("explorer.exe", $"/select,\"{Logging.MainLogPath}\"").Dispose();
                 }
             }
             else

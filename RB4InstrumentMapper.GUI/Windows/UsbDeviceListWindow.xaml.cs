@@ -166,10 +166,11 @@ namespace RB4InstrumentMapper.GUI
                     entry.DriverSwitchStart -= DriverSwitchStart;
                     entry.DriverSwitchEnd -= DriverSwitchEnd;
 
-                    children.RemoveAt(i);
-                    // Continue through everything to ensure removal
+                    children.RemoveAt(i--);
+
+                    // Don't break here, continue through everything to ensure removal
                     // For some reason, things don't get removed correctly otherwise
-                    i--;
+                    // break;
                 }
             }
 

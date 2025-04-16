@@ -56,29 +56,42 @@ namespace RB4InstrumentMapper.Core
         );
 
         /// <summary>
-        /// Creates a file stream in the specified folder.
+        /// The current path for the main log.
         /// </summary>
-        /// <param name="folderPath">
-        /// The folder to create the file in.
-        /// </param>
-        private static StreamWriter CreateFileStream(string folderPath)
+        public static string MainLogPath { get; private set; }
+
+        /// <summary>
+        /// The current path for the packet log.
+        /// </summary>
+        public static string PacketLogPath { get; private set; }
+
+        /// <summary>
+        /// Creates a log file path with the format of <c>log_{yyyy-MM-dd_HH-mm-ss}.txt</c>.
+        /// </summary>
+        private static string MakeDatedLogPath(string folderPath)
         {
-            // Create logs folder if it doesn't exist
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
+            return Path.Combine(folderPath, $"log_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt");
+        }
 
-            string currentTimeString = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture);
-            string filePath = Path.Combine(folderPath, $"log_{currentTimeString}.txt");
-
+        /// <summary>
+        /// Creates a file stream at the specified path.
+        /// </summary>
+        private static StreamWriter CreateFileStream(string filePath)
+        {
             try
             {
+                // Create folder if it doesn't exist
+                string folderPath = Path.GetDirectoryName(filePath);
+                if (!string.IsNullOrEmpty(folderPath) && !Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
                 return new StreamWriter(filePath);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Couldn't create log file {filePath}:");
+                Console.WriteLine($"Couldn't create log file at {filePath}");
                 Console.WriteLine(ex.GetFirstLine());
                 Debug.WriteLine(ex.ToString());
                 return null;
@@ -86,93 +99,57 @@ namespace RB4InstrumentMapper.Core
         }
 
         /// <summary>
-        /// Creates a file stream with a specific path.
+        /// Creates the main log file, optionally with the given file path.
         /// </summary>
-        private static StreamWriter CreateFileStreamAtPath(string filePath)
-        {
-            try
-            {
-                // Create directory if it doesn't exist
-                string directoryPath = Path.GetDirectoryName(filePath);
-                if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-
-                return new StreamWriter(filePath);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Couldn't create log file {filePath}:");
-                Console.WriteLine(ex.GetFirstLine());
-                Debug.WriteLine(ex.ToString());
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Creates the main log file.
-        /// </summary>
-        public static bool CreateMainLog()
+        public static void CreateMainLog(string filePath = null)
         {
             lock (mainLock)
             {
                 if (!allowMainLogCreation || mainLog != null)
-                    return true;
+                    return;
 
-                mainLog = CreateFileStream(LogFolderPath);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    filePath = MakeDatedLogPath(LogFolderPath);
+                }
+
+                mainLog = CreateFileStream(filePath);
                 if (mainLog == null)
                 {
                     // Log could not be created, don't allow creating it again to prevent console spam
                     allowMainLogCreation = false;
-                    return false;
+                    return;
                 }
+
+                MainLogPath = filePath;
             }
 
-            Console.WriteLine("Created main log file.");
-            return true;
+            Console.WriteLine($"Created main log file at {filePath}");
         }
 
         /// <summary>
-        /// Creates the main log file at the specified path.
+        /// Creates a packet log file, optionally with the given file path.
         /// </summary>
-        public static bool CreateMainLog(string logFilePath)
-        {
-            lock (mainLock)
-            {
-                if (!allowMainLogCreation || mainLog != null)
-                    return true;
-
-                mainLog = CreateFileStreamAtPath(logFilePath);
-                if (mainLog == null)
-                {
-                    // Log could not be created, don't allow creating it again to prevent console spam
-                    allowMainLogCreation = false;
-                    return false;
-                }
-            }
-
-            Console.WriteLine($"Created main log file at: {logFilePath}");
-            return true;
-        }
-
-        /// <summary>
-        /// Creates a packet log file.
-        /// </summary>
-        public static bool CreatePacketLog()
+        public static void CreatePacketLog(string filePath = null)
         {
             lock (packetLock)
             {
                 if (packetLog != null)
-                    return true;
+                    return;
 
-                packetLog = CreateFileStream(PacketLogFolderPath);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    filePath = MakeDatedLogPath(PacketLogFolderPath);
+                }
+
+                packetLog = CreateFileStream(filePath);
                 if (packetLog == null)
-                    return false;
+                    return;
+
+                PacketLogPath = filePath;
             }
 
-            Console.WriteLine("Created packet log file.");
-            return true;
+            Console.WriteLine($"Created packet log file at {filePath}");
         }
 
         /// <summary>
@@ -224,6 +201,7 @@ namespace RB4InstrumentMapper.Core
             {
                 mainLog?.Close();
                 mainLog = null;
+                MainLogPath = null;
             }
         }
 
@@ -236,6 +214,7 @@ namespace RB4InstrumentMapper.Core
             {
                 packetLog?.Close();
                 packetLog = null;
+                PacketLogPath = null;
             }
         }
 
@@ -256,11 +235,12 @@ namespace RB4InstrumentMapper.Core
             if (ex == null)
                 return "(null exception)";
 
-            int newLine = ex.Message.IndexOfAny(new[] { '\r', '\n' });
+            string message = ex.ToString();
+            int newLine = message.IndexOfAny(new[] { '\r', '\n' });
             if (newLine != -1)
-                return ex.Message.Substring(0, newLine);
+                return message.Substring(0, newLine);
             else
-                return ex.Message;
+                return message;
         }
 
         /// <summary>
@@ -268,10 +248,13 @@ namespace RB4InstrumentMapper.Core
         /// </summary>
         public static void WriteException(this StreamWriter stream, Exception ex, string context = null)
         {
+            stream.WriteLine(GetMessageHeader("EXCEPTION"));
+            stream.WriteLine("------------------------------");
+            // Prevent writing an empty line if context is not provided
             if (context != null)
                 stream.WriteLine(context);
             stream.WriteLine(ex);
-            stream.WriteLine();
+            stream.WriteLine("------------------------------");
         }
 
         /// <summary>
@@ -279,7 +262,7 @@ namespace RB4InstrumentMapper.Core
         /// </summary>
         private static string GetMessageHeader(string message)
         {
-            return $"[{DateTime.Now.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)}] {message}";
+            return $"[{DateTime.Now:HH:mm:ss.fff}] {message}";
         }
     }
 }

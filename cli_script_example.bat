@@ -1,9 +1,11 @@
 @echo off
-REM RB4InstrumentMapper CLI Launcher for Clone Hero Arcade Cabinet
-REM ===============================================================
+REM RB4InstrumentMapper CLI Launcher Example
+REM =======================================================
+REM This example script is intended to be run inside of the
+REM project source directory, with the CLI built already.
 
 REM Change to the directory where this script is located
-cd /d "%~dp0"
+pushd /d "%~dp0"
 
 echo Starting RB4InstrumentMapper in CLI mode...
 echo.
@@ -18,17 +20,17 @@ set LOG_FILE="%~dp0RB4InstrumentMapper_log.txt"
 REM Run the CLI version with the specified parameters
 echo Running with: --mode %MODE% --wait-for-devices %WAIT_TIMEOUT% --log-file %LOG_FILE%
 echo.
-echo Press Ctrl+C to stop the mapping process and exit
-echo.
 
 REM Launch the CLI application
-Program\bin\x64\CLI\net472\RB4InstrumentMapperCLI.exe --mode %MODE% --wait-for-devices %WAIT_TIMEOUT% --log-file %LOG_FILE% --accurate-drums --verbose
+RB4InstrumentMapper.CLI\bin\x64\Release\net472\RB4InstrumentMapper.CLI.exe --mode %MODE% --wait-for-devices %WAIT_TIMEOUT% --log-file %LOG_FILE% --accurate-drums --verbose
+
+REM Restore the previous working directory
+popd
 
 REM If we get here, check if the application exited with an error
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo RB4InstrumentMapper exited with error code: %ERRORLEVEL%
-    echo Check the log file for details.
     echo.
     pause
     exit /b %ERRORLEVEL%
