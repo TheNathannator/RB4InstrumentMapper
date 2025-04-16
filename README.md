@@ -35,6 +35,8 @@ All Xbox One instruments are supported (RB4 guitars/drums, GHL guitar), along wi
 - [Building](#building)
   - [With MSBuild](#with-msbuild)
   - [With the .NET SDK](#with-the-net-sdk)
+    - [Manually](#manually)
+    - [Build Script](#build-script)
 - [References](#references)
 - [License](#license)
 
@@ -322,9 +324,11 @@ This will result in the following build output paths:
 
 - CLI: `RB4InstrumentMapper.CLI\bin\x64\Release\net472`
 - GUI: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
-- GUI installer: `RB4InstrumentMapper.GUI.Installer\bin\x64\Release`
+- GUI+CLI installer: `RB4InstrumentMapper.Installer\bin\x64\Release`
 
 ### With the .NET SDK
+
+#### Manually
 
 With the .NET SDK, use the following command in the project folder:
 
@@ -332,13 +336,19 @@ With the .NET SDK, use the following command in the project folder:
 dotnet build "-p:Configuration=Release;Platform=x64" -verbosity:minimal
 ```
 
-This will result in the same build output paths as using MSBuild:
+This will result in the following build output paths:
 
 - CLI: `RB4InstrumentMapper.CLI\bin\x64\Release\net472`
 - GUI: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
-- GUI installer: `RB4InstrumentMapper.GUI.Installer\bin\x64\Release`
+- GUI+CLI installer: `RB4InstrumentMapper.Installer\bin\x64\Release`
 
-The .NET SDK is easier to use, since it will handle restoring NuGet packages for you automatically. With MSBuild, you need to explicitly restore packages through a separate build target before doing the actual build.
+#### Build Script
+
+The `publish.bat` script is provided to help make publishing new releases easier. This script will produce the same output as a manual build, along with the following additional output:
+
+- Standalone CLI package: `publish\RB4InstrumentMapper.CLI.zip`
+- Standalone GUI package: `publish\RB4InstrumentMapper.GUI.zip`
+- GUI+CLI installer: `publish\RB4InstrumentMapper.Installer.exe`
 
 ## References
 

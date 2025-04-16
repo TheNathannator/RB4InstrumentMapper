@@ -75,7 +75,7 @@
 
       <!-- Program package -->
       <MsiPackage
-          SourceFile="RB4InstrumentMapper.GUI.Package.msi"
+          SourceFile="RB4InstrumentMapper.Package.msi"
           Permanent="false" />
     </Chain>
 

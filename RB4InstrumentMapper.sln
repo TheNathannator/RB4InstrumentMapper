@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RB4InstrumentMapper.CLI", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RB4InstrumentMapper.GUI", "RB4InstrumentMapper.GUI\RB4InstrumentMapper.GUI.csproj", "{AEEF817D-BB48-4298-B82B-90192F78089D}"
 EndProject
-Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "RB4InstrumentMapper.GUI.Package", "RB4InstrumentMapper.GUI.Package\RB4InstrumentMapper.GUI.Package.wixproj", "{A845D07C-443B-4A08-8766-2E0950A3E124}"
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "RB4InstrumentMapper.Package", "RB4InstrumentMapper.Package\RB4InstrumentMapper.Package.wixproj", "{A845D07C-443B-4A08-8766-2E0950A3E124}"
 EndProject
-Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "RB4InstrumentMapper.GUI.Installer", "RB4InstrumentMapper.GUI.Installer\RB4InstrumentMapper.GUI.Installer.wixproj", "{9E28F285-3EAD-4F6B-A72E-64C29ECCED07}"
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "RB4InstrumentMapper.Installer", "RB4InstrumentMapper.Installer\RB4InstrumentMapper.Installer.wixproj", "{9E28F285-3EAD-4F6B-A72E-64C29ECCED07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
 <Project Sdk="WixToolset.Sdk/5.0.0">
 
   <PropertyGroup>
-    <Name>RB4InstrumentMapper.GUI.Installer</Name>
+    <Name>RB4InstrumentMapperInstaller</Name>
     <OutputType>Bundle</OutputType>
     <PlatformTarget>x64</PlatformTarget>
     <Platforms>x64</Platforms>
@@ -12,7 +12,7 @@
     <PackageReference Include="WixToolset.Util.wixext" Version="5.0.0" />
 
     <PackageReference Include="Microsoft.GameInput" Version="0.2303.22621.3038" PrivateAssets="all" GeneratePathProperty="true" />
-    <ProjectReference Include="..\RB4InstrumentMapper.GUI.Package\RB4InstrumentMapper.GUI.Package.wixproj" />
+    <ProjectReference Include="..\RB4InstrumentMapper.Package\RB4InstrumentMapper.Package.wixproj" />
   </ItemGroup>
 
   <PropertyGroup>

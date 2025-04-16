@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <AssemblyName>RB4InstrumentMapper</AssemblyName>
     <TargetFramework>net472</TargetFramework>
     <OutputType>WinExe</OutputType>
     <Platforms>x64</Platforms>

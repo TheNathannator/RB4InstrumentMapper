@@ -41,9 +41,16 @@
   
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      <Files Include="$(RB4InstrumentMapper.GUI.TargetDir)\*.*">
-        <!-- <Exclude Files="$(RB4InstrumentMapper.GUI.TargetDir)\publish\**" /> -->
-      </Files>
+      <Files Include="$(RB4InstrumentMapper.GUI.TargetDir)\*.exe" />
+      <Files Include="$(RB4InstrumentMapper.GUI.TargetDir)\*.exe.config" />
+      <Files Include="$(RB4InstrumentMapper.GUI.TargetDir)\*.dll" />
+      <Files Include="$(RB4InstrumentMapper.GUI.TargetDir)\*.pdb" />
+
+      <!-- Include CLI executable alongside the GUI
+        Its .dlls are not copied since they're all covered by the GUI's .dlls -->
+      <Files Include="$(RB4InstrumentMapper.CLI.TargetDir)\RB4InstrumentMapper.CLI.exe" />
+      <Files Include="$(RB4InstrumentMapper.CLI.TargetDir)\RB4InstrumentMapper.CLI.exe.config" />
+      <Files Include="$(RB4InstrumentMapper.CLI.TargetDir)\RB4InstrumentMapper.CLI.pdb" />
     </ComponentGroup>
   </Fragment>
 
