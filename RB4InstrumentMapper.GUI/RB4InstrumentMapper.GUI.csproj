@@ -14,7 +14,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>5.1.1.0</Version>
     <Copyright>Copyright ©  2021</Copyright>
     <ApplicationIcon>$(ResourcesDir)Icon.ico</ApplicationIcon>
   </PropertyGroup>

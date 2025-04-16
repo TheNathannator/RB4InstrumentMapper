@@ -5,7 +5,7 @@
 
   <Bundle
       Name="RB4InstrumentMapper"
-      Version="5.1.1.0"
+      Version="$(ProgramVersion)"
       Manufacturer="Andreas Schiffler"
       UpgradeCode="94bef546-701f-4571-9828-d4fa39b2ea84"
       DisableModify="yes">

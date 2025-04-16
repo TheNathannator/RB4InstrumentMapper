@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);ResourcesDir=$(ResourcesDir);PkgMicrosoft_GameInput=$(PkgMicrosoft_GameInput)</DefineConstants>
+    <DefineConstants>$(DefineConstants);ProgramVersion=$(Version);ResourcesDir=$(ResourcesDir);PkgMicrosoft_GameInput=$(PkgMicrosoft_GameInput)</DefineConstants>
   </PropertyGroup>
 
 </Project>
