@@ -40,6 +40,16 @@
   </Fragment>
   
   <Fragment>
+    <!--
+      A note for future Nate to save himself time and pain from troubleshooting:
+
+      If the installer forgets certain .dll files when upgrading from an older version to a newer one,
+      it means those files are an older version in the newer installer, and the package references
+      in the project need to be bumped.
+
+      why must Wix/Windows Installer be ths way... =w=
+    -->
+
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <Files Include="$(RB4InstrumentMapper.GUI.TargetDir)\*.exe" />
       <Files Include="$(RB4InstrumentMapper.GUI.TargetDir)\*.exe.config" />
