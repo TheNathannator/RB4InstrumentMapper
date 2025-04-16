@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Nefarius.Drivers.WinUSB;
 using Nefarius.Utilities.DeviceManagement.Extensions;
 using Nefarius.Utilities.DeviceManagement.PnP;
@@ -39,7 +38,7 @@ namespace RB4InstrumentMapper.Core.Parsing
             catch (Exception ex)
             {
                 Logging.WriteException("Failed to initialize WinUSB backend!", ex);
-                ResetDevices();
+                ClearDevices();
                 return;
             }
 
@@ -61,12 +60,12 @@ namespace RB4InstrumentMapper.Core.Parsing
             watcher.DeviceArrived -= DeviceArrived;
             watcher.DeviceRemoved -= DeviceRemoved;
 
-            ResetDevices();
+            ClearDevices();
 
             Initialized = false;
         }
 
-        public static void ResetDevices()
+        private static void ClearDevices()
         {
             if (!Initialized)
                 return;
@@ -125,36 +124,28 @@ namespace RB4InstrumentMapper.Core.Parsing
             DeviceCountChanged?.Invoke();
         }
 
-        public static Task StartCapture()
+        public static void StartCapture()
         {
             if (!Initialized)
-                return Task.CompletedTask;
+                return;
 
             inputsEnabled = true;
-            if (!devices.IsEmpty)
+            foreach (var device in devices.Values)
             {
-                Logging.WriteLine("Rebooting USB devices to ensure proper startup. Hang tight...");
-                Logging.WriteLine("(If this takes more than 15 seconds or so, try re-connecting your devices.)");
-                return Task.Run(ResetDevices);
+                device.EnableInputs(inputsEnabled);
             }
-
-            return Task.CompletedTask;
         }
 
-        public static Task StopCapture()
+        public static void StopCapture()
         {
             if (!Initialized)
-                return Task.CompletedTask;
+                return;
 
             inputsEnabled = false;
-            if (!devices.IsEmpty)
+            foreach (var device in devices.Values)
             {
-                Logging.WriteLine("Rebooting USB devices to refresh them after mapping...");
-                Logging.WriteLine("(If this takes more than 15 seconds or so, try re-connecting your devices.)");
-                return Task.Run(ResetDevices);
+                device.EnableInputs(inputsEnabled);
             }
-
-            return Task.CompletedTask;
         }
 
         public static bool IsCompatibleDevice(string devicePath)

@@ -168,10 +168,10 @@ namespace RB4InstrumentMapper.GUI
         /// <summary>
         /// Configures the Pcap device and controller devices, and starts packet capture.
         /// </summary>
-        private async void StartCapture()
+        private void StartCapture()
         {
             // Start capture in backends
-            await WinUsbBackend.StartCapture();
+            WinUsbBackend.StartCapture();
             GameInputBackend.StartCapture();
             packetCaptureActive = true;
 
@@ -201,9 +201,9 @@ namespace RB4InstrumentMapper.GUI
         /// <summary>
         /// Stops packet capture/mapping and resets Pcap/controller objects.
         /// </summary>
-        private async void StopCapture()
+        private void StopCapture()
         {
-            await WinUsbBackend.StopCapture();
+            WinUsbBackend.StopCapture();
             GameInputBackend.StopCapture();
 
             // Store whether or not the packet log was created

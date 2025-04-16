@@ -312,12 +312,10 @@ namespace RB4InstrumentMapper.CLI
             if (captureActive)
                 return;
 
-            Task.Run(async () => {
-                await WinUsbBackend.StartCapture();
-                GameInputBackend.StartCapture();
-                captureActive = true;
-                Console.WriteLine("Instrument mapping is active.");
-            });
+            WinUsbBackend.StartCapture();
+            GameInputBackend.StartCapture();
+            captureActive = true;
+            Console.WriteLine("Instrument mapping is active.");
         }
 
         private static void StopCapture()
@@ -325,12 +323,10 @@ namespace RB4InstrumentMapper.CLI
             if (!captureActive)
                 return;
 
-            Task.Run(async () => {
-                await WinUsbBackend.StopCapture();
-                GameInputBackend.StopCapture();
-                captureActive = false;
-                Console.WriteLine("Instrument mapping stopped.");
-            });
+            WinUsbBackend.StopCapture();
+            GameInputBackend.StopCapture();
+            captureActive = false;
+            Console.WriteLine("Instrument mapping stopped.");
         }
 
         private static void CleanupAndExit()
