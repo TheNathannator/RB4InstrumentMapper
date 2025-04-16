@@ -221,15 +221,15 @@ namespace RB4InstrumentMapper.CLI
             Console.WriteLine();
             Console.WriteLine("Options:");
             Console.WriteLine("  --mode <mode>                      The mapping mode to use.");
+            Console.WriteLine("                                     - mode: one of 'vigembus', 'vigem', 'vjoy', or 'rpcs3', case insensitive.");
             Console.WriteLine("  --accurate-drums                   Use hardware-accurate drum mappings for ViGEmBus mode.");
-            Console.WriteLine("                                       (one of 'vigembus'/'vigem', 'vjoy', or 'rpcs3')");
             Console.WriteLine();
-            Console.WriteLine("  --wait-for-devices [timeout]       Wait for devices to be detected (default: 30s).");
+            Console.WriteLine("  --wait-for-devices [timeout]       Wait for devices to be detected before starting (default timeout: 30s).");
             Console.WriteLine("  --timeout <seconds>                Run for the specified number of seconds, and then exit.");
             Console.WriteLine();
             Console.WriteLine("  --verbose                          Enable verbose logging.");
             Console.WriteLine("  --log-file <path>                  Path to write logging output to.");
-            Console.WriteLine("                                       (default: Documents\\RB4InstrumentMapper\\Logs\\log_{yyyy-MM-dd_HH-mm-ss}.txt)");
+            Console.WriteLine("                                     (default: Documents\\RB4InstrumentMapper\\Logs\\log_{yyyy-MM-dd_HH-mm-ss}.txt)");
             Console.WriteLine("  --log-packets <path>               Log packets to the given file path.");
             Console.WriteLine();
             Console.WriteLine("  --help                             Display this help message.");

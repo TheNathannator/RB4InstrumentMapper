@@ -30,8 +30,6 @@ All Xbox One instruments are supported (RB4 guitars/drums, GHL guitar), along wi
 - [Packet Logs](#packet-logs)
 - [Error Logs](#error-logs)
 - [Command-Line Interface](#command-line-interface)
-  - [CLI Options](#cli-options)
-  - [Example Batch Script](#example-batch-script)
 - [Building](#building)
   - [With MSBuild](#with-msbuild)
   - [With the .NET SDK](#with-the-net-sdk)
@@ -237,72 +235,17 @@ In the case that the program crashes, an error log is saved to a `RB4InstrumentM
 
 ## Command-Line Interface
 
-RB4InstrumentMapper now includes a command-line interface (CLI) mode that allows you to use the mapping functionality without the GUI. This is particularly useful for automating the setup of instruments in arcade cabinets or similar scenarios where you want to run the tool without user interaction.
+A command-line interface version of RB4InstrumentMapper is included alongside the GUI version. This is useful for scenarios where you want to run it without user interaction, such as a custom arcade cabinet or other startup automation scenarios.
 
-### CLI Options
+The CLI is available both standalone and alongside the installed version of the GUI. Additionaly, [an example startup script](cli_script_example.bat) is provided in the repository which can be quickly customized to suit specific needs.
 
-The CLI version supports the following command-line options:
+Example usage:
 
-- `--mode <mode>`: (Required) Specify the mapping mode. Valid values are:
-  - `vigem`: Use ViGEmBus emulation (recommended)
-  - `vjoy`: Use vJoy emulation
-  - `rpcs3`: Use RPCS3-specific mappings
-- `--timeout <seconds>`: Run for the specified number of seconds and then automatically exit
-- `--log-file <path>`: Path to write the log file (default: auto-generated in the application directory)
-- `--verbose`: Enable verbose logging (helpful for troubleshooting)
-- `--accurate-drums`: Use accurate drum mappings
-- `--wait-for-devices [timeout]`: Wait for devices to be detected before starting mapping (default timeout: 30 seconds)
-- `--help`: Display the help message
-
-Quick Script
-```bash
-Program\bin\x64\CLI\net472\RB4InstrumentMapperCLI.exe --mode vigem --verbose
+```
+.\RB4InstrumentMapper.CLI.exe --mode vigem
 ```
 
-### Example Batch Script
-
-The repository includes a sample batch script `run_mapper_cli.bat` that demonstrates how to use the CLI version:
-
-```batch
-@echo off
-REM RB4InstrumentMapper CLI Launcher for Clone Hero Arcade Cabinet
-REM ===============================================================
-
-REM Change to the directory where this script is located
-cd /d "%~dp0"
-
-echo Starting RB4InstrumentMapper in CLI mode...
-echo.
-
-REM Configuration Parameters
-set MODE=vigem
-set WAIT_FOR_DEVICES=true
-set WAIT_TIMEOUT=30
-set LOG_FILE="%~dp0RB4InstrumentMapper_log.txt"
-
-REM Run the CLI version with the specified parameters
-echo Running with: --mode %MODE% --wait-for-devices %WAIT_TIMEOUT% --log-file %LOG_FILE%
-echo.
-echo Press Ctrl+C to stop the mapping process and exit
-echo.
-
-REM Launch the CLI application
-Program\bin\x64\CLI\net472\RB4InstrumentMapperCLI.exe --mode %MODE% --wait-for-devices %WAIT_TIMEOUT% --log-file %LOG_FILE% --accurate-drums --verbose
-
-REM If we get here, check if the application exited with an error
-if %ERRORLEVEL% NEQ 0 (
-    echo.
-    echo RB4InstrumentMapper exited with error code: %ERRORLEVEL%
-    echo Check the log file for details.
-    echo.
-    pause
-    exit /b %ERRORLEVEL%
-)
-
-exit /b 0
-```
-
-You can customize this script to suit your specific needs. For example, in an arcade cabinet setup, you might want to include this script in your startup sequence to automatically map instruments without user interaction.
+For available options/arguments, run it without arguments or use the `--help` option.
 
 ## Building
 
