@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>8</LangVersion> <!-- For pattern-based usings -->
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- Dependencies -->
+  <ItemGroup>
+    <PackageReference Include="Nefarius.Drivers.WinUSB" Version="4.3.83" />
+    <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="3.17.406" />
+    <!-- A modified version of ViGEmBus is used instead of the package, see below.
+      <PackageReference Include="Nefarius.ViGEm.Client" Version="1.21.256" /> -->
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+  </ItemGroup>
+
+  <!-- External libraries -->
+  <ItemGroup>
+    <!-- https://github.com/jshafer817/vJoy -->
+    <Reference Include="vJoyInterfaceWrap, Version=2.2.0.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\x64\vJoyInterfaceWrap.dll</HintPath>
+    </Reference>
+    <Content Include="Dependencies\x64\vJoyInterface.dll">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+
+    <!-- Modified version of ViGEmBus, has fixes for unhandled/mishandled error codes -->
+    <Reference Include="Nefarius.ViGEm.Client, Version=1.21.259.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Dependencies\Nefarius.ViGEm.Client.dll</HintPath>
+    </Reference>
+
+    <!-- https://github.com/TheNathannator/SharpGameInput -->
+    <Reference Include="SharpGameInput, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Dependencies\SharpGameInput.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

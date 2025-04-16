@@ -1,40 +1,46 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.6.33815.320
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RB4InstrumentMapper", "Program\RB4InstrumentMapper.csproj", "{93041197-1E1B-4084-B1DD-C8363A588C48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RB4InstrumentMapper.Core", "RB4InstrumentMapper.Core\RB4InstrumentMapper.Core.csproj", "{B6FC7277-DC0B-4E36-8CEA-11E2D4E0A21F}"
 EndProject
-Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "RB4InstrumentMapperInstaller", "Installer\InstallerBundle\RB4InstrumentMapperInstaller.wixproj", "{047562BB-6D63-4259-8E2E-0A5E834190B1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{93041197-1E1B-4084-B1DD-C8363A588C48} = {93041197-1E1B-4084-B1DD-C8363A588C48}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RB4InstrumentMapper.CLI", "RB4InstrumentMapper.CLI\RB4InstrumentMapper.CLI.csproj", "{A5C36048-BF9B-40CD-8093-9ED1D70A2AC7}"
 EndProject
-Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "RB4InstrumentMapperPackage", "Installer\ProgramPackage\RB4InstrumentMapperPackage.wixproj", "{89FEECD0-F61C-444F-8643-8821D909B210}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RB4InstrumentMapper.GUI", "RB4InstrumentMapper.GUI\RB4InstrumentMapper.GUI.csproj", "{AEEF817D-BB48-4298-B82B-90192F78089D}"
+EndProject
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "RB4InstrumentMapper.GUI.Package", "RB4InstrumentMapper.GUI.Package\RB4InstrumentMapper.GUI.Package.wixproj", "{A845D07C-443B-4A08-8766-2E0950A3E124}"
+EndProject
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "RB4InstrumentMapper.GUI.Installer", "RB4InstrumentMapper.GUI.Installer\RB4InstrumentMapper.GUI.Installer.wixproj", "{9E28F285-3EAD-4F6B-A72E-64C29ECCED07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Release|x64 = Release|x64
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93041197-1E1B-4084-B1DD-C8363A588C48}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{93041197-1E1B-4084-B1DD-C8363A588C48}.Debug|x64.Build.0 = Debug|Any CPU
-		{93041197-1E1B-4084-B1DD-C8363A588C48}.Release|x64.ActiveCfg = Release|Any CPU
-		{93041197-1E1B-4084-B1DD-C8363A588C48}.Release|x64.Build.0 = Release|Any CPU
-		{047562BB-6D63-4259-8E2E-0A5E834190B1}.Debug|x64.ActiveCfg = Debug|x64
-		{047562BB-6D63-4259-8E2E-0A5E834190B1}.Debug|x64.Build.0 = Debug|x64
-		{047562BB-6D63-4259-8E2E-0A5E834190B1}.Release|x64.ActiveCfg = Release|x64
-		{047562BB-6D63-4259-8E2E-0A5E834190B1}.Release|x64.Build.0 = Release|x64
-		{89FEECD0-F61C-444F-8643-8821D909B210}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{89FEECD0-F61C-444F-8643-8821D909B210}.Debug|x64.Build.0 = Debug|Any CPU
-		{89FEECD0-F61C-444F-8643-8821D909B210}.Release|x64.ActiveCfg = Release|Any CPU
-		{89FEECD0-F61C-444F-8643-8821D909B210}.Release|x64.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {77A2083E-D297-4C3D-91F3-481C8A9A4BCA}
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6FC7277-DC0B-4E36-8CEA-11E2D4E0A21F}.Debug|x64.ActiveCfg = Debug|x64
+		{B6FC7277-DC0B-4E36-8CEA-11E2D4E0A21F}.Debug|x64.Build.0 = Debug|x64
+		{B6FC7277-DC0B-4E36-8CEA-11E2D4E0A21F}.Release|x64.ActiveCfg = Release|x64
+		{B6FC7277-DC0B-4E36-8CEA-11E2D4E0A21F}.Release|x64.Build.0 = Release|x64
+		{A5C36048-BF9B-40CD-8093-9ED1D70A2AC7}.Debug|x64.ActiveCfg = Debug|x64
+		{A5C36048-BF9B-40CD-8093-9ED1D70A2AC7}.Debug|x64.Build.0 = Debug|x64
+		{A5C36048-BF9B-40CD-8093-9ED1D70A2AC7}.Release|x64.ActiveCfg = Release|x64
+		{A5C36048-BF9B-40CD-8093-9ED1D70A2AC7}.Release|x64.Build.0 = Release|x64
+		{AEEF817D-BB48-4298-B82B-90192F78089D}.Debug|x64.ActiveCfg = Debug|x64
+		{AEEF817D-BB48-4298-B82B-90192F78089D}.Debug|x64.Build.0 = Debug|x64
+		{AEEF817D-BB48-4298-B82B-90192F78089D}.Release|x64.ActiveCfg = Release|x64
+		{AEEF817D-BB48-4298-B82B-90192F78089D}.Release|x64.Build.0 = Release|x64
+		{A845D07C-443B-4A08-8766-2E0950A3E124}.Debug|x64.ActiveCfg = Debug|x64
+		{A845D07C-443B-4A08-8766-2E0950A3E124}.Debug|x64.Build.0 = Debug|x64
+		{A845D07C-443B-4A08-8766-2E0950A3E124}.Release|x64.ActiveCfg = Release|x64
+		{A845D07C-443B-4A08-8766-2E0950A3E124}.Release|x64.Build.0 = Release|x64
+		{9E28F285-3EAD-4F6B-A72E-64C29ECCED07}.Debug|x64.ActiveCfg = Debug|x64
+		{9E28F285-3EAD-4F6B-A72E-64C29ECCED07}.Debug|x64.Build.0 = Debug|x64
+		{9E28F285-3EAD-4F6B-A72E-64C29ECCED07}.Release|x64.ActiveCfg = Release|x64
+		{9E28F285-3EAD-4F6B-A72E-64C29ECCED07}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,28 @@
+<Project Sdk="WixToolset.Sdk/5.0.0">
+
+  <PropertyGroup>
+    <Name>RB4InstrumentMapper.GUI.Package</Name>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>x64</Platforms>
+
+    <DefineConstants>$(DefineConstants);ResourcesDir=$(ResourcesDir)</DefineConstants>
+    <!-- Allow same-version upgrades so we can do test builds without touching the actual version number
+      ICE61: "This product should remove only older versions of itself. The Maximum version is not less than the current product." -->
+    <SuppressIces>ICE61</SuppressIces>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0" />
+    <ProjectReference Include="..\RB4InstrumentMapper.GUI\RB4InstrumentMapper.GUI.csproj" SetConfiguration="Configuration=Release" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources" />
+    <Content Include="Resources\banner.bmp" />
+    <Content Include="Resources\dialog.bmp" />
+    <Content Include="Resources\Icon.ico" />
+    <Content Include="Resources\Icon.xcf" />
+    <Content Include="Resources\license.rtf" />
+  </ItemGroup>
+
+</Project>
