@@ -1,0 +1,54 @@
+﻿<Window x:Class="RB4InstrumentMapper.GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RB4InstrumentMapper.GUI"
+        mc:Ignorable="d"
+        Title="RB4InstrumentMapper"
+        Height="520" Width="610"
+        ResizeMode="CanMinimize"
+        Loaded="Window_Loaded" Closed="Window_Closed">
+
+    <Grid Margin="10,10,10,10">
+        <Label Name="mainTitleLabel" Content="Rock Band 4 Instrument Mapper" FontSize="24" FontWeight="Bold" Height="44" Width="381" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+        <Label x:Name="versionLabel" Content="vX.X.X.X" FontSize="18" Height="44" Width="375" VerticalAlignment="Top" HorizontalAlignment="Right" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+        <GroupBox Header="GameInput Backend" Margin="0,50,0,0" Width="285" Height="75" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Grid Margin="10,10,10,10">
+                <Label x:Name="gameInputDeviceCountLabel" Content="Count: 9999" Width="75" Margin="-5,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <Button x:Name="gameInputRefreshButton" Content="Refresh" Width="170" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Click="gameInputRefreshButton_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="WinUSB Backend" Margin="0,50,0,0" Width="285" Height="75" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <Grid Margin="10,10,10,10">
+                <Label x:Name="usbDeviceCountLabel" Content="Count: 9999" Width="75" Margin="-5,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <Button x:Name="usbConfigureDevicesButton" Content="Configure USB Devices" Width="170" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Click="usbConfigureDevicesButton_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Settings" Width="200" Height="104" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Grid Margin="10,10,10,10">
+                <Button x:Name="settingsButton" Content="Settings" FontSize="18" Margin="10,10,10,10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="settingsButton_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Capture" Width="370" Height="104" Margin="0,130,0,0" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <Grid Margin="10,10,10,10">
+                <Label x:Name="controllerDeviceTypeLabel" Content="Controller Emulation Mode" Height="30" Width="170" Margin="-5,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <ComboBox x:Name="controllerDeviceTypeCombo" Height="30" Width="160" VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectionChanged="controllerDeviceTypeCombo_SelectionChanged">
+                    <ComboBoxItem x:Name="vjoyDeviceTypeOption" Content="vJoy" IsEnabled="False"/>
+                    <ComboBoxItem x:Name="vigemDeviceTypeOption" Content="ViGEmBus" IsEnabled="False"/>
+                    <ComboBoxItem x:Name="rpcs3DeviceTypeOption" Content="ViGEmBus (RPCS3 compatibility)" IsEnabled="False"/>
+                    <ComboBoxItem x:Name="shadPS4DeviceTypeOption" Content="ViGeEmBus (shadPS4 compatibility)" IsEnabled="False"/>
+                </ComboBox>
+                <Button x:Name="startButton" Content="Start" FontSize="18" Height="40" Width="160" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" IsEnabled="False" Click="startButton_Click"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Console" Margin="0,239,0,0">
+            <Grid Margin="10,10,10,10">
+                <CheckBox x:Name="packetDebugCheckBox" Content="Show packets (for debugging)" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="packetDebugCheckBox_CheckedChanged" Unchecked="packetDebugCheckBox_CheckedChanged"/>
+                <CheckBox x:Name="packetLogCheckBox" Content="Log packets to file" Margin="190,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="{Binding IsChecked, ElementName=packetDebugCheckBox}"/>
+                <CheckBox x:Name="verboseLogCheckBox" Content="Show verbose (unimportant) messages" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                <TextBox Name="messageConsole" Margin="0,26,0,0" FontSize="12" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

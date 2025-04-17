@@ -29,7 +29,12 @@ All Xbox One instruments are supported (RB4 guitars/drums, GHL guitar), along wi
   - [RPCS3](#rpcs3)
 - [Packet Logs](#packet-logs)
 - [Error Logs](#error-logs)
+- [Command-Line Interface](#command-line-interface)
 - [Building](#building)
+  - [With MSBuild](#with-msbuild)
+  - [With the .NET SDK](#with-the-net-sdk)
+    - [Manually](#manually)
+    - [Build Script](#build-script)
 - [References](#references)
 - [License](#license)
 
@@ -228,12 +233,65 @@ Note that these settings are meant for debugging purposes only, leaving them ena
 
 In the case that the program crashes, an error log is saved to a `RB4InstrumentMapper` > `Logs` folder inside your Documents folder. Make sure to include it when getting help or creating an issue report for the crash.
 
+## Command-Line Interface
+
+A command-line interface version of RB4InstrumentMapper is included alongside the GUI version. This is useful for scenarios where you want to run it without user interaction, such as a custom arcade cabinet or other startup automation scenarios.
+
+The CLI is available both standalone and alongside the installed version of the GUI. Additionaly, [an example startup script](cli_script_example.bat) is provided in the repository which can be quickly customized to suit specific needs.
+
+Example usage:
+
+```
+.\RB4InstrumentMapper.CLI.exe --mode vigem
+```
+
+For available options/arguments, run it without arguments or use the `--help` option.
+
 ## Building
 
 To build this program, you will need:
 
-- Visual Studio, or MSBuild/[the .NET SDK](https://dotnet.microsoft.com/en-us/download) + your code editor of choice.
+- Visual Studio, or MSBuild/[the .NET SDK](https://dotnet.microsoft.com/en-us/download).
 - [WiX Toolset v4](https://wixtoolset.org/) if you wish to build the installer.
+
+### With MSBuild
+
+With MSBuild, use the following commands in the project folder:
+
+```
+msbuild -t:Restore -verbosity:minimal
+msbuild "-p:Configuration=Release;Platform=x64" -verbosity:minimal
+```
+
+This will result in the following build output paths:
+
+- CLI: `RB4InstrumentMapper.CLI\bin\x64\Release\net472`
+- GUI: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
+- GUI+CLI installer: `RB4InstrumentMapper.Installer\bin\x64\Release`
+
+### With the .NET SDK
+
+#### Manually
+
+With the .NET SDK, use the following command in the project folder:
+
+```
+dotnet build "-p:Configuration=Release;Platform=x64" -verbosity:minimal
+```
+
+This will result in the following build output paths:
+
+- CLI: `RB4InstrumentMapper.CLI\bin\x64\Release\net472`
+- GUI: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
+- GUI+CLI installer: `RB4InstrumentMapper.Installer\bin\x64\Release`
+
+#### Build Script
+
+The `publish.bat` script is provided to help make publishing new releases easier. This script will produce the same output as a manual build, along with the following additional output:
+
+- Standalone CLI package: `publish\RB4InstrumentMapper.CLI.zip`
+- Standalone GUI package: `publish\RB4InstrumentMapper.GUI.zip`
+- GUI+CLI installer: `publish\RB4InstrumentMapper.Installer.exe`
 
 ## References
 
