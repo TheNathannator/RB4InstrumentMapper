@@ -109,6 +109,10 @@ namespace RB4InstrumentMapper.CLI
                         {
                             parsed.MappingMode = MappingMode.RPCS3;
                         }
+                        else if (modeStr.Equals("shadps4", StringComparison.OrdinalIgnoreCase))
+                        {
+                            parsed.MappingMode = MappingMode.shadPS4;
+                        }
                         else
                         {
                             Console.WriteLine($"Error: Invalid mapping mode '{modeStr}'");
@@ -221,7 +225,7 @@ namespace RB4InstrumentMapper.CLI
             Console.WriteLine();
             Console.WriteLine("Options:");
             Console.WriteLine("  --mode <mode>                      The mapping mode to use.");
-            Console.WriteLine("                                     - mode: one of 'vigembus', 'vigem', 'vjoy', or 'rpcs3', case insensitive.");
+            Console.WriteLine("                                     - mode: one of 'vigem'/'vigembus', 'vjoy', 'rpcs3', or 'shadps4', case insensitive.");
             Console.WriteLine("  --accurate-drums                   Use hardware-accurate drum mappings for ViGEmBus mode.");
             Console.WriteLine();
             Console.WriteLine("  --wait-for-devices [timeout]       Wait for devices to be detected before starting (default timeout: 30s).");

@@ -315,13 +315,13 @@ namespace RB4InstrumentMapper.GUI
                 case ControllerType.shadPS4:
                     if (shadPS4DeviceTypeOption.IsEnabled && ViGEmInstance.Initialized)
                     {
-                        MapperFactory.MapperMode = MappingMode.shadPS4;
+                        BackendSettings.MapperMode = MappingMode.shadPS4;
                     }
                     else
                     {
                         // Reset device type selection
                         // Setting this fires off the handler again, no extra handling is needed
-                        MapperFactory.MapperMode = MappingMode.NotSet;
+                        BackendSettings.MapperMode = MappingMode.NotSet;
                         controllerDeviceTypeCombo.SelectedIndex = -1;
                         return;
                     }
