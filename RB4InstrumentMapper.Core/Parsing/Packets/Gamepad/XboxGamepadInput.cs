@@ -27,8 +27,6 @@ namespace RB4InstrumentMapper.Core.Parsing
         RightStickPress = 0x8000
     }
 
-#if DEBUG
-
     /// <summary>
     /// An input report from a gamepad.
     /// </summary>
@@ -65,6 +63,4 @@ namespace RB4InstrumentMapper.Core.Parsing
         public short RightStickX;
         public short RightStickY;
     }
-
-#endif
 }

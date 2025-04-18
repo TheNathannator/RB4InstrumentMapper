@@ -3,8 +3,6 @@ using System.Diagnostics;
 using RB4InstrumentMapper.Core.Parsing;
 using vJoyInterfaceWrap;
 
-#if DEBUG
-
 namespace RB4InstrumentMapper.Core.Mapping
 {
     /// <summary>
@@ -100,5 +98,3 @@ namespace RB4InstrumentMapper.Core.Mapping
         }
     }
 }
-
-#endif

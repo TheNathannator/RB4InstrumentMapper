@@ -9,6 +9,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>$(DefineConstants);ENABLE_GAMEPAD_MAPPING</DefineConstants>
+  </PropertyGroup>
+
   <!-- Dependencies -->
   <ItemGroup>
     <PackageReference Include="Nefarius.Drivers.WinUSB" Version="5.1.0" />

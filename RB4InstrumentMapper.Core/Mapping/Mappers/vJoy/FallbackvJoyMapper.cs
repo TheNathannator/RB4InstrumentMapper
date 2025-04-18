@@ -19,9 +19,9 @@ namespace RB4InstrumentMapper.Core.Mapping
             {
                 case XboxGuitarInput.CommandId:
                 // These have the same value
-                // case DrumInput.CommandId:
-                // #if DEBUG
-                // case GamepadInput.CommandId:
+                // case XboxDrumInput.CommandId:
+                // #if ENABLE_GAMEPAD_MAPPING
+                // case XboxGamepadInput.CommandId:
                 // #endif
                     return ParseInput(data);
 
@@ -48,7 +48,7 @@ namespace RB4InstrumentMapper.Core.Mapping
             {
                 DrumsvJoyMapper.HandleReport(ref state, drumReport);
             }
-#if DEBUG
+#if ENABLE_GAMEPAD_MAPPING
             else if (data.Length == sizeof(XboxGamepadInput) && ParsingUtils.TryRead(data, out XboxGamepadInput gamepadReport))
             {
                 GamepadvJoyMapper.HandleReport(ref state, gamepadReport);

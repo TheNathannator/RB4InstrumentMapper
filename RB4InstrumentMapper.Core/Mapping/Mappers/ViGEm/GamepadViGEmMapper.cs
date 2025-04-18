@@ -4,8 +4,6 @@ using Nefarius.ViGEm.Client.Targets;
 using Nefarius.ViGEm.Client.Targets.Xbox360;
 using RB4InstrumentMapper.Core.Parsing;
 
-#if DEBUG
-
 namespace RB4InstrumentMapper.Core.Mapping
 {
     /// <summary>
@@ -104,5 +102,3 @@ namespace RB4InstrumentMapper.Core.Mapping
         }
     }
 }
-
-#endif

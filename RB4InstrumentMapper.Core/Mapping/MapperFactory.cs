@@ -189,8 +189,8 @@ namespace RB4InstrumentMapper.Core.Mapping
 
         public static DeviceMapper GetGamepadMapper(IBackendClient client)
         {
-#if DEBUG
-            Logging.WriteLine("Warning: Gamepads are only supported in debug mode for testing purposes, they will not work in release builds.");
+#if ENABLE_GAMEPAD_MAPPING
+            Logging.WriteLine("Warning: Gamepads are only supported for testing purposes. You will experience duplicate inputs in games.");
             return GetMapper(client,
                 (c) => new GamepadViGEmMapper(c),
                 (c) => new GamepadvJoyMapper(c),

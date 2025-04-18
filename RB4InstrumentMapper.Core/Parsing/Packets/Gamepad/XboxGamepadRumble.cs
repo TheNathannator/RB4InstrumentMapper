@@ -1,4 +1,3 @@
-#if DEBUG
 using System.Runtime.InteropServices;
 
 namespace RB4InstrumentMapper.Core.Parsing
@@ -52,4 +51,3 @@ namespace RB4InstrumentMapper.Core.Parsing
     }
 
 }
-#endif
