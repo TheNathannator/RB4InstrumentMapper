@@ -196,13 +196,7 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         public XboxResult SendMessage(XboxMessage message)
         {
-            return SendMessage(message.Header, message.Data);
-        }
-
-        public XboxResult SendMessage<T>(XboxMessage<T> message)
-            where T : unmanaged
-        {
-            return SendMessage(message.Header, ref message.Data);
+            return SendMessage(message.Header, message.Bytes);
         }
 
         public XboxResult SendMessage(XboxCommandHeader header)

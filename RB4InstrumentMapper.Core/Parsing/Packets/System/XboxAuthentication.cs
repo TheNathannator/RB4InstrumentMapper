@@ -11,7 +11,7 @@ namespace RB4InstrumentMapper.Core.Parsing
                 CommandId = CommandId,
                 Flags = XboxCommandFlags.SystemCommand,
             },
-            Data = new byte[] { 0x01, 0x00 },
+            Bytes = new byte[] { 0x01, 0x00 },
         };
     }
 }

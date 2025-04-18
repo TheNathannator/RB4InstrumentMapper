@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
+
 namespace RB4InstrumentMapper.Core.Parsing
 {
     internal class XboxMessage
     {
         private XboxCommandHeader _header;
-        private byte[] _data;
+        private byte[] _bytes;
 
         public XboxCommandHeader Header
         {
@@ -11,35 +13,33 @@ namespace RB4InstrumentMapper.Core.Parsing
             set
             {
                 _header = value;
-                _header.DataLength = _data?.Length ?? 0;
+                _header.DataLength = _bytes?.Length ?? 0;
             }
         }
 
-        public byte[] Data
+        public byte[] Bytes
         {
-            get => _data;
+            get => _bytes;
             set
             {
-                _data = value;
-                _header.DataLength = _data?.Length ?? 0;
+                _bytes = value;
+                _header.DataLength = _bytes?.Length ?? 0;
             }
         }
     }
 
-    internal unsafe class XboxMessage<TData>
+    internal unsafe class XboxMessage<TData> : XboxMessage
         where TData : unmanaged
     {
-        private XboxCommandHeader _header;
-        public TData Data;
-
-        public XboxCommandHeader Header
+        public TData Data
         {
-            get => _header;
-            set
-            {
-                _header = value;
-                _header.DataLength = sizeof(TData);
-            }
+            get => MemoryMarshal.Read<TData>(Bytes);
+            set => MemoryMarshal.Write(Bytes, ref value);
+        }
+
+        public XboxMessage()
+        {
+            Bytes = new byte[sizeof(TData)];
         }
     }
 }

@@ -140,13 +140,7 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         internal unsafe XboxResult SendMessage(XboxMessage message)
         {
-            return SendMessage(message.Header, message.Data);
-        }
-
-        internal unsafe XboxResult SendMessage<T>(XboxMessage<T> message)
-            where T : unmanaged
-        {
-            return SendMessage(message.Header, ref message.Data);
+            return SendMessage(message.Header, message.Bytes);
         }
 
         internal unsafe XboxResult SendMessage(XboxCommandHeader header)
