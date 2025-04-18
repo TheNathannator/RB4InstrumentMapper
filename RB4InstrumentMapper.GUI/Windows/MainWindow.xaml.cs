@@ -130,6 +130,7 @@ namespace RB4InstrumentMapper.GUI
         {
             SetDeviceType((ControllerType)Settings.Default.controllerDeviceType);
             BackendSettings.UseAccurateDrumMappings = Settings.Default.accurateDrumMaps;
+            BackendSettings.PollingFrequency = Settings.Default.pollingFrequency;
         }
 
         /// <summary>

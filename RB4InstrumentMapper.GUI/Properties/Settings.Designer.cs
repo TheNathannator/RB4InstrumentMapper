@@ -70,5 +70,17 @@ namespace RB4InstrumentMapper.GUI.Properties {
                 this["accurateDrumMaps"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public uint pollingFrequency {
+            get {
+                return ((uint)(this["pollingFrequency"]));
+            }
+            set {
+                this["pollingFrequency"] = value;
+            }
+        }
     }
 }

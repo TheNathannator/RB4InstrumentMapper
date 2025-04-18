@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using RB4InstrumentMapper.Core.Mapping;
+using RB4InstrumentMapper.Core.Utility;
 using SharpGameInput;
 
 namespace RB4InstrumentMapper.Core.Parsing
@@ -116,11 +117,16 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         private unsafe void ReadThreaded(DeviceMapper mapper)
         {
+            using var sleepTimer = new SleepTimer();
+
             // We unfortunately can't rely on timestamp to determine state change,
             // as guitar axis changes do not change the timestamp
             // ulong lastTimestamp = 0;
+
             while (!threadStop.WaitOne(0))
             {
+                sleepTimer.Sleep(1 / (double) BackendSettings.PollingFrequency);
+
                 int hResult = gameInput.GetCurrentReading(GameInputKind.RawDeviceReport, device, out var reading);
                 if (hResult < 0)
                 {

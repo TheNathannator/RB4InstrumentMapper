@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <LangVersion>8</LangVersion> <!-- For pattern-based usings -->
+    <LangVersion>9</LangVersion> <!-- For pattern-based usings and CsWin32 -->
     <Platforms>x64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
 
@@ -15,6 +15,9 @@
 
   <!-- Dependencies -->
   <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Nefarius.Drivers.WinUSB" Version="5.1.0" />
     <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="5.1.0" />
     <!-- A modified version of ViGEmBus is used instead of the package, see below.
