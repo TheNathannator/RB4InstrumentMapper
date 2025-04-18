@@ -18,6 +18,7 @@ namespace RB4InstrumentMapper.GUI
         {
             autoStartCheckBox.IsChecked = Settings.Default.autoStart;
             accurateDrumMapsCheckBox.IsChecked = Settings.Default.accurateDrumMaps;
+            riffmasterTiltSensitivity.Value = Settings.Default.riffmasterTiltSensitivity;
         }
 
         private void WindowClosed(object sender, EventArgs e)
@@ -29,7 +30,8 @@ namespace RB4InstrumentMapper.GUI
         {
             Settings.Default.autoStart = autoStartCheckBox.IsChecked.GetValueOrDefault();
             Settings.Default.accurateDrumMaps = accurateDrumMapsCheckBox.IsChecked.GetValueOrDefault();
-
+            Settings.Default.riffmasterTiltSensitivity = riffmasterTiltSensitivity.Value;
+            
             Close();
         }
 

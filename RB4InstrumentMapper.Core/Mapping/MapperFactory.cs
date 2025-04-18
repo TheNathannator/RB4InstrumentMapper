@@ -10,6 +10,7 @@ namespace RB4InstrumentMapper.Core.Mapping
         ViGEmBus = 1,
         vJoy = 2,
         RPCS3 = 3,
+        shadPS4 = 4,
     }
 
     /// <summary>
@@ -150,7 +151,7 @@ namespace RB4InstrumentMapper.Core.Mapping
         }
 
         private static DeviceMapper GetMapper(IBackendClient client, CreateMapper createViGEm, CreateMapper createvJoy,
-            CreateMapper createRpcs3)
+            CreateMapper createRpcs3, CreateMapper createshadPS4)
         {
             DeviceMapper mapper;
             bool devicesAvailable;
@@ -165,6 +166,11 @@ namespace RB4InstrumentMapper.Core.Mapping
 
                 case MappingMode.RPCS3:
                     mapper = ViGEmInstance.AreDevicesAvailable ? createRpcs3(client) : null;
+                    devicesAvailable = ViGEmInstance.AreDevicesAvailable;
+                    break;
+                
+                case MappingMode.shadPS4:
+                    mapper = ViGEmInstance.AreDevicesAvailable ? createshadPS4(client) : null;
                     devicesAvailable = ViGEmInstance.AreDevicesAvailable;
                     break;
 
@@ -194,7 +200,8 @@ namespace RB4InstrumentMapper.Core.Mapping
             return GetMapper(client,
                 (c) => new GamepadViGEmMapper(c),
                 (c) => new GamepadvJoyMapper(c),
-                // No RPCS3 mapper, as this is for testing only
+                // No RPCS3 or shadPS4 mapper, as this is for testing only
+                (c) => new GamepadViGEmMapper(c),
                 (c) => new GamepadViGEmMapper(c)
             );
 #else
@@ -215,24 +222,37 @@ namespace RB4InstrumentMapper.Core.Mapping
                 createViGEm = (c) => new RiffmasterViGEmMapper(c);
             else
                 createViGEm = (c) => new GuitarViGEmMapper(c);
+            
+            // I (aoiyu_) am not 100% sure if the base guitars share the same problems as the Riffmaster.
+            // Sorry if they do, I just don't have a non-Riffmaster to test on.
+            CreateMapper createshadPS4;
+            if (isRiffmaster)
+                createshadPS4 = (c) => new RiffmastershadPS4Mapper(c);
+            else
+                createshadPS4 = (c) => new GuitarViGEmMapper(c);
 
             return GetMapper(client,
                 createViGEm,
                 (c) => new GuitarvJoyMapper(c),
-                (c) => new GuitarRPCS3Mapper(c)
+                (c) => new GuitarRPCS3Mapper(c),
+                createshadPS4
             );
         }
 
         public static DeviceMapper GetDrumsMapper(IBackendClient client) => GetMapper(client,
             (c) => new DrumsViGEmMapper(c),
             (c) => new DrumsvJoyMapper(c),
-            (c) => new DrumsRPCS3Mapper(c)
+            (c) => new DrumsRPCS3Mapper(c),
+            // No mapping differences that I (aoiyu_) know of.
+            (c) => new DrumsViGEmMapper(c)
         );
 
         public static DeviceMapper GetGHLGuitarMapper(IBackendClient client) => GetMapper(client,
             (c) => new GHLGuitarViGEmMapper(c),
             (c) => new GHLGuitarvJoyMapper(c),
             // No mapping differences between RPCS3 and ViGEm modes
+            (c) => new GHLGuitarViGEmMapper(c),
+            // No mapping differences that I (aoiyu_) know of.
             (c) => new GHLGuitarViGEmMapper(c)
         );
 
@@ -246,7 +266,9 @@ namespace RB4InstrumentMapper.Core.Mapping
         public static DeviceMapper GetFallbackMapper(IBackendClient client) => GetMapper(client,
             (c) => new FallbackViGEmMapper(c),
             (c) => new FallbackvJoyMapper(c),
-            (c) => new FallbackRPCS3Mapper(c)
+            (c) => new FallbackRPCS3Mapper(c),
+            // No mapping differences that I (aoiyu_) know of.
+            (c) => new FallbackViGEmMapper(c)
         );
     }
 }

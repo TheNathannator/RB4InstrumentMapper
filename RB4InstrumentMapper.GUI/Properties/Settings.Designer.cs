@@ -70,5 +70,20 @@ namespace RB4InstrumentMapper.GUI.Properties {
                 this["accurateDrumMaps"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
+        public double riffmasterTiltSensitivity
+        {
+            get
+            {
+                return ((double)(this["riffmasterTiltSensitivity"]));
+            }
+            set
+            {
+                this["riffmasterTiltSensitivity"] = value;
+            }
+        }
     }
 }

@@ -37,6 +37,7 @@
                     <ComboBoxItem x:Name="vjoyDeviceTypeOption" Content="vJoy" IsEnabled="False"/>
                     <ComboBoxItem x:Name="vigemDeviceTypeOption" Content="ViGEmBus" IsEnabled="False"/>
                     <ComboBoxItem x:Name="rpcs3DeviceTypeOption" Content="ViGEmBus (RPCS3 compatibility)" IsEnabled="False"/>
+                    <ComboBoxItem x:Name="shadPS4DeviceTypeOption" Content="ViGeEmBus (shadPS4 compatibility)" IsEnabled="False"/>
                 </ComboBox>
                 <Button x:Name="startButton" Content="Start" FontSize="18" Height="40" Width="160" Margin="0,0,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Right" IsEnabled="False" Click="startButton_Click"/>
             </Grid>

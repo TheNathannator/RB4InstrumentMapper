@@ -21,5 +21,6 @@ namespace RB4InstrumentMapper.Core
         /// Whether packets should be logged to the console.
         /// </summary>
         public static bool LogPackets { get; set; } = false;
+        public static double RiffmasterSensitivity { get; set; } = 1.5;
     }
 }

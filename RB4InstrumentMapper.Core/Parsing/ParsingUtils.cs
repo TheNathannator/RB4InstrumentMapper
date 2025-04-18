@@ -107,6 +107,14 @@ namespace RB4InstrumentMapper.Core.Parsing
         {
             return (short)(((input ^ 0x80) << 8) | input);
         }
+        
+        /// <summary>
+        /// Scales a byte to a short, starting from 0.
+        /// </summary>
+        public static short ScaleToPositiveInt16(this byte input)
+        {
+            return (short)(((input / 2) << 8) | input);
+        }
 
         /// <summary>
         /// Scales a byte to an unsigned short.
@@ -114,6 +122,18 @@ namespace RB4InstrumentMapper.Core.Parsing
         public static ushort ScaleToUInt16(this byte input)
         {
             return (ushort)((input << 8) | input);
+        }
+        
+        /// <summary>
+        /// Clamps an int to a short.
+        /// </summary>
+        public static short ClampToShort(this int input)
+        {
+            if (input > short.MaxValue)
+                return short.MaxValue;
+            else if (input < short.MinValue)
+                return short.MinValue;
+            return (short)input;
         }
     }
 }
