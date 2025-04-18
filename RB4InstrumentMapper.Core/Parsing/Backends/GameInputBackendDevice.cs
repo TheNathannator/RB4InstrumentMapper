@@ -109,7 +109,7 @@ namespace RB4InstrumentMapper.Core.Parsing
                 // RegisterReadingCallback is not implemented at the time of writing,
                 // so we fall back to polling on failure
                 if (result != E_NOTIMPL)
-                    Logging.WriteLine($"Couldn't register reading callback, falling back to manual polling. Error result: 0x{result:X4}");
+                    Logging.WriteLineVerbose($"Couldn't register reading callback, falling back to manual polling. Error result: 0x{result:X4}");
                 ReadThreaded(deviceMapper);
             }
         }
