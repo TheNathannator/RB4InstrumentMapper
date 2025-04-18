@@ -31,21 +31,21 @@ echo.
 REM Copy files and build archives
 
 echo Packaging standalone CLI
-7z a "%~dp0\publish\RB4InstrumentMapper.CLI.zip" "%~dp0\RB4InstrumentMapper.CLI\bin\x64\Release\net472" -bb3 -bd -sse > nul
+7z a "%~dp0\publish\RB4InstrumentMapper.CLI-x64.zip" "%~dp0\RB4InstrumentMapper.CLI\bin\x64\Release\net472" -bb3 -bd -sse > nul
 if %ERRORLEVEL% NEQ 0 goto error
-7z rn "%~dp0\publish\RB4InstrumentMapper.CLI.zip" "net472" "RB4InstrumentMapper.CLI" -bb0 -bd > nul
+7z rn "%~dp0\publish\RB4InstrumentMapper.CLI-x64.zip" "net472" "RB4InstrumentMapper.CLI" -bb0 -bd > nul
 if %ERRORLEVEL% NEQ 0 goto error
 echo.
 
 echo Packaging standalone GUI
-7z a "%~dp0\publish\RB4InstrumentMapper.GUI.zip" "%~dp0\RB4InstrumentMapper.GUI\bin\x64\Release\net472" -bb3 -bd -sse > nul
+7z a "%~dp0\publish\RB4InstrumentMapper.GUI-x64.zip" "%~dp0\RB4InstrumentMapper.GUI\bin\x64\Release\net472" -bb3 -bd -sse > nul
 if %ERRORLEVEL% NEQ 0 goto error
-7z rn "%~dp0\publish\RB4InstrumentMapper.GUI.zip" "net472" "RB4InstrumentMapper.GUI" -bb0 -bd > nul
+7z rn "%~dp0\publish\RB4InstrumentMapper.GUI-x64.zip" "net472" "RB4InstrumentMapper.GUI" -bb0 -bd > nul
 if %ERRORLEVEL% NEQ 0 goto error
 echo.
 
 echo Copying installer package
-copy "%~dp0\RB4InstrumentMapper.Installer\bin\x64\Release\RB4InstrumentMapper.Installer.exe" "%~dp0\publish\RB4InstrumentMapperInstaller.exe"
+copy "%~dp0\RB4InstrumentMapper.Installer\bin\x64\Release\RB4InstrumentMapper.Installer.exe" "%~dp0\publish\RB4InstrumentMapperInstaller-x64.exe"
 if %ERRORLEVEL% NEQ 0 goto error
 
 exit
