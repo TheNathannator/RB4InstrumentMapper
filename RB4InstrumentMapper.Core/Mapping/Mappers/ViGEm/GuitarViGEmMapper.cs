@@ -67,7 +67,7 @@ namespace RB4InstrumentMapper.Core.Mapping
             // Whammy
             device.SetAxisValue(Xbox360Axis.RightThumbX, report.WhammyBar.ScaleToInt16());
             // Tilt
-            device.SetAxisValue(Xbox360Axis.RightThumbY, report.Tilt.ScaleToInt16());
+            device.SetAxisValue(Xbox360Axis.RightThumbY, report.Tilt.ScaleToInt16_Positive());
             // Pickup Switch
             device.SetSliderValue(Xbox360Slider.LeftTrigger, CalculatePickupSwitch(report.PickupSwitch));
         }
