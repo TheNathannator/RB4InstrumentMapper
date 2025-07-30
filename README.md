@@ -27,14 +27,17 @@ All Xbox One instruments are supported (RB4 guitars/drums, GHL guitar), along wi
   - [YARG](#yarg)
   - [GHWT: Definitive Edition](#ghwt-definitive-edition)
   - [RPCS3](#rpcs3)
-- [Packet Logs](#packet-logs)
-- [Error Logs](#error-logs)
-- [Command-Line Interface](#command-line-interface)
-- [Building](#building)
-  - [With MSBuild](#with-msbuild)
-  - [With the .NET SDK](#with-the-net-sdk)
-    - [Manually](#manually)
-    - [Build Script](#build-script)
+- [Troubleshooting](#troubleshooting)
+  - [FAQs](#faqs)
+  - [Packet Logs](#packet-logs)
+  - [Error Logs](#error-logs)
+- [Advanced Usage](#advanced-usage)
+  - [Command-Line Interface](#command-line-interface)
+  - [Building](#building)
+    - [With MSBuild](#with-msbuild)
+    - [With the .NET SDK](#with-the-net-sdk)
+      - [Manually](#manually)
+      - [Build Script](#build-script)
 - [References](#references)
 - [License](#license)
 
@@ -223,17 +226,27 @@ Refer to the [official documentation](https://ghwt.de/wiki/#/wtde/binding?id=bin
 4. Repeat for each connected device in the other Player tabs.
 5. Click `Done`.
 
-## Packet Logs
+## Troubleshooting
+
+### FAQs
+
+- "I see an XInput gamepad after hitting Start, but no inputs respond!"
+
+If you haven't restarted your PC since installing ViGEmBus, do so now. Sometimes it doesn't fully work until after a reboot.
+
+### Error Logs
+
+In the case that the program crashes, an error log is saved to a `RB4InstrumentMapper` > `Logs` folder inside your Documents folder. Make sure to include it when getting help or creating an issue report for the crash.
+
+### Packet Logs
 
 RB4InstrumentMapper is capable of logging packets to a file for debugging purposes. To do so, enable both the `Show Packets (for debugging)` and `Log packets to file` checkboxes, then hit Start. Packet logs get saved to a `RB4InstrumentMapper` > `PacketLogs` folder inside your Documents folder. Make sure to include it when getting help or creating an issue report for packet parsing issues.
 
 Note that these settings are meant for debugging purposes only, leaving them enabled can reduce the performance of the program somewhat.
 
-## Error Logs
+## Advanced Usage
 
-In the case that the program crashes, an error log is saved to a `RB4InstrumentMapper` > `Logs` folder inside your Documents folder. Make sure to include it when getting help or creating an issue report for the crash.
-
-## Command-Line Interface
+### Command-Line Interface
 
 A command-line interface version of RB4InstrumentMapper is included alongside the GUI version. This is useful for scenarios where you want to run it without user interaction, such as a custom arcade cabinet or other startup automation scenarios.
 
@@ -247,14 +260,14 @@ Example usage:
 
 For available options/arguments, run it without arguments or use the `--help` option.
 
-## Building
+### Building
 
 To build this program, you will need:
 
 - Visual Studio, or MSBuild/[the .NET SDK](https://dotnet.microsoft.com/en-us/download).
 - [WiX Toolset v4](https://wixtoolset.org/) if you wish to build the installer.
 
-### With MSBuild
+#### With MSBuild
 
 With MSBuild, use the following commands in the project folder:
 
@@ -269,9 +282,9 @@ This will result in the following build output paths:
 - GUI: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
 - GUI+CLI installer: `RB4InstrumentMapper.Installer\bin\x64\Release`
 
-### With the .NET SDK
+#### With the .NET SDK
 
-#### Manually
+##### Manually
 
 With the .NET SDK, use the following command in the project folder:
 
@@ -285,7 +298,7 @@ This will result in the following build output paths:
 - GUI: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
 - GUI+CLI installer: `RB4InstrumentMapper.Installer\bin\x64\Release`
 
-#### Build Script
+##### Build Script
 
 The `publish.bat` script is provided to help make publishing new releases easier. This script will produce the same output as a manual build, along with the following additional output:
 
