@@ -19,6 +19,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="../RB4InstrumentMapper.Core/RB4InstrumentMapper.Core.csproj" />
   </ItemGroup>
 

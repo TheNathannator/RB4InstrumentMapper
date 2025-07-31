@@ -1,4 +1,6 @@
 using System;
+using System.Configuration;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -55,6 +57,35 @@ namespace RB4InstrumentMapper.GUI
             // Connect to console
             var textboxConsole = new TextBoxWriter(messageConsole);
             Console.SetOut(textboxConsole);
+
+            // Check for settings file corruption
+            try
+            {
+                // Settings validity *must* be checked via OpenExeConfiguration;
+                // querying a random setting instead will cause the corrupt data to become
+                // cached internally and require a program restart to clear out
+                ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                var result = MessageBox.Show(
+                    "RB4InstrumentMapper has detected that your settings have become corrupted. " +
+                    "This may be due to a crash or some other improper exiting of the program.\n\n" +
+                    "To continue, your settings must be deleted and reset. Do you wish to continue?",
+                    "Settings Corruption Detected",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+                );
+                if (result != MessageBoxResult.Yes)
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
+
+                File.Delete(ex.Filename);
+                Settings.Default.Reset();
+                Settings.Default.Save();
+            }
 
             // Check for vJoy
             bool vjoyFound = vJoyInstance.Enabled;
