@@ -132,7 +132,7 @@ Es posible que guitarras/baterías no se emparejan correctamente solo usando el 
 
 Vas a necesitar instalar el controlador de WinUSB al receptor de Guitar Hero Live o el adaptador de RB4 inalámbrico para instrumentos anteriores (RB4 Wireless Legacy Adapter) antes de usarlos. Es posible usar RB4InstrumentMapper para instalarlo directamente, por el menú de `Configure Devices` en su menú principal:
 
-1. Activa la opción `Enable` bajo el grupo de `USB`, y luego haz click en `Configure Devices` abajo de eso.
+1. Haz click en `Configure Devices` abajo de eso.
 
    ![Recuadro para activar USB](Docs/Images/Readme/usb-configure-button.png)
 
@@ -144,24 +144,20 @@ Vas a necesitar instalar el controlador de WinUSB al receptor de Guitar Hero Liv
    
    ![Lado derecho de la configuración de WinUSB](Docs/Images/Readme/usb-configure-right.png)
 
-   - Por favor toma en cuenta que cualquier juego que tenga soporte directo para estos dispositivos no va funcionar hasta que borres el controlador de WinUSB. Haz click en el botón de `Revert Driver` para revertir tus cambios para poder usar el dispositivo directamente.
+   - Toma en cuenta que cualquier juego que tenga soporte directo para estos dispositivos no va funcionar hasta que borres el controlador de WinUSB. Haz click en el botón de `Revert Driver` para revertir tus cambios para poder usar el dispositivo directamente.
 
 Si tienes problemas con esta instalación, puedes tratar [instalar el controlador manualmente (en Ingles)](Docs/WinUSB/manual-winusb-install.md). Esto no es recomendado para la mayoría de los usuarios. Solo se debe usar esta alternativa si el menú de `Configure Devices` no funciona.
 - Esto también describe como [desinstalar manualmente (en Ingles)](Docs/WinUSB/manual-winusb-install.md#remove-winusb), en caso de que el dispositivo se quede con el controlador atorado y RB4InstrumentMapper pare de detectarlo.
 
 ### Usando
 
-1. Activa la opción `Enable` bajo el grupo de `USB`.
-
-   ![Recuadro para activar USB](Docs/Images/Readme/usb-checkbox.png)
-
-2. **¡Asegúrate que instalaste [el controlador de WinUSB](#configurando-1) en los dispositivos que quieres usar! ¡No serán detectados si no esta hecho!**
-3. En el menú desplegable de `Controller Emulation Mode`, selecciona el modo de emulación que quieres usar.
+1. **¡Asegúrate que instalaste [el controlador de WinUSB](#configurando-1) en los dispositivos que quieres usar! ¡No serán detectados si no esta hecho!**
+2. En el menú desplegable de `Controller Emulation Mode`, selecciona el modo de emulación que quieres usar.
 
    ![Selección de Controller emulation mode](Docs/Images/Readme/controller-emulation-mode.png)
 
-4. Haz click en el botón de `Start` para empezar a leer datos que va a mandar tu instrumento.
-5. [Configura tus instrumentos en los juegos en los que los vas a usar](#configurando-tus-instrumentos).
+3. Haz click en el botón de `Start` para empezar a leer datos que va a mandar tu instrumento.
+4. [Configura tus instrumentos en los juegos en los que los vas a usar](#configurando-tus-instrumentos).
 
 Se detectará de forma automática si se conectan/desconectan instrumentos, pero no se van a mandar datos a los juegos hasta que presiones el botón de `Start`.
 
@@ -169,7 +165,7 @@ Si tienes problemas con el envío de botones, ya sean presiones o cosas raras, i
 
 ---
 
-## Configurando Tus Instrumentos
+## Configurando tus instrumentos
 
 Ahora que RB4InstrumentMapper está listo y corriendo, puedes configurar los controles de tus instrumentos en los juegos que vas a jugar. 
 
@@ -223,22 +219,67 @@ Consulta la [documentación oficial (en Ingles)](https://ghwt.de/wiki/#/wtde/bin
 4. Repite para cada instrumento en las pestañas de Player.
 5. Haz click en `Listo`.
 
-## Registro de Paquetes
+## Problemas y soluciones
+
+### Preguntas frecuentes
+
+- "Veo un control de XInput después de pulsar Start, ¡pero ningún botón responde!"
+
+### Registro de errores
+
+En caso de que el programa falle, el error se va a registrar en un archivo dentro de la carpeta `RB4InstrumentMapper` > `Logs` que va estar localizada en la carpeta de tus Documentos. Asegúrate de incluirla cuando preguntes por ayuda o creas reportes de problemas con el programa.
+
+### Registro de paquetes
 
 Se puede usar RB4InstrumentMapper para registrar datos a un archivo por motivos de depuración. Para hacer esto, activa `Show Packets (for debugging)` y `Log packets to file` y luego haz click en el botón de `Start`. Los datos se van a guardar en tu carpeta de Documentos. Asegúrate de incluirla cuando preguntes por ayuda o creas reportes de problemas con la interpretación de datos.
 
 Toma en cuenta que estas opciones son solo para depurar. Dejarlas activadas puede causar problemas con el rendimiento del programa.
 
-## Registro de Errores
-
-En caso de que el programa falle, el error se va a registrar en un archivo dentro de la carpeta `RB4InstrumentMapper` > `Logs` que va estar localizada en la carpeta de tus Documentos. Asegúrate de incluirla cuando preguntes por ayuda o creas reportes de problemas con el programa.
-
-## Construyendo
+### Construyendo
 
 Para construir este programa, vas a necesitar:
 
 - Visual Studio, o MSBuild/[el SDK de .NET](https://dotnet.microsoft.com/es-es/download) + tu editor de código preferido.
 - [WiX Toolset v4](https://wixtoolset.org/) si quieres construir el instalador.
+
+#### Con MSBuild
+
+Con MSBuild, usa los siguientes comandos en la carpeta del proyecto:
+
+```
+msbuild -t:Restore -verbosity:minimal
+msbuild "-p:Configuration=Release;Platform=x64" -verbosity:minimal
+```
+
+Esto resultara en los siguientes directorios:
+
+- Intérprete de órdenes: `RB4InstrumentMapper.CLI\bin\x64\Release\net472`
+- Interfaz gráfica de usuario: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
+- Instalador de interfaz gráfica de usuario+intérprete de órdenes: `RB4InstrumentMapper.Installer\bin\x64\Release`
+
+#### Con el SDK de .NET
+
+##### Manualmente
+
+Con el SDK de .NET, usa los siguientes comandos en la carpeta del proyecto:
+
+```
+dotnet build "-p:Configuration=Release;Platform=x64" -verbosity:minimal
+```
+
+Esto resultara en los siguientes directorios:
+
+- Intérprete de órdenes: `RB4InstrumentMapper.CLI\bin\x64\Release\net472`
+- Interfaz gráfica de usuario: `RB4InstrumentMapper.GUI\bin\x64\Release\net472`
+- Instalador de interfaz gráfica de usuario+intérprete de órdenes: `RB4InstrumentMapper.Installer\bin\x64\Release`
+
+##### Script de construcción
+
+El archivo de `publish.bat` esta proporcionado para crear lanzar nuevas versiones fácilmente. Esta producira el mismo resultado que una construcción manual, con estos resultados:
+
+- Intérprete de órdenes: `publish\RB4InstrumentMapper.CLI.zip`
+- Interfaz gráfica de usuario: `publish\RB4InstrumentMapper.GUI.zip`
+- Instalador de interfaz gráfica de usuario+intérprete de órdenes: `publish\RB4InstrumentMapper.Installer.exe`
 
 ## Referencias
 
