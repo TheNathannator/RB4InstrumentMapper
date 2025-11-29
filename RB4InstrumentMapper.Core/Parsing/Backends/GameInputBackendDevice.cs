@@ -1,5 +1,5 @@
 using System;
-using System.Diagnostics;
+using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using RB4InstrumentMapper.Core.Mapping;
@@ -162,33 +162,51 @@ namespace RB4InstrumentMapper.Core.Parsing
 
             using (rawReport)
             {
+                const int maxStackSize = 64;
+
                 byte reportId = (byte)rawReport.ReportInfo.id;
-                UIntPtr size = rawReport.GetRawDataSize();
+                int reportSize = (int)rawReport.GetRawDataSize();
 
-                byte* buffer = stackalloc byte[(int)size];
-                UIntPtr readSize = rawReport.GetRawData(size, buffer);
-                Debug.Assert(size == readSize);
+                byte[] poolBuffer = null;
+                Span<byte> data = reportSize > maxStackSize
+                    ? (poolBuffer = ArrayPool<byte>.Shared.Rent(reportSize))
+                    : stackalloc byte[maxStackSize];
 
-                var data = new ReadOnlySpan<byte>(buffer, (int)size);
-                // Compare with last report to determine if any inputs changed
-                // Necessary due to the timestamp not updating on guitar axis changes
-                if (data.SequenceEqual(lastReport.AsSpan(0, lastReportLength)))
-                    return true;
+                try
+                {
+                    fixed (byte* ptr = data)
+                    {
+                        int readSize = (int)rawReport.GetRawData((UIntPtr)data.Length, ptr);
+                        data = data.Slice(0, Math.Min(readSize, data.Length));
+                    }
 
-                if (lastReport.Length < data.Length)
-                    lastReport = new byte[data.Length];
-                data.CopyTo(lastReport);
-                lastReportLength = data.Length;
+                    // Compare with last report to determine if any inputs changed
+                    // Necessary due to the timestamp not updating on guitar axis changes
+                    if (data.SequenceEqual(lastReport.AsSpan(0, lastReportLength)))
+                        return true;
 
-                PacketLogging.WritePacket(
-                    new ReadOnlySpan<byte>(&reportId, sizeof(byte)),
-                    data,
-                    PacketDirection.In
-                );
+                    if (lastReport.Length < data.Length)
+                        lastReport = new byte[data.Length];
+                    data.CopyTo(lastReport);
+                    lastReportLength = data.Length;
 
-                var result = mapper.HandleMessage(reportId, data);
-                if (result == XboxResult.Disconnected)
-                    return false;
+                    PacketLogging.WritePacket(
+                        new ReadOnlySpan<byte>(&reportId, sizeof(byte)),
+                        data,
+                        PacketDirection.In
+                    );
+
+                    var result = mapper.HandleMessage(reportId, data);
+                    if (result == XboxResult.Disconnected)
+                        return false;
+                }
+                finally
+                {
+                    if (poolBuffer != null)
+                    {
+                        ArrayPool<byte>.Shared.Return(poolBuffer);
+                    }
+                }
             }
 
             return true;
