@@ -33,7 +33,7 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         public static bool TryParseBytesFromHexString(ReadOnlySpan<char> input, out byte[] bytes)
         {
-            bytes = null;
+            bytes = Array.Empty<byte>();
             if (input.IsEmpty)
                 return false;
 

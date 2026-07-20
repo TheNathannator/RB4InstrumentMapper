@@ -69,8 +69,11 @@ namespace RB4InstrumentMapper.Core.Parsing
                 // Parse data (optional)
                 // Not all packets have data
                 var dataText = input.Slice(headerSeparator + 1);
-                if (!ParsingUtils.TryParseBytesFromHexString(dataText, out data))
-                    return false;
+                if (ParsingUtils.TryParseBytesFromHexString(dataText, out var parsedData))
+                {
+                    data = parsedData;
+                }
+
                 input = input.Slice(0, headerSeparator);
             }
 
