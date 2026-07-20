@@ -43,6 +43,11 @@ namespace RB4InstrumentMapper.Core.Parsing
             BackendSettings.MapperMode = mappingMode;
             Console.WriteLine($"Using mapping mode {mappingMode}");
 
+            Console.WriteLine("Lines of the log will be read one-by-one, pausing after each one.");
+            Console.WriteLine("Press any key after this pause to move on to the next.");
+            Console.WriteLine("Press any key to begin...");
+            WaitForKey();
+
             string[] lines = File.ReadAllLines(logPath);
             var previousSequence = new Dictionary<byte, Dictionary<byte, byte>>();
             using var device = new XboxDevice(BackendType.Replay);
@@ -93,20 +98,49 @@ namespace RB4InstrumentMapper.Core.Parsing
                     clientSequence[header.CommandId] = sequence;
                 }
 
-                Console.WriteLine($"Processing line: {line}");
+                Console.WriteLine($"About to process line: {line}");
+                WaitForKey();
+
                 var result = device.HandlePacket(header, data);
                 if (result != XboxResult.Success)
                 {
-                    Console.WriteLine($"Error when handling line: {result}");
+                    Console.WriteLine($"Error when processing line: {result}");
                     Debugger.Break();
                     break;
                 }
             }
 
-            // Debug break before the device is disposed
-            Debugger.Break();
+            Console.WriteLine($"Replay finished. Press any key to continue...");
+            WaitForKey();
 
             return true;
+        }
+
+        private static bool _consoleAvailable = true;
+
+        [DebuggerStepThrough] // to make debug breaks show in the caller instead
+        private static void WaitForKey()
+        {
+            if (_consoleAvailable)
+            {
+                try
+                {
+                    // Flush any existing keypresses
+                    while (Console.KeyAvailable)
+                    {
+                        Console.ReadKey(intercept: true);
+                    }
+
+                    Console.ReadKey(intercept: true);
+                    return;
+                }
+                catch (InvalidOperationException)
+                {
+                    _consoleAvailable = false;
+                }
+            }
+
+            Debugger.Break();
         }
     }
 }
