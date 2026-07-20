@@ -117,13 +117,17 @@ namespace RB4InstrumentMapper.Core.Parsing
                 }
             }
 
-            // Don't handle the same packet twice
-            if (!previousReceiveSequence.TryGetValue(header.CommandId, out byte previousSequence))
-                previousSequence = 0;
+            if (header.SequenceCount is {} incomingSequence)
+            {
+                // Don't handle the same packet twice
+                if (previousReceiveSequence.TryGetValue(header.CommandId, out byte previousSequence) &&
+                    incomingSequence == previousSequence)
+                {
+                    return XboxResult.Success;
+                }
 
-            if (header.SequenceCount == previousSequence)
-                return XboxResult.Success;
-            previousReceiveSequence[header.CommandId] = header.SequenceCount;
+                previousReceiveSequence[header.CommandId] = incomingSequence;
+            }
 
             // Handle packet
             return (header.Flags & XboxCommandFlags.SystemCommand) != 0

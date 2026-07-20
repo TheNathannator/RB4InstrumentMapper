@@ -31,7 +31,10 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         public byte CommandId;
         public byte Flags_Client;
-        public byte SequenceCount;
+        // Not all backends support sequence counting, and
+        // not all devices respect a sequence count of 0 being invalid,
+        // so this is nullable to properly allow and express both cases
+        public byte? SequenceCount;
         public int DataLength;
         public int ChunkIndex;
 
@@ -106,10 +109,13 @@ namespace RB4InstrumentMapper.Core.Parsing
             if (buffer.Length < GetByteLength())
                 return false;
 
+            if (SequenceCount is not {} sequence)
+                return false;
+
             // Command info
             buffer[0] = CommandId;
             buffer[1] = Flags_Client;
-            buffer[2] = SequenceCount;
+            buffer[2] = sequence;
             bytesWritten += MinimumByteLength - 1;
 
             // Message length

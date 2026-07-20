@@ -86,7 +86,7 @@ namespace RB4InstrumentMapper.Core.Parsing
                 header.DataLength = data.Length;
 
                 // Set proper sequence ID if unspecified (for GameInput)
-                if (header.SequenceCount == 0)
+                if (header.SequenceCount == null)
                 {
                     if (!previousSequence.TryGetValue(header.Client, out var clientSequence))
                     {
