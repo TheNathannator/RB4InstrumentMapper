@@ -50,6 +50,14 @@ namespace RB4InstrumentMapper.Core.Mapping
             byte userIndex = header.UserIndex;
             if (!mappers.TryGetValue(userIndex, out var subMapper))
             {
+                // Don't flag as invalid if no devices are currently connected
+                // GIP devices are required to send a state report during initialization, so it's
+                // possible by design to receive one for index 0 before having a mapper for it
+                if (userIndex == 0 && mappers.Count < 1)
+                {
+                    return XboxResult.Pending;
+                }
+
                 Logging.WriteLineVerbose($"Missing mapper for wireless legacy user index {userIndex}!");
                 return XboxResult.InvalidMessage;
             }
@@ -72,16 +80,24 @@ namespace RB4InstrumentMapper.Core.Mapping
             if (!XboxWirelessLegacyDeviceConnect.TryParse(data, out var connect))
                 return XboxResult.InvalidMessage;
 
-            // Check if a mapper already exists for the given user index
+            // Clear any existing mapper at this index
             byte userIndex = connect.UserIndex;
             if (mappers.TryGetValue(userIndex, out var subMapper))
             {
-                Logging.WriteLineVerbose($"Mapper already exists for legacy adapter user index {userIndex}! Overwriting.");
                 subMapper.Mapper?.Dispose();
             }
 
-            // Add a new mapper for the device
-            mappers[userIndex] = new SubMapper() { DeviceType = connect.DeviceType, Mapper = GetMapperForDevice(connect) };
+            // Initialize with new mapper
+            var mapper = GetMapperForDevice(connect);
+            if (mapper != null)
+            {
+                mappers[userIndex] = new SubMapper()
+                {
+                    DeviceType = connect.DeviceType,
+                    Mapper = mapper
+                };
+            }
+
             return XboxResult.Success;
         }
 
