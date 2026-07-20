@@ -185,17 +185,32 @@ namespace RB4InstrumentMapper.Core.Mapping
             byte yellowPad = report.YellowPad;
             byte bluePad   = report.BluePad;
             byte greenPad  = report.GreenPad;
+            bool padActive = (redPad | yellowPad | bluePad | greenPad) != 0;
 
             byte yellowCym = report.YellowCymbal;
             byte blueCym   = report.BlueCymbal;
             byte greenCym  = report.GreenCymbal;
+            bool cymActive = (yellowCym | blueCym | greenCym) != 0;
 
-            // Pads/face buttons
-            var buttons = (XboxGamepadButton)report.Buttons;
-            device.SetButtonState(Xbox360Button.B, (redPad != 0) || ((buttons & XboxGamepadButton.B) != 0));
-            device.SetButtonState(Xbox360Button.Y, (yellowPad != 0) || ((buttons & XboxGamepadButton.Y) != 0));
-            device.SetButtonState(Xbox360Button.X, (bluePad != 0) || ((buttons & XboxGamepadButton.X) != 0));
-            device.SetButtonState(Xbox360Button.A, (greenPad != 0) || ((buttons & XboxGamepadButton.A) != 0));
+            // For wireless legacy adapter: don't read face buttons when pads or cymbals are active,
+            // as it sends navigation button inputs for *both* pads and cymbals
+            if (!padActive && !cymActive)
+            {
+                // Face buttons
+                var buttons = (XboxGamepadButton)report.Buttons;
+                device.SetButtonState(Xbox360Button.A, (buttons & XboxGamepadButton.A) != 0);
+                device.SetButtonState(Xbox360Button.B, (buttons & XboxGamepadButton.B) != 0);
+                device.SetButtonState(Xbox360Button.X, (buttons & XboxGamepadButton.X) != 0);
+                device.SetButtonState(Xbox360Button.Y, (buttons & XboxGamepadButton.Y) != 0);
+            }
+            else
+            {
+                // Pads
+                device.SetButtonState(Xbox360Button.B, redPad != 0);
+                device.SetButtonState(Xbox360Button.Y, yellowPad != 0);
+                device.SetButtonState(Xbox360Button.X, bluePad != 0);
+                device.SetButtonState(Xbox360Button.A, greenPad != 0);
+            }
 
             // Cymbals
             device.SetButtonState(Xbox360Button.LeftThumb, yellowCym != 0);
