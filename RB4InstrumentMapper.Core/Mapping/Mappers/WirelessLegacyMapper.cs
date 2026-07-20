@@ -127,7 +127,7 @@ namespace RB4InstrumentMapper.Core.Mapping
             }
         }
 
-        private DeviceMapper GetMapperForDevice(XboxWirelessLegacyDeviceConnect connect)
+        private DeviceMapper GetMapperForDevice(in XboxWirelessLegacyDeviceConnect connect)
         {
             var type = connect.DeviceType;
             switch (type)

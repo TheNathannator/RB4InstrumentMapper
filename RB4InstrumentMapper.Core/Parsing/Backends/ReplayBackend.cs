@@ -43,7 +43,7 @@ namespace RB4InstrumentMapper.Core.Parsing
             BackendSettings.MapperMode = mappingMode;
             Console.WriteLine($"Using mapping mode {mappingMode}");
 
-            Console.WriteLine("Lines of the log will be read one-by-one, pausing after each one.");
+            Console.WriteLine("Lines of the log will be read one-by-one, pausing before each one.");
             Console.WriteLine("Press any key after this pause to move on to the next.");
             Console.WriteLine("Press any key to begin...");
             WaitForKey();
@@ -57,11 +57,15 @@ namespace RB4InstrumentMapper.Core.Parsing
                 // Remove any comments
                 int spanEnd = line.IndexOf("//");
                 if (spanEnd < 0)
+                {
                     spanEnd = line.Length;
+                }
 
                 var lineSpan = line.AsSpan().Slice(0, spanEnd).Trim();
                 if (lineSpan.IsEmpty)
+                {
                     continue;
+                }
 
                 if (!PacketLogging.TryParsePacket(lineSpan, out var headerBytes, out var data, out var direction) ||
                     !XboxCommandHeader.TryParse(headerBytes, out var header, out _))
@@ -74,7 +78,7 @@ namespace RB4InstrumentMapper.Core.Parsing
                 // Skip packets that were sent from us
                 if (direction != PacketDirection.In)
                 {
-                    Console.WriteLine($"Skipping direction-out line: {line}");
+                    Console.WriteLine($"Skipping outbound line: {line}");
                     continue;
                 }
 
@@ -92,7 +96,9 @@ namespace RB4InstrumentMapper.Core.Parsing
 
                     if (!clientSequence.TryGetValue(header.CommandId, out byte sequence) ||
                         sequence == 0xFF) // Sequence IDs of 0 are not valid
+                    {
                         sequence = 0;
+                    }
 
                     header.SequenceCount = ++sequence;
                     clientSequence[header.CommandId] = sequence;
