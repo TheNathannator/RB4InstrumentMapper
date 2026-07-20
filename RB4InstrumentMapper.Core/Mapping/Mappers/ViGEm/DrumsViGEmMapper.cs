@@ -126,10 +126,12 @@ namespace RB4InstrumentMapper.Core.Mapping
             byte yellowPad = report.YellowPad;
             byte bluePad   = report.BluePad;
             byte greenPad  = report.GreenPad;
+            bool padActive = (redPad | yellowPad | bluePad | greenPad) != 0;
 
             byte yellowCym = report.YellowCymbal;
             byte blueCym   = report.BlueCymbal;
             byte greenCym  = report.GreenCymbal;
+            bool cymActive = (yellowCym | blueCym | greenCym) != 0;
 
             // Color flags
             var buttons = (XboxGamepadButton)report.Buttons;
@@ -139,11 +141,9 @@ namespace RB4InstrumentMapper.Core.Mapping
             device.SetButtonState(Xbox360Button.A, ((greenPad | greenCym) != 0) || ((buttons & XboxGamepadButton.A) != 0));
 
             // Pad flag
-            device.SetButtonState(Xbox360Button.RightThumb,
-                (redPad | yellowPad | bluePad | greenPad) != 0);
+            device.SetButtonState(Xbox360Button.RightThumb, padActive);
             // Cymbal flag
-            device.SetButtonState(Xbox360Button.RightShoulder,
-                (yellowCym | blueCym | greenCym) != 0);
+            device.SetButtonState(Xbox360Button.RightShoulder, cymActive);
 
             // Pedals
             device.SetButtonState(Xbox360Button.LeftShoulder,
@@ -152,22 +152,30 @@ namespace RB4InstrumentMapper.Core.Mapping
                 (report.Buttons & (ushort)XboxDrumButton.KickTwo) != 0);
 
             // Velocities
-            device.SetAxisValue(
-                Xbox360Axis.LeftThumbX,
-                ByteToVelocity(redPad)
-            );
-            device.SetAxisValue(
-                Xbox360Axis.LeftThumbY,
-                ByteToVelocityNegative((byte)(yellowPad | yellowCym))
-            );
-            device.SetAxisValue(
-                Xbox360Axis.RightThumbX,
-                ByteToVelocity((byte)(bluePad | blueCym))
-            );
-            device.SetAxisValue(
-                Xbox360Axis.RightThumbY,
-                ByteToVelocityNegative((byte)(greenPad | greenCym))
-            );
+            byte redVel;
+            byte yellowVel;
+            byte blueVel;
+            byte greenVel;
+            if (padActive && cymActive)
+            {
+                // For simultaneous pad+cymbal hits, the cymbal velocity is moved to the red pad
+                redVel = Math.Max(Math.Max(Math.Max(redPad, yellowCym), blueCym), greenCym);
+                yellowVel = yellowPad;
+                blueVel = bluePad;
+                greenVel = greenPad;
+            }
+            else
+            {
+                redVel = redPad;
+                yellowVel = Math.Max(yellowPad, yellowCym);
+                blueVel = Math.Max(bluePad, blueCym);
+                greenVel = Math.Max(greenPad, greenCym);
+            }
+
+            device.SetAxisValue(Xbox360Axis.LeftThumbX, ByteToVelocity(redVel));
+            device.SetAxisValue(Xbox360Axis.LeftThumbY, ByteToVelocityNegative(yellowVel));
+            device.SetAxisValue(Xbox360Axis.RightThumbX, ByteToVelocity(blueVel));
+            device.SetAxisValue(Xbox360Axis.RightThumbY, ByteToVelocityNegative(greenVel));
         }
 
         // Maps with drums and cymbals fully separated
