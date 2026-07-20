@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using RB4InstrumentMapper.Core.Mapping;
 
@@ -261,53 +262,62 @@ namespace RB4InstrumentMapper.Core.Parsing
             return XboxResult.Success;
         }
 
-        public unsafe XboxResult SendMessage(XboxMessage message)
+        public XboxCommandHeader MakeHeader(byte commandId, XboxCommandFlags flags)
         {
-            return SendMessage(message.Header, message.Bytes);
+            if (!previousSendSequence.TryGetValue(commandId, out byte sequence) ||
+                sequence == 0xFF) // Sequence IDs of 0 are not valid
+            {
+                sequence = 0;
+            }
+
+            byte sequenceCount = ++sequence;
+            previousSendSequence[commandId] = sequence;
+
+            return new XboxCommandHeader()
+            {
+                CommandId = commandId,
+                Flags = flags,
+                Client = ClientId,
+                SequenceCount = sequenceCount,
+            };
         }
 
-        public unsafe XboxResult SendMessage(XboxCommandHeader header)
+        public XboxResult SendMessage(XboxMessage message)
         {
-            SetUpHeader(ref header);
-            return Parent.SendMessage(header);
+            var header = MakeHeader(message.CommandId, message.Flags);
+            return SendMessage(header, Span<byte>.Empty);
         }
 
-        public unsafe XboxResult SendMessage<T>(XboxCommandHeader header, ref T data)
+        public XboxResult SendMessage<T>(in XboxMessage<T> message)
             where T : unmanaged
         {
-            SetUpHeader(ref header);
-            return Parent.SendMessage(header, ref data);
+            var header = MakeHeader(message.CommandId, message.Flags);
+            return SendMessage(header, message.Data);
         }
 
-        public XboxResult SendMessage(XboxCommandHeader header, Span<byte> data)
+        private unsafe XboxResult SendMessage<T>(XboxCommandHeader header, in T data)
+            where T : unmanaged
         {
-            SetUpHeader(ref header);
+            var span = new Span<byte>(Unsafe.AsPointer(ref Unsafe.AsRef(data)), sizeof(T));
+            return SendMessage(header, span);
+        }
+
+        private XboxResult SendMessage(XboxCommandHeader header, Span<byte> data)
+        {
             return Parent.SendMessage(header, data);
         }
 
         private XboxResult SendAcknowledge(ref XboxCommandHeader header, ReadOnlySpan<byte> commandData)
         {
-            var (sendHeader, acknowledge) = chunkBuffers.TryGetValue(header.CommandId, out var chunkBuffer)
-                ? XboxAcknowledgement.FromMessage(header, commandData, chunkBuffer)
-                : XboxAcknowledgement.FromMessage(header, commandData);
+            var (ackHeader, acknowledge) = chunkBuffers.TryGetValue(header.CommandId, out var chunkBuffer)
+                ? XboxProtocolControl.MakeAck(header, chunkBuffer)
+                : XboxProtocolControl.MakeAck(header, commandData);
 
             // Don't go through SetUpHeader, we must preserve the sequence ID in the header
             header.Client = ClientId;
             header.Flags &= ~XboxCommandFlags.NeedsAcknowledgement;
 
-            return Parent.SendMessage(sendHeader, ref acknowledge);
-        }
-
-        private void SetUpHeader(ref XboxCommandHeader header)
-        {
-            header.Client = ClientId;
-
-            if (!previousSendSequence.TryGetValue(header.CommandId, out byte sequence) ||
-                sequence == 0xFF) // Sequence IDs of 0 are not valid
-                sequence = 0;
-
-            header.SequenceCount = ++sequence;
-            previousSendSequence[header.CommandId] = sequence;
+            return SendMessage(ackHeader, acknowledge);
         }
 
         public void EnableInputs(bool enabled)

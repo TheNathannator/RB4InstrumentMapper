@@ -18,13 +18,10 @@ namespace RB4InstrumentMapper.Core.Parsing
     {
         public const byte CommandId = 0x0a;
 
-        public static readonly XboxMessage<XboxLedControl> EnableLed = new XboxMessage<XboxLedControl>()
+        public static XboxMessage<XboxLedControl> EnableLed => new XboxMessage<XboxLedControl>()
         {
-            Header = new XboxCommandHeader()
-            {
-                CommandId = CommandId,
-                Flags = XboxCommandFlags.SystemCommand,
-            },
+            CommandId = CommandId,
+            Flags = XboxCommandFlags.SystemCommand,
             Data = new XboxLedControl()
             {
                 Mode = XboxLedMode.On,

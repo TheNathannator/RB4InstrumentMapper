@@ -214,26 +214,19 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         public XboxResult SendMessage(XboxMessage message)
         {
-            return SendMessage(message.Header, message.Bytes);
+            return SendMessage(message.CommandId, ReadOnlySpan<byte>.Empty);
         }
 
-        public XboxResult SendMessage(XboxCommandHeader header)
+        public unsafe XboxResult SendMessage<T>(in XboxMessage<T> message) where T : unmanaged
         {
-            return SendMessage(header, Span<byte>.Empty);
+            var span = new ReadOnlySpan<byte>(Unsafe.AsPointer(ref Unsafe.AsRef(message.Data)), sizeof(T));
+            return SendMessage(message.CommandId, span);
         }
 
-        public unsafe XboxResult SendMessage<T>(XboxCommandHeader header, ref T data)
-            where T : unmanaged
-        {
-            // Create a byte buffer for the given data
-            var writeBuffer = new Span<byte>(Unsafe.AsPointer(ref data), sizeof(T));
-            return SendMessage(header, writeBuffer);
-        }
-
-        public unsafe XboxResult SendMessage(XboxCommandHeader header, Span<byte> data)
+        private unsafe XboxResult SendMessage(byte commandId, ReadOnlySpan<byte> data)
         {
             PacketLogging.WritePacket(
-                new ReadOnlySpan<byte>(&header.CommandId, sizeof(byte)),
+                new ReadOnlySpan<byte>(&commandId, sizeof(byte)),
                 data,
                 PacketDirection.Out
             );
@@ -245,7 +238,7 @@ namespace RB4InstrumentMapper.Core.Parsing
             for (int tryCount = 0; tryCount < retryThreshold; tryCount++,
                 Logging.WriteLineVerbose($"Error while sending report! (Attempt {tryCount})"))
             {
-                int hResult = device.CreateRawDeviceReport(header.CommandId, GameInputRawDeviceReportKind.Output, out var report);
+                int hResult = device.CreateRawDeviceReport(commandId, GameInputRawDeviceReportKind.Output, out var report);
                 if (hResult < 0)
                 {
                     if (hResult == (int)GameInputResult.DeviceDisconnected)

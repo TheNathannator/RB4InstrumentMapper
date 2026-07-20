@@ -61,11 +61,8 @@ namespace RB4InstrumentMapper.Core.Parsing
 
             return new XboxMessage<XboxGHLGuitarOutput>()
             {
-                Header = new XboxCommandHeader()
-                {
-                    CommandId = XboxGHLGuitarOutput.CommandId,
-                    Flags = XboxCommandFlags.None,
-                },
+                CommandId = XboxGHLGuitarOutput.CommandId,
+                Flags = XboxCommandFlags.None,
                 Data = output,
             };
         }
@@ -75,8 +72,6 @@ namespace RB4InstrumentMapper.Core.Parsing
     {
         public const byte SubCommand = 0x02;
         public const int SendPeriodMilliseconds = 8000;
-
-        public static readonly XboxMessage<XboxGHLGuitarOutput> Message = CreateMessage();
 
         private readonly IBackendClient client;
         private readonly Timer sendTimer;
@@ -105,16 +100,13 @@ namespace RB4InstrumentMapper.Core.Parsing
 
             return new XboxMessage<XboxGHLGuitarOutput>()
             {
-                Header = new XboxCommandHeader()
-                {
-                    CommandId = XboxGHLGuitarOutput.CommandId,
-                    Flags = XboxCommandFlags.None,
-                },
+                CommandId = XboxGHLGuitarOutput.CommandId,
+                Flags = XboxCommandFlags.None,
                 Data = output,
             };
         }
 
-        private void SendKeepAlive(object _) => client.SendMessage(Message);
+        private void SendKeepAlive(object _) => client.SendMessage(CreateMessage());
 
         /// <summary>
         /// Disposes the mapper and any resources it uses.

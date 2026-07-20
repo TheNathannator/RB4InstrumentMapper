@@ -38,13 +38,10 @@ namespace RB4InstrumentMapper.Core.Parsing
             private ushort unk3;
         }
 
-        public static readonly XboxMessage GetDescriptor = new XboxMessage()
+        public static XboxMessage GetDescriptor => new XboxMessage()
         {
-            Header = new XboxCommandHeader()
-            {
-                CommandId = CommandId,
-                Flags = XboxCommandFlags.SystemCommand,
-            },
+            CommandId = CommandId,
+            Flags = XboxCommandFlags.SystemCommand,
             // Header only, no data
         };
 

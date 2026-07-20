@@ -46,8 +46,8 @@ namespace RB4InstrumentMapper.Core.Parsing
 
         public byte Client
         {
-            get => (byte)(Flags_Client & 0x0F);
-            set => Flags_Client = (byte)((byte)Flags | value & 0x0F);
+            get => (byte)(Flags_Client & 0x07);
+            set => Flags_Client = (byte)((byte)Flags | value & 0x07);
         }
 
         public static bool TryParse(ReadOnlySpan<byte> data, out XboxCommandHeader header, out int bytesRead)

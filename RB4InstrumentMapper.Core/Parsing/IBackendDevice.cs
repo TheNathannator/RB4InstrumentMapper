@@ -1,5 +1,3 @@
-using System;
-
 namespace RB4InstrumentMapper.Core.Parsing
 {
     internal interface IBackendClient
@@ -10,8 +8,6 @@ namespace RB4InstrumentMapper.Core.Parsing
         bool MapGuideButton { get; }
 
         XboxResult SendMessage(XboxMessage message);
-        XboxResult SendMessage(XboxCommandHeader header);
-        XboxResult SendMessage<T>(XboxCommandHeader header, ref T data) where T : unmanaged;
-        XboxResult SendMessage(XboxCommandHeader header, Span<byte> data);
+        XboxResult SendMessage<T>(in XboxMessage<T> message) where T : unmanaged;
     }
 }

@@ -16,39 +16,30 @@ namespace RB4InstrumentMapper.Core.Parsing
     {
         public const byte CommandId = 0x05;
 
-        public static readonly XboxMessage<XboxConfiguration> PowerOnDevice = new XboxMessage<XboxConfiguration>()
+        public static XboxMessage<XboxConfiguration> PowerOnDevice => new XboxMessage<XboxConfiguration>()
         {
-            Header = new XboxCommandHeader()
-            {
-                CommandId = CommandId,
-                Flags = XboxCommandFlags.SystemCommand,
-            },
+            CommandId = CommandId,
+            Flags = XboxCommandFlags.SystemCommand,
             Data = new XboxConfiguration()
             {
                 SubCommand = XboxConfigurationCommand.PowerOn,
             }
         };
 
-        public static readonly XboxMessage<XboxConfiguration> PowerOffDevice = new XboxMessage<XboxConfiguration>()
+        public static XboxMessage<XboxConfiguration> PowerOffDevice => new XboxMessage<XboxConfiguration>()
         {
-            Header = new XboxCommandHeader()
-            {
-                CommandId = CommandId,
-                Flags = XboxCommandFlags.SystemCommand,
-            },
+            CommandId = CommandId,
+            Flags = XboxCommandFlags.SystemCommand,
             Data = new XboxConfiguration()
             {
                 SubCommand = XboxConfigurationCommand.PowerOff,
             }
         };
 
-        public static readonly XboxMessage<XboxConfiguration> ResetDevice = new XboxMessage<XboxConfiguration>()
+        public static XboxMessage<XboxConfiguration> ResetDevice => new XboxMessage<XboxConfiguration>()
         {
-            Header = new XboxCommandHeader()
-            {
-                CommandId = CommandId,
-                Flags = XboxCommandFlags.SystemCommand,
-            },
+            CommandId = CommandId,
+            Flags = XboxCommandFlags.SystemCommand,
             Data = new XboxConfiguration()
             {
                 SubCommand = XboxConfigurationCommand.Reset,

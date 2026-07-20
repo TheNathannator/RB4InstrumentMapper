@@ -7,13 +7,10 @@ namespace RB4InstrumentMapper.Core.Parsing
     {
         public const byte CommandId = 0x24;
 
-        public static readonly XboxMessage RequestDevices = new XboxMessage()
+        public static XboxMessage RequestDevices => new XboxMessage()
         {
-            Header = new XboxCommandHeader()
-            {
-                CommandId = CommandId,
-                Flags = XboxCommandFlags.None,
-            },
+            CommandId = CommandId,
+            Flags = XboxCommandFlags.None,
             // No data
         };
     }

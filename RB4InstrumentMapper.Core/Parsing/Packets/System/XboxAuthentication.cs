@@ -1,17 +1,27 @@
+using System.Runtime.InteropServices;
+
 namespace RB4InstrumentMapper.Core.Parsing
 {
     internal static class XboxAuthentication
     {
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Success
+        {
+            public byte subcommand;
+            public byte unknown;
+        }
+
         public const byte CommandId = 0x06;
 
-        public static readonly XboxMessage SuccessMessage = new XboxMessage()
+        public static XboxMessage<Success> SuccessMessage => new XboxMessage<Success>()
         {
-            Header = new XboxCommandHeader()
+            CommandId = CommandId,
+            Flags = XboxCommandFlags.SystemCommand,
+            Data = new Success()
             {
-                CommandId = CommandId,
-                Flags = XboxCommandFlags.SystemCommand,
+                subcommand = 0x01,
+                unknown = 0x00,
             },
-            Bytes = new byte[] { 0x01, 0x00 },
         };
     }
 }

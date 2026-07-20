@@ -33,11 +33,8 @@ namespace RB4InstrumentMapper.Core.Parsing
         public static XboxMessage<XboxGamepadRumble> Create(byte left, byte right)
             => new XboxMessage<XboxGamepadRumble>()
         {
-            Header = new XboxCommandHeader()
-            {
-                CommandId = CommandId,
-                Flags = XboxCommandFlags.None,
-            },
+            CommandId = CommandId,
+            Flags = XboxCommandFlags.None,
             Data = new XboxGamepadRumble()
             {
                 flags = Flags.LeftRumble | Flags.RightRumble,

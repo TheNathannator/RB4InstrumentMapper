@@ -138,22 +138,25 @@ namespace RB4InstrumentMapper.Core.Parsing
             return XboxResult.Success;
         }
 
-        internal unsafe XboxResult SendMessage(XboxMessage message)
+        internal XboxResult SendMessage(XboxMessage message)
         {
-            return SendMessage(message.Header, message.Bytes);
+            if (clients.TryGetValue(0, out var mainClient))
+            {
+                return mainClient.SendMessage(message);
+            }
+
+            return XboxResult.Disconnected;
         }
 
-        internal unsafe XboxResult SendMessage(XboxCommandHeader header)
-        {
-            return SendMessage(header, Span<byte>.Empty);
-        }
-
-        internal unsafe XboxResult SendMessage<T>(XboxCommandHeader header, ref T data)
+        internal XboxResult SendMessage<T>(XboxMessage<T> message)
             where T : unmanaged
         {
-            // Create a byte buffer for the given data
-            var writeBuffer = new Span<byte>(Unsafe.AsPointer(ref data), sizeof(T));
-            return SendMessage(header, writeBuffer);
+            if (clients.TryGetValue(0, out var mainClient))
+            {
+                return mainClient.SendMessage(message);
+            }
+
+            return XboxResult.Disconnected;
         }
 
         // TODO: Span instead of ReadOnlySpan since the WinUSB lib doesn't use ReadOnlySpan for writing atm
